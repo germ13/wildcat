@@ -7,7 +7,7 @@ using Wildcat.Entities.PCC.Wildcat;
 
 namespace Wildcat.App.Controllers.Engineering
 {
-    //[Area("Engineering")]
+    [Area("SHCA")]
 
     public class WorkersController : Controller
     {
@@ -70,6 +70,13 @@ namespace Wildcat.App.Controllers.Engineering
             {
                 return NotFound();
             }
+
+            var area = ControllerContext.ActionDescriptor.RouteValues["area"];
+            var actionName = ControllerContext.ActionDescriptor.ActionName;
+            var controllerName = ControllerContext.ActionDescriptor.ControllerName;
+
+            ViewData["area"] = area;
+
 
             var worker = await _context.Worker.FindAsync(id);
             if (worker == null)

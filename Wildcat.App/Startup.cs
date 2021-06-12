@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,12 @@ namespace Wildcat.App
         {
             services.AddAuthentication(IISDefaults.AuthenticationScheme);
             services.AddControllersWithViews();
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/Engineering/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            });
             services.AddDbContext<WildcatContext>(
                 options => options.UseSqlServer(
                     Configuration.GetConnectionString("Wildcat")));
