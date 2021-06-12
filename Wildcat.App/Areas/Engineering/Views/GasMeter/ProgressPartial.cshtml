@@ -1,0 +1,42 @@
+﻿
+@model Wildcat.App.ViewModels.Engineering.Gas
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                
+                <div class="card-datatable table-responsive">
+
+                    <input type="hidden" id="HiddenMinimumCompleteness" asp-for="MinimumCompleteness" />
+
+                    <table cellpadding="0" cellspacing="0" class="display datatables-demo table table-striped table-bordered" id="datatable1" dataTable no-footer role="grid">
+                        <thead>
+                            <tr role="row">
+                                <th>Meter</th>
+                                <th>IP</th>
+                                <th>Status</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var gmt in Model.GasMeters)
+                            {
+                            <tr>
+                                <td style="width: 125px">@Html.DisplayFor(Model => gmt.MeterName)</td>
+                                <td style="width: 150px">@Html.DisplayFor(Model => gmt.MeterIp)</td>
+                                <td style="width: 200px">@Html.DisplayFor(Model => gmt.Message)</td>
+
+                                <td>@Html.Raw(@Model.GetPortionBarHTML(string.Format("Progress{0}", gmt.MeterName), gmt.PercentComplete, gmt.PercentIncomplete, true))</td>
+                            </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿<div class="demo-navbar-user nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+        <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
+            @*<img src="~/assets/img/avatars/1.png" alt class="d-block ui-w-30 rounded-circle">*@
+            <div class="avatar-circle">
+                <span class="initials">@ViewBag.Initials</span>
+            </div>
+            <span class="px-1 mr-lg-2 ml-2 ml-lg-0">@ViewBag.UserName!</span>
+        </span>
+    </a>
+    <div class="dropdown-menu dropdown-menu-right">
+        <a href="javascript:void(0)" class="dropdown-item">
+            <i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile
+        </a>
+        <a href="javascript:void(0)" class="dropdown-item">
+            <i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages
+        </a>
+        <a href="javascript:void(0)" class="dropdown-item">
+            <i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="javascript:void(0)" class="dropdown-item">
+            <i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out
+        </a>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        background-color: green;
+        text-align: center;
+        border-radius: 50%;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+    }
+
+    .initials {
+        position: relative;
+        top: 10px; /* 25% of parent */
+        font-size: 20px; /* 50% of parent */
+        line-height: 20px; /* 50% of parent */
+        color: #fff;
+        font-family: "Arial", "Helvetica" , sans-serif   "Courier New", monospace;
+        font-weight:300;
+    }
+</style>

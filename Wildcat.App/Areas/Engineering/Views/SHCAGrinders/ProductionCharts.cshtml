@@ -1,0 +1,717 @@
+﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersProductionChartsViewModel
+@{
+    ViewData["Title"] = "ProductionCharts";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Engineering/SHCAGrinders/Index">SHCA Grinders</a>
+            </li>
+            <li class="breadcrumb-item active">Production Charts</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                Grinder Production Charts
+            </h6>
+            <div class="card-body">
+                <form id="submitform">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Select Grinder</label>
+                            @Html.DropDownListFor(x => x.GrindersSelect, Model.GrindersSelect, new { @id = "GrindersSelect", @class = "custom-select", @style = "btn-default" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">From Date</label>
+                            @Html.TextBoxFor(x => x.Fromdate.Date, new { @id = "fromdate", @class = "form-control" })
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="form-label">To Date</label>
+                            @Html.TextBoxFor(x => x.Todate.Date, new { @id = "todate", @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            @*<h6 class="card-header">
+                    Grinder Production Data
+                </h6>*@
+            <div class="card-body">
+                <div id="shift1">
+                    <div id="chartContainer1" class="demo-vertical-spacing-lg">
+                        <canvas id="chart1" height="250" class="chartjs-demo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            @*<h6 class="card-header">
+                    Grinder Production Data
+                </h6>*@
+            <div class="card-body">
+                <div id="shift2">
+                    <div id="chartContainer2" class="demo-vertical-spacing-lg">
+                        <canvas id="chart2" height="250" class="chartjs-demo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            @*<h6 class="card-header">
+                    Grinder Production Data
+                </h6>*@
+            <div class="card-body">
+                <div id="shift3">
+                    <div id="chartContainer3" class="demo-vertical-spacing-lg">
+                        <canvas id="chart3" height="250" class="chartjs-demo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            @*<h6 class="card-header">
+                    Grinder Production Data
+                </h6>*@
+            <div class="card-body">
+                <div id="shift4">
+                    <div id="chartContainer4" class="demo-vertical-spacing-lg">
+                        <canvas id="chart4" height="250" class="chartjs-demo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div id="viewContent">
+        <br />
+        <div id="shift1">
+            <div class="demo-vertical-spacing-lg">
+                <canvas id="chart1" height="250" class="chartjs-demo"></canvas>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div id="shift2">
+            <div class="demo-vertical-spacing-lg">
+                <canvas id="chart2" height="250" class="chartjs-demo"></canvas>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div id="shift3">
+            <div class="demo-vertical-spacing-lg">
+                <canvas id="chart3" height="250" class="chartjs-demo"></canvas>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div id="shift4">
+            <div class="demo-vertical-spacing-lg">
+                <canvas id="chart4" height="250" class="chartjs-demo"></canvas>
+            </div>
+        </div>
+        <br />
+    </div>*@
+<script>
+
+    $('#submitform').submit(function () {
+
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        //var graphChart1 = document.getElementById('chart1').getContext("2d"); var chart1;
+        //var graphChart2 = new Chart(document.getElementById('chart2').getContext("2d")); graphChart2.destroy();
+        //var graphChart3 = new Chart(document.getElementById('chart3').getContext("2d")); graphChart3.destroy();
+        //var graphChart4 = new Chart(document.getElementById('chart4').getContext("2d")); graphChart4.destroy();
+
+        document.getElementById("chartContainer1").innerHTML = '&nbsp;';
+        document.getElementById("chartContainer1").innerHTML = '<canvas id="chart1" height="250" class="chartjs-demo"></canvas>';
+
+        document.getElementById("chartContainer2").innerHTML = '&nbsp;';
+        document.getElementById("chartContainer2").innerHTML = '<canvas id="chart2" height="250" class="chartjs-demo"></canvas>';
+
+        document.getElementById("chartContainer3").innerHTML = '&nbsp;';
+        document.getElementById("chartContainer3").innerHTML = '<canvas id="chart3" height="250" class="chartjs-demo"></canvas>';
+
+        document.getElementById("chartContainer4").innerHTML = '&nbsp;';
+        document.getElementById("chartContainer4").innerHTML = '<canvas id="chart4" height="250" class="chartjs-demo"></canvas>';
+
+        $('.chartjs-demo').each(function () {
+            $(this).wrap($('<div style="height:' + this.getAttribute('height') + 'px"></div>'));
+        });
+
+
+        var GrindersSelect = $('#GrindersSelect').val();
+        //var ShiftsSelect1 = $('#ShiftsSelect1').val();
+        //var ShiftsSelect2 = $('#ShiftsSelect2').val();
+        //var ShiftsSelect3 = $('#ShiftsSelect3').val();
+        //var ShiftsSelect4 = $('#ShiftsSelect4').val();
+        var Fromdate = $('#fromdate').val();
+        var Todate = $('#todate').val();
+
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/SHCAGrindersProductionChartsResponse",
+            type: "POST",
+            data: {
+                selectedGrinder: GrindersSelect,
+                //shiftSelect1: ShiftsSelect1,
+                //shiftSelect2: ShiftsSelect2,
+                //shiftSelect3: ShiftsSelect3,
+                //shiftSelect4: ShiftsSelect4,
+                fromdate: Fromdate,
+                todate: Todate,
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    if (result.ShiftData1Times !== null) {
+                        //if (chart1) {
+                        //    //chart1.destroy();
+                        //    chart1.data.labels = result.vm.ShiftData1Times;
+                        //    chart1.data.datasets = [{
+                        //            label: '1st Shift',
+                        //            data: result.vm.ShiftData1Values,
+                        //            borderWidth: 1,
+                        //            backgroundColor: 'rgba(235, 64, 52, 0.3)',
+                        //            borderColor: '#FFC107',
+                        //            borderDash: [5, 5],
+                        //            fill: false
+                        //        }];
+                        //    chart1.update();
+                        //}
+                        //else {
+                        //    chart1 = new Chart(graphChart1, {
+                        //    type: 'line',
+                        //    data: {
+                        //        labels: result.vm.ShiftData1Times,
+                        //        datasets: [{
+                        //            label: '1st Shift',
+                        //            data: result.vm.ShiftData1Values,
+                        //            borderWidth: 1,
+                        //            backgroundColor: 'rgba(235, 64, 52, 0.3)',
+                        //            borderColor: '#FFC107',
+                        //            borderDash: [5, 5],
+                        //            fill: false
+                        //        }],
+                        //    },
+
+                        //    // Demo
+                        //    options: {
+                        //        responsive: true,
+                        //        maintainAspectRatio: false
+                        //    }});
+                        //}
+
+                        var graphChart1 = new Chart(document.getElementById('chart1').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData1Times,
+                                datasets: [{
+                                    label: '1st Shift',
+                                    data: result.vm.ShiftData1Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(235, 64, 52, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                    if (result.ShiftData2Times !== null) {
+                        var graphChart2 = new Chart(document.getElementById('chart2').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData2Times,
+                                datasets: [{
+                                    label: '2nd Shift',
+                                    data: result.vm.ShiftData2Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(235, 211, 52, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                    if (result.ShiftData3Times !== null) {
+                        var graphChart3 = new Chart(document.getElementById('chart3').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData3Times,
+                                datasets: [{
+                                    label: '3rd Shift',
+                                    data: result.vm.ShiftData3Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(70, 235, 52, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                    if (result.ShiftData4Times !== null) {
+                        var graphChart4 = new Chart(document.getElementById('chart4').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData4Times,
+                                datasets: [{
+                                    label: '4th Shift',
+                                    data: result.vm.ShiftData4Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(52, 171, 235, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                }
+
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                //$.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    function setTable() {
+        $(function () {
+            var $table = $('#bootstrap-table-example');
+            var $remove = $('#bootstrap-table-remove');
+            var selections = [];
+
+            function getIdSelections() {
+                return $.map($table.bootstrapTable('getSelections'), function (row) {
+                    return row.id;
+                });
+            }
+
+            $table.bootstrapTable({
+                height: 500,
+                iconsPrefix: 'opacity-75 ion',
+                icons: {
+                    paginationSwitchDown: 'ion-ios-arrow-down icon-chevron-down',
+                    paginationSwitchUp: 'ion-ios-arrow-up icon-chevron-up',
+                    refresh: 'ion-md-refresh icon-refresh',
+                    columns: 'ion-md-apps icon-th',
+                    detailOpen: 'ion-md-add icon-plus',
+                    detailClose: 'ion-md-remove icon-minus',
+                    export: 'ion-md-cloud-download icon-share'
+                },
+                detailFormatter: function detailFormatter(index, row) {
+                    var html = [];
+
+                    $.each(row, function (key, value) {
+                        html.push('<p><b>' + key + ':</b> ' + (typeof value === 'undefined' ? false : value) + '</p>');
+                    });
+
+                    return html.join('');
+                },
+                columns: [
+                    //[
+                    //  {
+                    //    field: 'state',
+                    //    checkbox: true,
+                    //    rowspan: 2,
+                    //    align: 'center',
+                    //    valign: 'middle'
+                    //  }, {
+                    //    title: 'Item ID',
+                    //    field: 'id',
+                    //    rowspan: 2,
+                    //    align: 'center',
+                    //    valign: 'middle',
+                    //    sortable: true,
+                    //    footerFormatter: function totalTextFormatter(data) {
+                    //      return 'Total';
+                    //    }
+                    //  }, {
+                    //    title: 'Item Detail',
+                    //    colspan: 3,
+                    //    align: 'center'
+                    //  }
+                    //],
+                    //[
+                    //  {
+                    //    field: 'name',
+                    //    title: 'Item Name',
+                    //    sortable: true,
+                    //    editable: true,
+                    //    footerFormatter: function totalNameFormatter(data) {
+                    //      return data.length;
+                    //    },
+                    //    align: 'center'
+                    //  }, {
+                    //    field: 'price',
+                    //    title: 'Item Price',
+                    //    sortable: true,
+                    //    align: 'center',
+                    //    editable: {
+                    //      type: 'text',
+                    //      title: 'Item Price',
+                    //      validate: function (value) {
+                    //        value = $.trim(value);
+
+                    //        if (!value) { return 'This field is required'; }
+                    //        if (!/^\$/.test(value)) { return 'This field needs to start width $.' }
+
+                    //        var data = $table.bootstrapTable('getData');
+                    //        var index = $(this).parents('tr').data('index');
+
+                    //        // console.log(data[index]);
+                    //        return '';
+                    //      }
+                    //    },
+                    //    footerFormatter: function totalPriceFormatter(data) {
+                    //      var total = 0;
+
+                    //      $.each(data, function (i, row) {
+                    //        total += +(row.price.substring(1));
+                    //      });
+
+                    //      return '$' + total;
+                    //    }
+                    //  }, {
+                    //    field: 'operate',
+                    //    title: 'Item Operate',
+                    //    align: 'center',
+                    //    events: {
+                    //      'click .like': function (e, value, row, index) {
+                    //        alert('You click like action, row: ' + JSON.stringify(row));
+                    //      },
+                    //      'click .remove': function (e, value, row, index) {
+                    //        $table.bootstrapTable('remove', {
+                    //          field: 'id',
+                    //          values: [row.id]
+                    //        });
+                    //      }
+                    //    },
+                    //    formatter: function operateFormatter(value, row, index) {
+                    //      return [
+                    //        '<a class="btn btn-xs icon-btn btn-outline-default borderless like" href="javascript:void(0)" title="Like">',
+                    //        '<i class="ion ion-md-heart"></i>',
+                    //        '</a>  ',
+                    //        '<a class="btn btn-xs icon-btn btn-outline-danger borderless remove" href="javascript:void(0)" title="Remove">',
+                    //        '<i class="ion ion-md-close"></i>',
+                    //        '</a>'
+                    //      ].join('');
+                    //    }
+                    //  }
+                    //]
+                ]
+            });
+
+
+            // Make bootstrapTable compatible with Bootstrap 4
+            if ($('body').attr('dir') !== 'rtl' && $('html').attr('dir') !== 'rtl') {
+                $('.bootstrap-table .pull-right .dropdown-menu').addClass('dropdown-menu-right');
+                $('.bootstrap-table .pull-left .dropdown-menu').removeClass('dropdown-menu-right');
+            } else {
+                $('.bootstrap-table .pull-left .dropdown-menu').addClass('dropdown-menu-right');
+            }
+
+
+            // sometimes footer render error.
+            setTimeout(function () {
+                $table.bootstrapTable('resetView');
+            }, 200);
+
+            $table.on('check.bs.table uncheck.bs.table ' + 'check-all.bs.table uncheck-all.bs.table', function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+                // save your data, here just save the current page
+                selections = getIdSelections();
+                // push or splice the selections if you want to save all data selections
+            });
+
+            $table.on('all.bs.table', function (e, name, args) {
+                // console.log(name, args);
+            });
+
+            $remove.click(function () {
+                var ids = getIdSelections();
+
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: ids
+                });
+                $remove.prop('disabled', true);
+            });
+
+        });
+
+    }
+
+    jQuery(document).ready(function () {
+        $('.chartjs-demo').each(function () {
+            $(this).wrap($('<div style="height:' + this.getAttribute('height') + 'px"></div>'));
+        });
+
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var GrindersSelect = $('#GrindersSelect').val();
+        //var ShiftsSelect1 = $('#ShiftsSelect1').val()
+        //var ShiftsSelect2 = $('#ShiftsSelect2').val();
+        //var ShiftsSelect3 = $('#ShiftsSelect3').val();
+        //var ShiftsSelect4 = $('#ShiftsSelect4').val();
+        var Fromdate = $('#fromdate').val();
+        var Todate = $('#todate').val();
+
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/SHCAGrindersProductionChartsResponse",
+            type: "POST",
+            data: {
+                selectedGrinder: GrindersSelect,
+                //shiftSelect1: ShiftsSelect1,
+                //shiftSelect2: ShiftsSelect2,
+                //shiftSelect3: ShiftsSelect3,
+                //shiftSelect4: ShiftsSelect4,
+                fromdate: Fromdate,
+                todate: Todate,
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    if (result.ShiftData1Times !== null) {
+                        var graphChart1 = new Chart(document.getElementById('chart1').getContext("2d"));
+                        var chart1 = new Chart(graphChart1, {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData1Times,
+                                datasets: [{
+                                    label: '1st Shift',
+                                    data: result.vm.ShiftData1Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(235, 64, 52, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                        //var graphChart1 = new Chart(document.getElementById('chart1').getContext("2d"), {
+                        //    type: 'line',
+                        //    data: {
+                        //        labels: result.vm.ShiftData1Times,
+                        //        datasets: [{
+                        //            label: '1st Shift',
+                        //            data: result.vm.ShiftData1Values,
+                        //            borderWidth: 1,
+                        //            backgroundColor: 'rgba(235, 64, 52, 0.3)',
+                        //            borderColor: '#FFC107',
+                        //            borderDash: [5, 5],
+                        //            fill: false
+                        //        }],
+                        //    },
+
+                        //    // Demo
+                        //    options: {
+                        //        responsive: true,
+                        //        maintainAspectRatio: false
+                        //    }
+                        //});
+                    }
+                    if (result.ShiftData2Times !== null) {
+                        var graphChart2 = new Chart(document.getElementById('chart2').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData2Times,
+                                datasets: [{
+                                    label: '2nd Shift',
+                                    data: result.vm.ShiftData2Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(235, 211, 52, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                    if (result.ShiftData3Times !== null) {
+                        var graphChart3 = new Chart(document.getElementById('chart3').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData3Times,
+                                datasets: [{
+                                    label: '3rd Shift',
+                                    data: result.vm.ShiftData3Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(70, 235, 52, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                    if (result.ShiftData4Times !== null) {
+                        var graphChart4 = new Chart(document.getElementById('chart4').getContext("2d"), {
+                            type: 'bar',
+                            data: {
+                                labels: result.vm.ShiftData4Times,
+                                datasets: [{
+                                    label: '4th Shift',
+                                    data: result.vm.ShiftData4Values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(52, 171, 235, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                }
+
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                //$.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+    });
+
+</script>
+<script src="~/html-demo/assets/vendor/libs/chartjs/chartjs.js"></script>
+

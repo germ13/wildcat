@@ -1,0 +1,57 @@
+﻿
+@model Wildcat.App.ViewModels.Engineering.Gas
+
+<div class="container-fluid flex-grow-1 container-p-y">
+
+    <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item">Engineering</a>
+            </li>
+            <li class="breadcrumb-item active">
+                Gas Meters
+            </li>
+        </ol>
+    </h4>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card mb-4 text-left">
+                <div class="card-body">
+                    <div class="demo-inline-spacing mt-sm-3">
+
+                        <form id="GasParameters">
+
+                            <input type="hidden" id="HiddenFurnaceSelected" asp-for="SelectedFurnaceOption" />
+                            <input type="hidden" id="HiddenIntervalSelected" asp-for="SelectedIntervalOption" />
+
+                            <label class="form-check-inline">
+                                @Model.Dropdown("ddlFurnace", Model.FurnaceOptions, "Furnace", Model.SelectedFurnaceOption, 160)
+                            </label>
+                            <label class="form-check-inline">
+                                @Model.Dropdown("ddlInterval", Model.IntervalOptions, "Interval", Model.SelectedIntervalOption, 160)
+                            </label>
+
+                            <label class="form-check-inline">
+                                <button id="Button1" class="btn btn-primary">Download</button>
+                            </label>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="divProgressPartial">
+        @*<partial name="ProgressPartial" />*@
+    </div>
+
+</div>
+
+<script type="text/javascript" src="~/scripts/Engineering/GasMeterReader.js"></script>
+@*<script type="text/javascript" src="~/assets/js/forms_pickers.js"></script>*@
+

@@ -1,0 +1,342 @@
+﻿@model Wildcat.App.ViewModels.Engineering.MachineTypeViewModel
+@{
+    ViewData["Title"] = "Machine Management";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Engineering/Machine/Index">Machine Management</a>
+            </li>
+            <li class="breadcrumb-item active">Machine Type Settings</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Machine Types
+        <a type="button" class="btn btn-primary pull-right" href="javascript:void(0)" data-toggle="modal" data-target="#modals-default-add">Add Machine Type</a>
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>Machine Type</th>
+                    <th>Active</th>
+                    <th>Definition</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var item in Model.MachineTypes)
+                    {
+                        <tr class="gradeU">
+                            <td>@item.MachineType1</td>
+                            <td>@item.Definition</td>
+                            <td>@item.Active</td>
+                            <td style="text-align:center;"><a href="#" data-value=@item.Id type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a></td>
+                        </tr>
+                    }*@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-add">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-add">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Type
+                    <br>
+                    <small class="text-muted">Add new machine type.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="add-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label class="form-label">Machine Type</label>
+                        @Html.TextBoxFor(x => x.addtype.MachineType1, new { @class = "form-control", @id = "addtypeMachineType" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Definition</label>
+                        @Html.TextAreaFor(x => x.addtype.Definition, new { @class = "form-control", @id = "addtypeDefinition", @rows = 4 })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.addtype.Active, new { @class = "custom-control-input", @id = "addtypeActive" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="AddSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-edit">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Type
+                    <br>
+                    <small class="text-muted">Edit selected machine type.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                @Html.HiddenFor(x => x.edittype.Id, new { @id = "edittypeId" })
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label class="form-label">Machine Type</label>
+                        @Html.TextBoxFor(x => x.edittype.MachineType1, new { @class = "form-control", @id = "edittypeMachineType" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Definition</label>
+                        @Html.TextAreaFor(x => x.edittype.Definition, new { @class = "form-control", @id = "edittypeDefinition", @rows = 4 })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.edittype.Active, new { @class = "custom-control-input", @id = "edittypeActive" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="EditSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Engineering/Machine/EditMachineTypePartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#AddSave').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Type = $('#addtypeMachineType').val();
+        var Definition = $('#addtypeDefinition').val();
+        var Active = $('#addtypeActive').is(":checked") ? true : false;
+
+        $.ajax({
+            url: "/Engineering/Machine/AddTypeResult",
+            type: "POST",
+            data: {
+                Type: Type,
+                Definition: Definition,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-add').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#EditSave').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Id = $('#edittypeId').val();
+        var Type = $('#edittypeMachineType').val();
+        var Definition = $('#edittypeDefinition').val();
+        var Active = $('#edittypeActive').is(":checked") ? true : false;
+
+        $.ajax({
+            url: "/Engineering/Machine/EditTypeResult",
+            type: "POST",
+            data: {
+                Id: Id,
+                Type: Type,
+                Definition: Definition,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/Engineering/Machine/AjaxGetMachineTypesJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "MachineType1", "orderable": true },
+                { "data": "Active", "orderable": true },
+                { "data": "Definition", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

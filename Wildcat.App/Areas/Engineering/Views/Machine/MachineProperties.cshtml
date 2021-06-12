@@ -1,0 +1,387 @@
+﻿@model Wildcat.App.ViewModels.Engineering.MachinePropertyViewModel
+@{
+    ViewData["Title"] = "Machine Management";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Engineering/Machine/Index">Machine Management</a>
+            </li>
+            <li class="breadcrumb-item active">Machine Property Settings</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Machine Properties
+        <a type="button" class="btn btn-primary pull-right" href="javascript:void(0)" data-toggle="modal" data-target="#modals-default-add">Add Machine Properties</a>
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>Property Name</th>
+                    <th>Active</th>
+                    <th>Display Name</th>
+                    <th>Datatype</th>
+                    <th>Definition</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var item in Model.MachineProperties)
+                    {
+                    <tr class="gradeU">
+                        <td>@item.PropertyName</td>
+                        <td>@item.DisplayName</td>
+                        <td>@item.Datatype</td>
+                        <td>@item.Definition</td>
+                        <td>@item.Active</td>
+                        <td style="text-align:center;"><a href="#" data-value=@item.Id type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a></td>
+                    </tr>
+                    }*@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-add">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-addproperty">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Property
+                    <br>
+                    <small class="text-muted">Add selected property.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="add-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label class="form-label">PropertyName</label>
+                        @Html.TextBoxFor(x => x.addprop.PropertyName, new { @class = "form-control", @id = "addpropPropertyName" })
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label class="form-label">DisplayName</label>
+                        @Html.TextBoxFor(x => x.addprop.DisplayName, new { @class = "form-control", @id = "addpropDisplayName" })
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label class="form-label">Select Datatype</label>
+                        @Html.DropDownListFor(x => x.datatypes, Model.datatypes, new { @id = "addpropdatatypes", @class = "custom-select", @style = "btn-default" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Property Definition</label>
+                        @Html.TextAreaFor(x => x.addprop.Definition, new { @class = "form-control", @id = "addpropDefinition", @rows = 4 })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.addprop.IsRequired, new { @class = "custom-control-input", @id = "addpropIsRequired" })
+                            <span class="custom-control-label">Is Required?</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.addprop.Active, new { @class = "custom-control-input", @id = "addpropActive" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="NewPropSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-editproperty">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Property
+                    <br>
+                    <small class="text-muted">Edit selected property to machine.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                @Html.HiddenFor(x => x.editprop.Id, new { @id = "editpropId" })
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label class="form-label">PropertyName</label>
+                        @Html.TextBoxFor(x => x.editprop.PropertyName, new { @class = "form-control", @id = "editpropPropertyName" })
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label class="form-label">DisplayName</label>
+                        @Html.TextBoxFor(x => x.editprop.DisplayName, new { @class = "form-control", @id = "editprop.DisplayName" })
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label class="form-label">Select Datatype</label>
+                        @Html.DropDownListFor(x => x.datatypes, Model.datatypes, new { @id = "editpropdatatypes", @class = "custom-select", @style = "btn-default" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Property Definition</label>
+                        @Html.TextAreaFor(x => x.editprop.Definition, new { @class = "form-control", @id = "editpropDefinition", @rows = 4 })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.editprop.IsRequired, new { @class = "custom-control-input", @id = "editpropIsRequired" })
+                            <span class="custom-control-label">Is Required?</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.editprop.Active, new { @class = "custom-control-input", @id = "editpropActive" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="EditPropSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Engineering/Machine/MachinePropertyPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#NewPropSave').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var PropertyName = $('#addpropPropertyName').val();
+        var DisplayName = $('#addpropDisplayName').val();
+        var datatypes = $('#addpropdatatypes').val();
+        var Definition = $('#addpropDefinition').val();
+        var IsRequired = $('#addpropIsRequired').is(":checked") ? true : false;
+        var Active = $('#addpropActive').is(":checked") ? true : false;
+
+        $.ajax({
+            url: "/Engineering/Machine/AddMetadataResult",
+            type: "POST",
+            data: {
+                Property: PropertyName,
+                DisplayName: DisplayName,
+                IsRequired: IsRequired,
+                Definition: Definition,
+                DataType: datatypes,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-add').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#EditPropSave').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Id = $('#editpropId').val();
+        var PropertyName = $('#editpropPropertyName').val();
+        var DisplayName = $('#editpropDisplayName').val();
+        var datatypes = $('#editpropdatatypes').val();
+        var Definition = $('#editpropDefinition').val();
+        var IsRequired = $('#editpropIsRequired').is(":checked") ? true : false;
+        var Active = $('#editpropActive').is(":checked") ? true : false;
+
+        $.ajax({
+            url: "/Engineering/Machine/EditMetadataResult",
+            type: "POST",
+            data: {
+                Id: Id,
+                Property: PropertyName,
+                DisplayName: DisplayName,
+                IsRequired: IsRequired,
+                Definition: Definition,
+                DataType: datatypes,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/Engineering/Machine/AjaxGetMachinePropertiesJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "PropertyName", "orderable": true },
+                { "data": "Active", "orderable": true },
+                { "data": "DisplayName", "orderable": true },
+                { "data": "Datatype", "orderable": true },
+                { "data": "Definition", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

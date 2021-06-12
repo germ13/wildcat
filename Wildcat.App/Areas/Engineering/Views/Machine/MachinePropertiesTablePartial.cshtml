@@ -1,0 +1,12 @@
+﻿@model List<Wildcat.App.ViewModels.Engineering.MachinePropertyDTO>
+@foreach (var item in Model)
+{
+    <tr class="gradeU">
+        <td>@item.Display</td>
+        <td>@item.Value</td>
+        <td style="text-align:center;">
+            <a href="#" data-value="@item.PropertyMetadataId.ToString()" class="btn btn-primary btn-sm openbtn editpropertybtn">Edit</a>
+        </td>
+    </tr>
+}
+@*onclick="editpropertybtn(@item.PropertyMetadataId.ToString().Trim())"*@ 

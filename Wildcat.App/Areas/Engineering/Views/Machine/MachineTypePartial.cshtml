@@ -1,0 +1,22 @@
+﻿@model Wildcat.Entities.PCC.Wildcat.MachineType
+@Html.HiddenFor(x => x.Id, new { @id = "edittypeId" })
+<div class="form-row">
+    <div class="form-group col-sm-6">
+        <label class="form-label">Machine Type</label>
+        @Html.TextBoxFor(x => x.MachineType1, new { @class = "form-control", @id = "edittypeMachineType" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-12">
+        <label class="form-label">Definition</label>
+        @Html.TextAreaFor(x => x.Definition, new { @class = "form-control", @id = "edittypeDefinition", @rows = 4 })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-6">
+        <label class="custom-control custom-checkbox">
+            @Html.CheckBoxFor(x => x.Active, new { @class = "custom-control-input", @id = "edittypeActive" })
+            <span class="custom-control-label">Active?</span>
+        </label>
+    </div>
+</div>

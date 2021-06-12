@@ -1,0 +1,36 @@
+﻿@model Wildcat.App.ViewModels.Engineering.EditMachinePropertyPartialViewModel
+@Html.HiddenFor(x => x.editprop.Id, new { @id = "editpropId" })
+<div class="form-row">
+    <div class="form-group col-sm-4">
+        <label class="form-label">PropertyName</label>
+        @Html.TextBoxFor(x => x.editprop.PropertyName, new { @class = "form-control", @id = "editpropPropertyName" })
+    </div>
+    <div class="form-group col-sm-4">
+        <label class="form-label">DisplayName</label>
+        @Html.TextBoxFor(x => x.editprop.DisplayName, new { @class = "form-control", @id = "editpropDisplayName" })
+    </div>
+    <div class="form-group col-sm-4">
+        <label class="form-label">Select Datatype</label>
+        @Html.DropDownListFor(x => x.datatypes, Model.datatypes, new { @id = "editpropdatatypes", @class = "custom-select", @style = "btn-default" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-12">
+        <label class="form-label">Property Definition</label>
+        @Html.TextAreaFor(x => x.editprop.Definition, new { @class = "form-control", @id = "editpropDefinition", @rows = 4 })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-6">
+        <label class="custom-control custom-checkbox">
+            @Html.CheckBoxFor(x => x.editprop.IsRequired, new { @class = "custom-control-input", @id = "editpropIsRequired" })
+            <span class="custom-control-label">Is Required?</span>
+        </label>
+    </div>
+    <div class="form-group col-sm-6">
+        <label class="custom-control custom-checkbox">
+            @Html.CheckBoxFor(x => x.editprop.Active, new { @class = "custom-control-input", @id = "editpropActive" })
+            <span class="custom-control-label">Active?</span>
+        </label>
+    </div>
+</div>

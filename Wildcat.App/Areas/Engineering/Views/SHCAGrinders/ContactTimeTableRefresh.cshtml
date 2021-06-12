@@ -1,0 +1,20 @@
+﻿@model List<Wildcat.Entities.SHCA.EngineeringData.ContactTimeDTO>
+<table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>Value</th>
+            <th>Machine</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td data-sort="YYYYMMDD">@item.Timestamp</td>
+            <td>@Html.DisplayFor(modelItem => item.Value)</td>
+            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+        </tr>
+        }
+    </tbody>
+</table>

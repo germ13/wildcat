@@ -1,0 +1,92 @@
+﻿@model Wildcat.Entities.PCC.Wildcat.Worker
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<h4>Worker</h4>
+<hr />
+
+<div class="card" style="max-width: 20rem;">
+    <img class="card-img-top" src="https://via.placeholder.com/500x300.png/" alt="@Html.DisplayFor(model => model.FirstName)">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <strong>Name:</strong>
+            @Html.DisplayFor(model => model.FirstName)  @Html.DisplayFor(model => model.LastName)
+        </li>
+        <li class="list-group-item">
+            <strong>Is Salary?:</strong>
+            @if (Model.IsSalary == true)
+            {
+                <span class="badge badge-success">Y</span>
+            }
+            else
+            {
+                <span class="badge badge-warning">N</span>
+            }
+        </li>
+        <li class="list-group-item">
+            <strong>Badge #:</strong>
+            @Html.DisplayFor(model => model.BadgeNumber)
+        </li>
+        <li class="list-group-item">
+            <strong>Mobile #:</strong>
+            @Html.DisplayFor(model => model.MobileNumber)
+        </li>
+        <li class="list-group-item">
+            <strong>Working Days:</strong>
+            @if (!String.IsNullOrEmpty(Model.DaysOfWeek))
+            {
+                @foreach (var c in Model.DaysOfWeek.Trim())
+                {
+                    <day-of-the-week day-number="@c"></day-of-the-week>
+                }
+            }
+        </li>
+        <li class="list-group-item">
+            <strong>Shift Start:</strong>
+            @Html.DisplayFor(model => model.ShiftStart)
+        </li>
+        <li class="list-group-item">
+            <strong>Shift End:</strong>
+            @Html.DisplayFor(model => model.ShiftEnd)
+        </li>
+        <li class="list-group-item">
+            <strong>Is Active:</strong>
+            @if (Model.Active == true)
+            {
+                <span class="badge badge-success">Active</span> }
+            else
+            {
+                <span class="badge badge-danger">Deactivated</span>
+            }
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.Added)</strong>
+            @Html.DisplayFor(model => model.Added)
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.AddedBy)</strong>
+            @Html.DisplayFor(model => model.AddedBy)
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.Updated)</strong>
+            @Html.DisplayFor(model => model.Updated)
+        </li>
+        <li class="list-group-item">
+            <strong>@Html.DisplayNameFor(model => model.UpdatedBy)</strong>
+            @Html.DisplayFor(model => model.UpdatedBy)
+        </li>
+    </ul>
+    <div class="card-body">
+        <a href="~/Engineering/Workers/Edit/@Model.Id">Edit</a> |
+        <a href="~/Engineering/Workers/Index">Back To List</a>
+        @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a href="~/Engineering/Workers/Edit/@model.Id">Edit</a> *@
+        @*<a asp-action="Index">Back to List</a> *@
+        @*<a  class="card-link">Card link</a>*@
+        @*<a href="javascript:void(0)" class="card-link">Another link</a>*@
+    </div>
+</div>

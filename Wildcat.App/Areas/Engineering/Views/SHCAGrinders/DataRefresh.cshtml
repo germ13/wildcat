@@ -1,0 +1,106 @@
+﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersIndexViewModel
+
+<div class="row">
+    <div class="col-sm-2 ">
+        <div class="card ">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <div id="c1" class="circles" style="background-color: red; border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                    <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Bag House Pressure Warning</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 ">
+        <div class="card ">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <div id="c2" class="circles" style="background-color:red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                    <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Auto Grind</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 ">
+        <div class="card ">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <div id="c3" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                    <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Run Auto Grind</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 ">
+        <div class="card ">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <div id="c4" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                    <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Boom In</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 ">
+        <div class="card ">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <div id="c5" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                    <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Boom Out</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 ">
+        <div class="card ">
+            <div class="card-body">
+                <div class="align-items-center">
+                    <div id="c6" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                    <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">In Grind Area</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div id="id_grinders_datatable" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+    <div class="row">
+        <div class="col-sm-12">
+            <table id="bootstrap-table-example"
+                   data-search="true" data-show-refresh="false" data-show-columns="false"
+                   data-show-export="false" data-detail-view="false" data-minimum-count-columns="2" data-show-pagination-switch="false"
+                   data-pagination="true" data-id-field="id" data-show-footer="true">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting">
+                            Time
+                        </th>
+                        <th>
+                            Contact Time
+                        </th>
+                        <th>
+                            Machine
+                        </th>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DTO)
+                    {
+                        <tr role="row">
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Timestamp)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Value)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

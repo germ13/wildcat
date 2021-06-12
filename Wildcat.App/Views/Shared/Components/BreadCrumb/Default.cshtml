@@ -1,0 +1,70 @@
+﻿@{
+    string[] accumulatedPath = new string[Model.Length];
+    string sum = Model[0];
+    accumulatedPath[0] = sum;
+    for (int i = 1; i < Model.Length; i++)
+    {
+        sum = sum + Model[i] + "/";
+        accumulatedPath[i] = sum;
+
+    }
+}
+
+
+@*<h4 aria-label="breadcrumb" class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@accumulatedPath[0]"><i class="ion ion-md-home"></i></a></li>
+
+
+
+            @for (int i = 1; i < Model.Length; i++)
+            {
+
+                if (i == (Model.Length - 1))
+                {
+                    <li class="breadcrumb-item active" aria-current="page">@Model[i]</li>
+                }
+                else
+                {
+                    <li class="breadcrumb-item"><a href="@accumulatedPath[i]">@Model[i]</a></li>
+                }
+            }
+
+        </ol>
+    </h4>
+
+
+    <div class="btn-group btn-breadcrumb">
+        <a href="@accumulatedPath[0]" class="btn btn-info"><i class="ion ion-md-home"></i></a>
+        @for (int i = 1; i < Model.Length; i++)
+        {
+            if (i == (Model.Length - 1))
+            {
+                <a href="#" class="btn btn-info">@Model[i]</a>
+            }
+            else
+            {
+                <a href="@accumulatedPath[i]" class="btn btn-info">@Model[i]</a>
+            }
+        }
+    </div>
+
+
+    <ol class="breadcrumb">
+        <li>
+            <a href="@accumulatedPath[0]" class=""><i class="ion ion-md-home"></i></a>
+        </li>
+        @for (int i = 1; i < Model.Length; i++)
+        {
+            <li>
+                @if (i == (Model.Length - 1))
+                {
+                    <a href="#" class="active">@Model[i]</a>
+                }
+                else
+                {
+                    <a href="@accumulatedPath[i]" class="">@Model[i]</a>
+                }
+            </li>
+        }
+    </ol>*@

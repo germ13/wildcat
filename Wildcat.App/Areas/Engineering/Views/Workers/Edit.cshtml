@@ -1,0 +1,181 @@
+﻿@model Wildcat.Entities.PCC.Wildcat.Worker
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Worker</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @*<form asp-action="Edit">*@
+        <form action="~/Engineering/Workers/Edit/@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" class="form-control" value="@(Model.Id)" />
+
+            @*<input type="hidden" asp-for="Id" />*@
+            @*<div class="form-group">
+                    <label asp-for="EndUserId" class="control-label"></label>
+                    <input asp-for="EndUserId" class="form-control" />
+                    <span asp-validation-for="EndUserId" class="text-danger"></span>
+                </div>*@
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" asp-for="IsSalary" class="form-control" value="@(Model.IsSalary)" />
+            @*<div class="form-group">
+                    <label asp-for="IsSalary" class="control-label"></label>
+                    <input asp-for="IsSalary" class="form-control" />
+                    <span asp-validation-for="IsSalary" class="text-danger"></span>
+                </div>*@
+
+            <input type="hidden" asp-for="BadgeNumber" class="form-control" value="@(Model.BadgeNumber)" />
+            @*<div class="form-group">
+                    <label asp-for="BadgeNumber" class="control-label"></label>
+                    <input asp-for="BadgeNumber" class="form-control" />
+                    <span asp-validation-for="BadgeNumber" class="text-danger"></span>
+                </div>*@
+
+            <div class="form-group">
+                <label asp-for="MobileNumber" class="control-label"></label>
+                <input asp-for="MobileNumber" class="form-control" />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DaysOfWeek" class="control-label"></label>
+                <input type="hidden" asp-for="DaysOfWeek" class="form-control" />
+                <br />
+
+                @{
+                    var d = new Dictionary<string, string>() { { "1", "Mo" }, { "2", "Tu" }, { "3", "We" }, { "4", "Th" }, { "5", "Fr" }, { "6", "Sa" }, { "7", "Su" } };
+
+                    @foreach (var dd in d)
+                    {
+                        if (Model.DaysOfWeek != null)
+                        {
+                            if (Model.DaysOfWeek.Contains(dd.Key))
+                            {
+                                <input id="id_check_@dd.Key" type="checkbox" checked onclick='buildWorkingDays()' />@dd.Value;
+                            }
+                            else
+                            {
+                                <input id="id_check_@dd.Key" type="checkbox" onclick='buildWorkingDays()' />@dd.Value;
+                            }
+                        }
+                        else
+                        {
+                            <input id="id_check_@dd.Key" type="checkbox" onclick='buildWorkingDays()' /> @dd.Value;
+                        }
+                        @Html.Raw("&nbsp;&nbsp;")
+                        @if (dd.Key == "5")
+                        {
+                            <br />
+                        }
+                    }
+                }
+                <span asp-validation-for="DaysOfWeek" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">
+                    Shift Start
+                </label>
+                <input type="time" id="ShiftStart" name="ShiftStart" value="@Model.ShiftStart" required />
+            </div>
+            <div class="form-group">
+                <span class="text-danger field-validation-valid" data-valmsg-for="ShiftStart" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                    Shift End
+                </label>
+                <input type="time" id="ShiftEnd" name="ShiftEnd" value="@Model.ShiftEnd" required />
+                <span class="text-danger field-validation-valid" data-valmsg-for="ShiftEnd" data-valmsg-replace="true"></span>
+            </div>
+            @*<div class="form-group">
+                    <label asp-for="ShiftStart" class="control-label"></label>
+                    <input asp-for="ShiftStart" class="form-control" />
+                    <span asp-validation-for="ShiftStart" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ShiftEnd" class="control-label"></label>
+                    <input asp-for="ShiftEnd" class="form-control" />
+                    <span asp-validation-for="ShiftEnd" class="text-danger"></span>
+                </div>*@
+
+            <input type="hidden" asp-for="AddedBy" class="form-control" value="@(Model.AddedBy)" />
+            <input type="hidden" asp-for="EndUserId" class="form-control" value="@(Model.EndUserId)" />
+            <input type="hidden" asp-for="Added" class="form-control" value="@(Model.Added)" />
+
+            @*<div class="form-group">
+                    <input type="checkbox" name="Active" id="Active" @( Model.Active.ToString().Contains("True") ? "checked" : "") />Is Active |  @Model.Active.ToString()
+                </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Active)
+                @Html.EditorFor(m => m.Active)
+            </div>
+            @*<div class="form-group">
+                    <label asp-for="Active" class="control-label"></label>
+                    <input asp-for="Active" class="form-control" />
+                    <span asp-validation-for="Active" class="text-danger"></span>
+                </div>*@
+            @*<div class="form-group">
+                    <label asp-for="Added" class="control-label"></label>
+                    <input asp-for="Added" class="form-control" />
+                    <span asp-validation-for="Added" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="AddedByEndUserId" class="control-label"></label>
+                    <input asp-for="AddedByEndUserId" class="form-control" />
+                    <span asp-validation-for="AddedByEndUserId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Updated" class="control-label"></label>
+                    <input asp-for="Updated" class="form-control" />
+                    <span asp-validation-for="Updated" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UpdatedByEndUserId" class="control-label"></label>
+                    <input asp-for="UpdatedByEndUserId" class="form-control" />
+                    <span asp-validation-for="UpdatedByEndUserId" class="text-danger"></span>
+                </div>*@
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" ac />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a href="~/Engineering/Workers/Index">Back to List</a>
+    @*<a asp-action="Index">Back to List</a>*@<a asp-action="Index"></a><a asp-action="Index"></a>
+</div>
+
+<script>
+    document.getElementById("ShiftStart").classList.add("form-control");
+    document.getElementById("ShiftEnd").classList.add("form-control");
+    //document.getElementById("Active").classList.add("form-control");
+
+    function buildWorkingDays(e, k) {
+        var result = "";
+        for (var i = 1; i < 8; i++) {
+            var checkbox = document.getElementById("id_check_" + i);
+            if (checkbox.checked == true) {
+                result += i;
+            }
+            document.getElementById("DaysOfWeek").value = result;
+        }
+    }
+</script>

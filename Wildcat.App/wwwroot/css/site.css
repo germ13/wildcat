@@ -1,0 +1,219 @@
+﻿
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+/*body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}*/
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
+
+/*CUSTOM CSS STARTS HERE:*/
+
+.scrollable-menu {
+    height: auto;
+    max-height: 600px;
+    overflow-x: hidden;
+}
+
+
+/*BEG GRID SECTION*/
+.edit-mode {
+}
+
+.edit-row {
+}
+
+    .edit-row display-mode {
+    }
+
+.delete-row display-mode {
+}
+
+.save-row edit-mode {
+}
+
+.cancel-row edit-mode {
+}
+
+.display-mode {
+}
+
+.cancel-row {
+}
+
+.col1Width {
+    width: 50px;
+}
+
+.col2Width {
+    width: 200px;
+}
+
+/*END GRID SECTION*/
+
+/*BEG BAR SECTION*/
+
+text {
+    fill: white;
+    font-size: 14px;
+}
+
+.mainBars rect {
+    shape-rendering: auto;
+    fill-opacity: 0;
+    stroke-width: 0.5px;
+    stroke: rgb(0, 0, 0);
+    stroke-opacity: 0;
+}
+
+.mainBars .text {
+    fill: white;
+    text-anchor: middle;
+    font-size: 14px;
+}
+
+.subBars {
+    shape-rendering: crispEdges;
+}
+
+.edges {
+    stroke: none;
+    fill-opacity: 0.8;
+}
+
+.header {
+    text-anchor: middle;
+    font-size: 16px;
+}
+
+line {
+    stroke: grey;
+}
+
+/*END BAR SECTION*/
+
+/*Override small, wimpy text Size in bootstrap*/
+.input-group-text {
+    font-size: medium;
+    font-weight: 600;
+}
+
+/*BEG SCATTER PLOT SECTION*/
+
+/*@import url(//fonts.googleapis.com/css?family=Open+Sans:400,700);*/
+
+/*svg {
+    font: 14px 'Open Sans';
+}*/
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    fill: #000;
+}
+
+.axis .tick line {
+    stroke: rgba(0, 0, 0, 0.1);
+}
+
+.area {
+    stroke-width: 1;
+}
+
+/*.area.outer,
+.legend .outer {
+    fill: rgba(230, 230, 255, 0.8);
+    stroke: rgba(216, 216, 255, 0.8);
+}
+
+.area.inner,
+.legend .inner {
+    fill: rgba(127, 127, 255, 0.8);
+    stroke: rgba(96, 96, 255, 0.8);
+}*/
+
+/*.median-line,
+.legend .median-line {
+    fill: none;
+    stroke: #000;
+    stroke-width: 3;
+}
+
+.legend .legend-bg {
+    fill: rgba(0, 0, 0, 0.5);
+    stroke: rgba(0, 0, 0, 0.5);
+}*/
+
+.marker.hollowBall {
+    fill: rgba(255, 255, 255, 0.9);
+    stroke: rgba(0, 0, 0, 0.9);
+    stroke-width: 1;
+}
+
+.marker-bg path {
+    fill: rgba(255, 255, 255, 0.9);
+    stroke: rgba(0, 0, 0, 0.9);
+    stroke-width: 2;
+}
+
+/*.marker.server .marker-bg,
+.marker.server path {
+    fill: rgba(24, 28, 33, 0.5);
+    stroke: rgba(24, 28, 33, 0.5);
+    stroke-width: 1;
+
+
+    fill: rgba(24, 28, 33, 0.8);
+}*/
+
+/*.marker path {
+    fill: none;
+}*/
+
+/*.legend text,
+.marker text {
+    fill: #fff;
+    font-weight: bold;
+}
+
+.marker text {
+    text-anchor: middle;
+}*/
+
+/*BEG SCATTER PLOT SECTION*/

@@ -1,0 +1,868 @@
+﻿@model Wildcat.App.ViewModels.Engineering.AddMachineViewModel
+@{
+    ViewData["Title"] = "Add Machine";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Engineering/Machine/Index">Machine Management</a>
+            </li>
+            <li class="breadcrumb-item active">Add Machine</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-sm-12 h-100">
+        <div class="card">
+            <h5 class="card-header">
+                Machine Details
+            </h5>
+            <div class="card-body">
+                <form>
+                    @Html.HiddenFor(x => x.SortOrder, new { @id = "SortOrder" })
+                    <div class="form-row">
+                        <div class="form-group col-sm-4">
+                            <label class="form-label">Machine Name</label>
+                            @Html.TextBoxFor(x => x.Machine.MachineName, new { @class = "form-control", @id = "MachineName" })
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label class="form-label">Machine Type</label>
+                            @Html.DropDownListFor(x => x.MachineType, Model.MachineType, new { @id = "MachineType", @class = "custom-select", @style = "btn-default" })
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label class="form-label">Status</label>
+                            @Html.TextBoxFor(x => x.Machine.Status, new { @id = "Status", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <label class="form-label">Machine Type Description</label>
+                            @Html.TextAreaFor(x => x.MachineDef, new { @id = "MachineDef", @class = "form-control", @readonly = "readonly", @rows = 4 })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-3">
+                            <label class="custom-control custom-checkbox m-0">
+                                @Html.CheckBoxFor(x => x.Machine.Active, new { @id = "Active", @class = "custom-control-input" })
+                                <span class="custom-control-label">Active?</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="MachineSubmit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Machine Properties
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default-addproperty">Add Property</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_propertiestbody">
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Value</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="propertiestbody">
+                        @foreach (var item in Model.properties)
+                        {
+                            <tr class="gradeU">
+                                <td>@item.Display</td>
+                                <td>@item.Value</td>
+                                <td style="text-align:center;">
+                                    <a href="#" onclick="myFunctionabc( + @item.PropertyMetadataId.ToString() + )" data-value="@item.PropertyMetadataId.ToString()" class="btn btn-primary btn-sm openbtn editpropertybtn">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Machine Notes
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default-addnote">Add Note</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_notestbody">
+                    <thead>
+                        <tr>
+                            <th>Note Type</th>
+                            <th>Note</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="notestbody">
+                        @foreach (var item in Model.notes)
+                        {
+                            <tr class="gradeU">
+                                <td>@item.NoteType</td>
+                                <td>@item.Note</td>
+                                <td style="text-align:center;">
+                                    <a href="#" onclick="editnotebtn(@item.Id.ToString())" data-value="@item.Id.ToString()" class="btn btn-primary btn-sm openbtn editnotebtn">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-addproperty">
+    <div class="modal-dialog modal-sm">
+        <form class="modal-content" id="modals-default-form-addproperty">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Property
+                    <br>
+                    <small class="text-muted">Add selected property to machine.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-body-addproperty">
+                @Html.HiddenFor(x => x.newprop.MachineId, new { @id = "newpropMachineId" })
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Select Property</label>
+                        @Html.DropDownListFor(x => x.propertytypes, Model.propertytypes, new { @id = "newpropType", @class = "custom-select", @style = "btn-default" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Property Value</label>
+                        @Html.TextBoxFor(x => x.newprop.Value, new { @class = "form-control", @id = "newpropValue" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-3">
+                        <label class="custom-control custom-checkbox m-0">
+                            @Html.CheckBoxFor(x => x.newprop.Active, new { @id = "newpropActive", @class = "custom-control-input" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="NewPropSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-editproperty">
+    <div class="modal-dialog modal-sm">
+        <form class="modal-content" id="modals-default-form-editproperty">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Property
+                    <br>
+                    <small class="text-muted">Edit selected property to machine.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-body-editproperty">
+                @*@Html.HiddenFor(x => x.editprop.MachineId, new { @id = "editpropMachineId" })*@
+                @Html.HiddenFor(x => x.editprop.PropertyMetadataId, new { @id = "editpropPropertyMetadataId" })
+
+                @*<div class="form-row">
+            <div class="form-group col-sm-12">
+                <label class="form-label">Select Property</label>
+                @Html.DropDownListFor(x => x.propertytypes, Model.propertytypes, new { @id = "editpropType", @class = "custom-select", @style = "btn-default" })
+            </div>
+        </div>*@
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label class="form-label">Property Value</label>
+                        @Html.TextBoxFor(x => x.editprop.Value, new { @class = "form-control", @id = "editpropValue" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-3">
+                        <label class="custom-control custom-checkbox m-0">
+                            @Html.CheckBoxFor(x => x.newprop.Active, new { @id = "editpropActive", @class = "custom-control-input" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="EditPropSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-addnote">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-addnote">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Note
+                    <br>
+                    <small class="text-muted">Add note to machine.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-body-addnote">
+                @Html.HiddenFor(x => x.addnote.MachineId, new { @id = "addnoteMachineId" })
+                <div class="form-row">
+                    <div class="form-group col-lg-12">
+                        <label class="form-label">Note Type</label>
+                        @Html.TextBoxFor(x => x.addnote.NoteType, new { @class = "form-control", @id = "addnoteNoteType" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-12">
+                        <label class="form-label">Note</label>
+                        @Html.TextAreaFor(x => x.addnote.Note, new { @class = "form-control", @id = "addnoteNote", @rows = 4 })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-3">
+                        <label class="custom-control custom-checkbox m-0">
+                            @Html.CheckBoxFor(x => x.addnote.Active, new { @id = "addnoteActive", @class = "custom-control-input" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="NewNoteSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-editnote">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-editnote">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Note
+                    <br>
+                    <small class="text-muted">Edit note to machine.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-body-editnote">
+                @Html.HiddenFor(x => x.editnote.Id, new { @id = "editnoteId" })
+                <div class="form-row">
+                    <div class="form-group col-lg-12">
+                        <label class="form-label">Note Type</label>
+                        @Html.TextBoxFor(x => x.editnote.NoteType, new { @class = "form-control", @id = "editnoteNoteType" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-12">
+                        <label class="form-label">Note</label>
+                        @Html.TextAreaFor(x => x.editnote.Note, new { @class = "form-control", @id = "editnoteNote", @rows = 4 })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-3">
+                        <label class="custom-control custom-checkbox m-0">
+                            @Html.CheckBoxFor(x => x.editnote.Active, new { @id = "editnoteActive", @class = "custom-control-input" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="EditNoteSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('#m_table_propertiestbody tbody').on('click', '.editpropertybtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Engineering/Machine/EditMachinePropertyPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#modals-default-body-editproperty').html(result.Form.Result);
+                $('#modals-default-editproperty').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    //function editpropertybtn(e) {
+    //    var id = e;
+    //    $.blockUI({
+    //        message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //        css: {
+    //            backgroundColor: 'transparent',
+    //            border: '0',
+    //            zIndex: 9999999
+    //        },
+    //        overlayCSS: {
+    //            backgroundColor: '#fff',
+    //            opacity: 0.8,
+    //            zIndex: 9999990
+    //        }
+    //    });
+
+    //    $.ajax({
+    //        url: "/Engineering/Machine/EditMachinePropertyPartial/?ID=" + encodeURIComponent(id),
+    //        type: "GET",
+    //        cache: false,
+    //        success: function (result) {
+    //            $.unblockUI();
+
+    //            if (result.success) {
+    //                $('#modals-default-body-editproperty').html(result.Form.Result);
+    //                $('#modals-default-editproperty').modal('show');
+    //            }
+    //            else {
+    //                $.growl.error({
+    //                    message: result.message
+    //                });
+    //            }
+    //        },
+    //        error: function (result) {
+    //            $.unblockUI();
+
+    //            $.growl.error({
+    //                message: result.statusText
+    //            });
+    //        }
+
+    //    });
+
+    //    return false;
+
+    //};
+
+    function editnotebtn(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Engineering/Machine/EditMachineNotePartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $('#modals-default-body-editnote').html(result.Form.Result);
+                    $('#modals-default-editnote').modal('show');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    };
+
+    $('#MachineSubmit').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var MachineName = $('#MachineName').val();
+        var MachineType = $('#MachineType').val()
+        var Status = $('#Status').val();
+        var Active = $('#Active').is(":checked") ? true : false;
+
+        $.ajax({
+            url: "/Engineering/Machine/AddMachineResult",
+            type: "POST",
+            data: {
+                MachineName: MachineName,
+                MachineType: MachineType,
+                Status: Status,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#newpropMachineId').val(result.MachineId);
+                    $('#addnoteMachineId').val(result.MachineId);
+
+                    //$("#CertDie").prop("readonly", true);
+                    $('#MachineSubmit').attr("disabled", true);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#NewPropSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var MachineId = $('#newpropMachineId').val();
+        var PropertyId = $('#newpropType').val();
+        var Value = $('#newpropValue').val()
+        var Active = $('#newpropActive').val();
+
+        $.ajax({
+            url: "/Engineering/Machine/AddPropertyResult",
+            type: "POST",
+            data: {
+                MachineId: MachineId,
+                PropertyId: PropertyId,
+                Value: Value,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#propertiestbody').html(result.Form.Result);
+                    $('#modals-default-form-addproperty').trigger('reset');
+                    $('#newpropMachineId').val(MachineId);
+                    $('#modals-default-addproperty').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditPropSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var PropertyId = $('#NewTblDieWoqtyHtProcessNo').val();
+        var Value = $('#NewTblDieWoqtyHtWorkOrder').val()
+        var Active = $('#NewTblDieWoqtyHtWoqty').val();
+
+        $.ajax({
+            url: "/Engineering/Machine/EditPropertyResult",
+            type: "POST",
+            data: {
+                PropertyId: PropertyId,
+                Value: Value,
+                Active: Active
+            },
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.FormTable.Result);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#NewNoteSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var MachineId = $('#addnoteMachineId').val();
+        var NoteType = $('#addnoteNoteType').val();
+        var Note = $('#addnoteNote').val()
+        var Active = $('#newpropActive').val();
+
+        $.ajax({
+            url: "/Engineering/Machine/AddNoteResult",
+            type: "POST",
+            data: {
+                MachineId: MachineId,
+                NoteType: NoteType,
+                Note: Note,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#notestbody').html(result.FormTable.Result);
+                    $('#modals-default-form-addnote').trigger('reset');
+                    $('#addnoteMachineId').val(MachineId);
+                    $('#modals-default-addnote').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditNoteSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Id = $('#editnoteId').val();
+        var NoteType = $('#editnoteNoteType').val();
+        var Note = $('#editnoteNote').val()
+        var Active = $('#editnoteActive').val();
+
+        $.ajax({
+            url: "/Engineering/Machine/EditNoteResult",
+            type: "POST",
+            data: {
+                Id: Id,
+                MachineId: MachineId,
+                NoteType: NoteType,
+                Note: Note,
+                Active: Active
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#notestbody').html(result.FormTable.Result);
+                    $('#modals-default-editnote').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#MachineType').change(function () {
+
+        var selectedType = $('#MachineType').val();
+
+        $.ajax({
+            url: "/Engineering/Machine/MachineTypeSelect/?ID=" + encodeURIComponent(selectedType),
+            type: "GET",
+            //data: {
+            //    Id: Id,
+            //    MachineId: MachineId,
+            //    NoteType: NoteType,
+            //    Note: Note,
+            //    Active: Active
+            //},
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $("#MachineDef").val(result.Definition);
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+        return false;
+    });
+
+    $(function () {
+        $("#CertHeat").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/AutoCompleteHeat?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/GetHeatInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#CertCrn').val(data[0].Crn)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#CertDie").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/AutoCompleteDies?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/GetDiesInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#CertDie').val(data[0].Die)
+                        $('#DieProcessNo').val(data[0].Die)
+                        $('#DiePartNum').val(data[0].PartNum)
+                        $('#DieAuxDoc').val(data[0].AuxDoc)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+
+</script>

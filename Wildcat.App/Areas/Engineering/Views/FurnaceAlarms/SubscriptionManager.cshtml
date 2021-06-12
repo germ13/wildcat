@@ -1,0 +1,127 @@
+﻿@model Wildcat.App.ViewModels.FurnaceAlarmSubscriptions
+
+@{
+    ViewData["Title"] = "Subscription Manager";
+    int counter = 0;
+    var request_user = Context.Request.HttpContext.User.Identity.Name.ToString();
+}
+
+<h2>Furnace Alarms</h2>
+
+<div class="layout-content">
+    <div class="container-fluid h-100">
+        <div class="row">
+            <div class="col">
+                <div class="card mb-auto">
+                    <h6 class="card-header">Menu Items</h6>
+                    <div class="card-body">
+                        <select id="id_furnacealarms" multiple size="36" class="form-control">
+                            @foreach (var item in Model.FurnaceAlarmSubscription)
+                            {
+                                <!option data-subscription="@item.Subscription.Id" @((counter++ == 0) ? "selected" : String.Empty) onclick="show_workers_click(this)">
+                                    @item.Subscription.NameCode.PadLeft(2, '0') - @item.Subscription.DisplayName.Replace("ALARM:", "")
+                                </!option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card mb-auto" id="id_subscriptions">
+                    @foreach (var furnacealarm in Model.FurnaceAlarmSubscription)
+                    {
+                        <div id="id_subscription-@furnacealarm.Subscription.Id" class="card mb-4">
+                            <h6 class="card-header">Worker - @furnacealarm.Subscription.DisplayName.Replace("ALARM:", "") </h6>
+                            <div class="card-body">
+                                <ul>
+                                    @foreach (var workerAll in Model.WorkersAll)
+                                    {
+                                        <li>
+                                            @{var idd = $"subscription-{furnacealarm.Subscription.Id}_worker-{workerAll.Id}";}
+                                            <input id="@idd" class="form-check-input" type="checkbox" value="@workerAll.Id" @(furnacealarm.Worker.Contains(workerAll) ? "checked" : "") onclick="changeWorkerAlarmStatus(this)">
+                                            <div class="form-check-label">@workerAll.FirstName @workerAll.LastName</div>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/vendor/libs/growl/growl.js"></script>
+<script src="~/assets/vendor/libs/toastr/toastr.js"></script>
+<script>
+    //startup code
+
+    wait_forrender();
+
+    // this makes sure that subscriptions element is rendered in DOM, so we can proceed.
+    // once it is rendered, show only but first selection.
+    function wait_forrender() {
+        if (!$("#id_subscriptions").length) {
+            window.requestAnimationFrame(wait_forrender);
+        } else {
+            show_workers(1);
+        }
+    }
+
+    // only show element at element_id, display:none the rest.
+    function show_workers(element_id) {
+        console.log()
+        var subcriptions = document.getElementById("id_subscriptions");
+        for (var i = 1; i <= subcriptions.children.length; i++) {
+            if (element_id == i) {
+                subcriptions.children[i - 1].style.display = "block";
+            } else {
+                subcriptions.children[i - 1].style.display = "none";
+            }
+        }
+    }
+
+    // handle click from furnaces, and call the function to display the corresponding workers.
+    function show_workers_click(e) {
+        console.log(e);
+        var subscription_id = document.getElementById("id_furnacealarms").selectedIndex;
+        show_workers(subscription_id + 1);
+    }
+
+    function changeWorkerAlarmStatus(e) {
+        var sub_id = e.id.split("_")[0].split("-")[1];
+        var worker_id = e.id.split("_")[1].split("-")[1];
+
+        $.ajax({
+            url: 'ChangeWorkerStatus',
+            type: "GET",
+            data: {
+                subscriptionId: sub_id,
+                workerId: worker_id,
+                check: e.checked,
+                change_requestby: '@(Context.Request.HttpContext.User.Identity.Name.ToString().Replace("\\","\\\\"))'
+            },
+            success: function (result) {
+                toastr['success']('Worker : ' + worker_id + ' modified', 'Success: modified!', {
+                    positionClass: 'toast-top-right',
+                    closeButton: true,
+                    progressBar: false,
+                    preventDuplicates: true,
+                    newestOnTop: true,
+                    rtl: $('body').attr('dir') === 'rtl' || $('html').attr('dir') === 'rtl'
+                });
+            },
+            error: function (result) {
+                toastr['error']('Worker : ' + worker_id + ' not modified', 'Error!', {
+                    positionClass: 'toast-top-right',
+                    closeButton: true,
+                    progressBar: false,
+                    preventDuplicates: true,
+                    newestOnTop: true,
+                    rtl: $('body').attr('dir') === 'rtl' || $('html').attr('dir') === 'rtl'
+                });
+            }
+        });
+    }
+</script>

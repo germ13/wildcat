@@ -1,0 +1,817 @@
+﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersIndexViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Grinders</li>
+        </ol>
+    </div>
+</h4>
+
+<div id="bootstrap-table-toolbar" class="row">
+    <div class="col-sm-2">
+        @Html.DropDownListFor(x => x.GrindersSelect, Model.GrindersSelect, new { @id = "GrinderSelect", @class = "custom-select", @style = "btn-default" })    <br />
+    </div>
+</div>
+
+
+<div id="viewContent">
+
+    <div class="row">
+        <div class="col-sm-2 ">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="align-items-center">
+                        <div id="c1" class="circles" style="background-color: red; border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                        <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Bag House Pressure Warning</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 ">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="align-items-center">
+                        <div id="c2" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                        <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Grind Auto Grind</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 ">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="align-items-center">
+                        <div id="c3" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                        <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Run Auto Grind</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 ">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="align-items-center">
+                        <div id="c4" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                        <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Boom In</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 ">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="align-items-center">
+                        <div id="c5" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                        <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">Boom Out</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 ">
+            <div class="card ">
+                <div class="card-body">
+                    <div class="align-items-center">
+                        <div id="c6" class="circles" style="background-color: red;border-radius: 100px; margin: 0 auto; height: 45px; width: 45px;"></div>
+                        <h6 style="margin: 0 auto; padding-top: 10px; text-align: center;">In Grind Area</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div id="blockContactTime">
+        <div class="demo-vertical-spacing-lg">
+            <canvas id="chart-contactTime" height="250" class="chartjs-demo"></canvas>
+        </div>
+        <br />
+    </div>
+    <div id="blockIndexPosition">
+        <div class="demo-vertical-spacing-lg">
+            <canvas id="chart-IndexPosition" height="250" class="chartjs-demo"></canvas>
+        </div>
+        <br />
+    </div>
+    <div id="blockTravelSpeed">
+        <div class="demo-vertical-spacing-lg">
+            <canvas id="chart-TravelSpeed" height="250" class="chartjs-demo"></canvas>
+        </div>
+        <br />
+    </div>
+    <div id="blockPressureDiff">
+        <div class="demo-vertical-spacing-lg">
+            <canvas id="chart-PressureDiff" height="250" class="chartjs-demo"></canvas>
+        </div>
+        <br />
+    </div>
+    <div id="blockLubeTempReturn">
+        <div class="demo-vertical-spacing-lg">
+            <canvas id="chart-TempReturn" height="250" class="chartjs-demo"></canvas>
+        </div>
+        <br />
+    </div>
+    <div id="blockLubeTempSupply">
+        <div class="demo-vertical-spacing-lg">
+            <canvas id="chart-TempSupply" height="250" class="chartjs-demo"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#GrinderSelect').change(function () {
+        $('.chartjs-demo').each(function () {
+            $(this).wrap($('<div style="height:' + this.getAttribute('height') + 'px"></div>'));
+        });
+
+        var selectedGrinder = $('#GrinderSelect').val();
+
+        setGrinderPressureWarning(selectedGrinder);
+        setGrinderAutoGrind(selectedGrinder);
+        setRunAutoGrind(selectedGrinder);
+        setBoomIn(selectedGrinder);
+        setBoomOut(selectedGrinder);
+        setInGrindArea(selectedGrinder);
+        setContactTime(selectedGrinder);
+        setIndexPosition(selectedGrinder);
+        setTravelSpeed(selectedGrinder);
+        setPressureDiff(selectedGrinder);
+        setLubeTempReturn(selectedGrinder);
+        setLubeTempSupply(selectedGrinder);
+
+        $('.chartjs-demo').each(function () {
+            $(this).wrap($('<div style="height:' + this.getAttribute('height') + 'px"></div>'));
+        });
+
+        return false;
+    });
+
+    function setGrinderPressureWarning(selectedGrinder) {
+        $('#c1').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderPressureWarning?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#c1').css("background-color", result.color);
+                    //setTable();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message,
+                    });
+                    $('#c1').css("background-color", 'yellow');
+                }
+
+                $('#c1').unblock();
+            },
+            error: function (result) {
+                $('#c1').css("background-color", 'yellow');
+                $('#c1').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setGrinderAutoGrind(selectedGrinder) {
+        $('#c2').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderAutoGrind?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#c2').css("background-color", result.color);
+                    //setTable();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                    $('#c2').css("background-color", 'yellow');
+                }
+
+                $('#c2').unblock();
+            },
+            error: function (result) {
+                $('#c2').css("background-color", 'yellow');
+                $('#c2').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setRunAutoGrind(selectedGrinder) {
+                $('#c3').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderAutoGrind?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#c3').css("background-color", result.color);
+                    //setTable();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                    $('#c3').css("background-color", 'yellow');
+                }
+
+                $('#c3').unblock();
+            },
+            error: function (result) {
+                $('#c3').css("background-color", 'yellow');
+                $('#c3').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setBoomIn(selectedGrinder) {
+        $('#c4').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderBoomIn?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#c4').css("background-color", result.color);
+                    //setTable();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                    $('#c4').css("background-color", 'yellow');
+                }
+
+                $('#c4').unblock();
+            },
+            error: function (result) {
+                $('#c4').css("background-color", 'yellow');
+                $('#c4').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setBoomOut(selectedGrinder) {
+        $('#c5').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderBoomOut?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#c5').css("background-color", result.color);
+                    //setTable();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                    $('#c5').css("background-color", 'yellow');
+                }
+
+                $('#c5').unblock();
+            },
+            error: function (result) {
+                $('#c5').css("background-color", 'yellow');
+                $('#c5').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setInGrindArea(selectedGrinder) {
+        $('#c6').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderInGrindArea?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#c6').css("background-color", result.color);
+                    //setTable();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                    $('#c6').css("background-color", 'yellow');
+                }
+
+                $('#c6').unblock();
+            },
+            error: function (result) {
+                $('#c6').css("background-color", 'yellow');
+                $('#c6').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setContactTime(selectedGrinder) {
+        $('#blockContactTime').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderContactTime?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $('#blockContactTime').unblock();
+
+                if (result.success) {
+                    if (result.values === undefined || result.values.length == 0) {
+                        $('#blockContactTime').hide();
+                    }
+                    else {
+                        var graphChart = new Chart(document.getElementById('chart-contactTime').getContext("2d"), {
+                            type: 'line',
+                            data: {
+                                labels: result.timestamps,
+                                datasets: [{
+                                    label: 'Contact Time',
+                                    data: result.values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(255, 193, 7, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                        $('#blockContactTime').show();
+                    }
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $('#blockContactTime').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setIndexPosition(selectedGrinder) {
+        $('#blockIndexPosition').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderIndexPosition?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $('#blockIndexPosition').unblock();
+
+                if (result.success) {
+                    if (result.values === undefined || result.values.length == 0) {
+                        $('#blockIndexPosition').hide();
+                    }
+                    else {
+                        var graphChart = new Chart(document.getElementById('chart-IndexPosition').getContext("2d"), {
+                            type: 'line',
+                            data: {
+                                labels: result.timestamps,
+                                datasets: [{
+                                    label: 'Index Position',
+                                    data: result.values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(255, 193, 7, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                        $('#blockIndexPosition').show();
+                    }
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $('#blockIndexPosition').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setTravelSpeed(selectedGrinder) {
+        $('#blockTravelSpeed').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderTravelSpeed?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $('#blockTravelSpeed').unblock();
+
+                if (result.success) {
+                    if (result.values === undefined || result.values.length == 0) {
+                        $('#blockTravelSpeed').hide();
+                    }
+                    else {
+                        var graphChart = new Chart(document.getElementById('chart-TravelSpeed').getContext("2d"), {
+                            type: 'line',
+                            data: {
+                                labels: result.timestamps,
+                                datasets: [{
+                                    label: 'Travel Speed',
+                                    data: result.values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(255, 193, 7, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                        $('#blockTravelSpeed').show();
+                    }
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $('#blockTravelSpeed').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setPressureDiff(selectedGrinder) {
+        $('#blockPressureDiff').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderPressureDiff?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $('#blockPressureDiff').unblock();
+
+                if (result.success) {
+                    if (result.values === undefined || result.values.length == 0) {
+                        $('#blockPressureDiff').hide();
+                    }
+                    else {
+                        var graphChart = new Chart(document.getElementById('chart-PressureDiff').getContext("2d"), {
+                            type: 'line',
+                            data: {
+                                labels: result.timestamps,
+                                datasets: [{
+                                    label: 'Bag House Press Diff',
+                                    data: result.values,
+                                    borderWidth: 1,
+                                    backgroundColor: 'rgba(255, 193, 7, 0.3)',
+                                    borderColor: '#FFC107',
+                                    borderDash: [5, 5],
+                                    fill: false
+                                }],
+                            },
+
+                            // Demo
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                        $('#blockPressureDiff').show();
+                    }
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $('#blockPressureDiff').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setLubeTempReturn(selectedGrinder) {
+        $('#blockLubeTempReturn').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderLubeTempReturn?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#blockLubeTempReturn').unblock();
+
+                    if (result.values === undefined || result.values.length == 0) {
+                        $('#blockLubeTempReturn').hide();
+                    }
+                    else {
+                        var graphChart = new Chart(document.getElementById('chart-TempReturn').getContext("2d"), {
+                        type: 'line',
+                        data: {
+                            labels: result.timestamps,
+                            datasets: [{
+                                label: 'Lube Oil Temp Return',
+                                data: result.values,
+                                borderWidth: 1,
+                                backgroundColor: 'rgba(255, 193, 7, 0.3)',
+                                borderColor: '#FFC107',
+                                borderDash: [5, 5],
+                                fill: false
+                            }],
+                        },
+
+                        // Demo
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+
+                        $('#blockLubeTempReturn').show();
+                    }
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $('#blockLubeTempReturn').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    function setLubeTempSupply(selectedGrinder) {
+        $('#blockLubeTempSupply').block({
+            message: '<div class="sk-wave sk-primary"><div class="sk-rect sk-rect1"></div> <div class="sk-rect sk-rect2"></div> <div class="sk-rect sk-rect3"></div> <div class="sk-rect sk-rect4"></div> <div class="sk-rect sk-rect5"></div></div>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0'
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8
+            }
+        });
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/GetGrinderLubeTempSupply?ID=" + selectedGrinder,
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#blockLubeTempSupply').unblock();
+
+                    if (result.values === undefined || result.values.length == 0) {
+                        $('#blockLubeTempSupply').hide();
+                    }
+                    else {
+                        var graphChart = new Chart(document.getElementById('chart-TempSupply').getContext("2d"), {
+                        type: 'line',
+                        data: {
+                            labels: result.timestamps,
+                            datasets: [{
+                                label: 'Lube Oil Temp Supply',
+                                data: result.values,
+                                borderWidth: 1,
+                                backgroundColor: 'rgba(255, 193, 7, 0.3)',
+                                borderColor: '#FFC107',
+                                borderDash: [5, 5],
+                                fill: false
+                            }],
+                        },
+
+                        // Demo
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                            }
+                        });
+
+                        $('#blockLubeTempSupply').show();
+                    }
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+                $('#blockLubeTempSupply').unblock();
+            },
+            error: function (result) {
+                $('#blockLubeTempSupply').unblock();
+                $.growl.error({
+                    message: result.message
+                });
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('.chartjs-demo').each(function () {
+            $(this).wrap($('<div style="height:' + this.getAttribute('height') + 'px"></div>'));
+        });
+
+        var selectedGrinder = $("#GrinderSelect").val();
+
+        setGrinderPressureWarning(selectedGrinder);
+        setGrinderAutoGrind(selectedGrinder);
+        setRunAutoGrind(selectedGrinder);
+        setBoomIn(selectedGrinder);
+        setBoomOut(selectedGrinder);
+        setInGrindArea(selectedGrinder);
+        setContactTime(selectedGrinder);
+        setIndexPosition(selectedGrinder);
+        setTravelSpeed(selectedGrinder);
+        setPressureDiff(selectedGrinder);
+        setLubeTempReturn(selectedGrinder);
+        setLubeTempSupply(selectedGrinder);
+
+        $(function () {
+
+            function circleBlink() {
+                var circles = $('.circles');
+                circles.hide();
+                circles.fadeIn('slow', function () { });
+            };
+            setInterval(circleBlink, 2500);
+        })
+        //window.setInterval(function () {
+        //    var selectedGrinder = $("#GrinderSelect").val();
+
+        //    setGrinderPressureWarning(selectedGrinder);
+        //    setGrinderAutoGrind(selectedGrinder);
+        //    setRunAutoGrind(selectedGrinder);
+        //    setBoomIn(selectedGrinder);
+        //    setBoomOut(selectedGrinder);
+        //    setInGrindArea(selectedGrinder);
+        //}, 10000);
+    });
+</script>
+<script src="~/html-demo/assets/vendor/libs/chartjs/chartjs.js"></script>

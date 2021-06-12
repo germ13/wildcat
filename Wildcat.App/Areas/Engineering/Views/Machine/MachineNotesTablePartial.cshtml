@@ -1,0 +1,11 @@
+﻿@model List<Wildcat.Entities.PCC.Wildcat.MachineNote>
+@foreach (var item in Model)
+{
+    <tr class="gradeU">
+        <td>@item.NoteType</td>
+        <td>@item.Note</td>
+        <td style="text-align:center;">
+            <a href="#" onclick="editnotebtn(@item.Id)" data-value="@item.Id" class="btn btn-primary btn-sm openbtn editnotebtn">Edit</a>
+        </td>
+    </tr>
+}

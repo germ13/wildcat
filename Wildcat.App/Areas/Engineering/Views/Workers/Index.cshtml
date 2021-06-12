@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Wildcat.Entities.PCC.Wildcat.Worker>
+
+@{
+    ViewData["Title"] = "Workers";
+}
+
+<h2>Workers</h2>
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+
+<div id="id_workers_engineering_datatable" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="datatables-demo table table-striped table-bordered dataTable no-footer" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+                <thead>
+                    <tr role="row">
+                        <th class="sorting">
+                            Name
+                        </th>
+                        <th>
+                            Is <br /> Salaried?
+                        </th>
+                        <th>
+                            Badge #
+                        </th>
+                        <th>
+                            Mobile #
+                        </th>
+                        <th>
+                            Working Days
+                        </th>
+                        <th>
+                            Shift Start <br /> HH:MM
+                        </th>
+                        <th>
+                            Shift End <br /> HH:MM
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Active)
+                        </th>
+                        <th></th>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr role="row">
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @if (item.IsSalary == true)
+                                {
+                                    <span class="badge badge-success">Y</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">N</span>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BadgeNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MobileNumber)
+                            </td>
+                            <td>
+                                @if (!String.IsNullOrEmpty(item.DaysOfWeek))
+                                {
+                                    @foreach (var c in item.DaysOfWeek.Trim())
+                                    {
+                                        <day-of-the-week day-number="@c"></day-of-the-week>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShiftStart)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ShiftEnd)
+                            </td>
+                            <td>
+                                @if (item.Active == true)
+                                {
+                                    <span class="badge badge-success">Active</span> }
+                                else
+                                {
+                                    <span class="badge badge-danger">Deactivated</span>
+                                }
+                            </td>
+                            <td>
+                                @*<a href="~/Engineering/Workers/Edit/@item.Id">Edit</a> |
+                                <a href="~/Engineering/Workers/Details/@item.Id">Details</a> |*@
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                @*<a asp-action="Delete" asp-route-id="@item.WorkerId">Delete</a>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.datatables-demo').dataTable();
+    });
+</script>

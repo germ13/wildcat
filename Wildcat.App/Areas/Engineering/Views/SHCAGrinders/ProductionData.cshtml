@@ -1,0 +1,935 @@
+﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersProductionViewModel
+@{
+    ViewData["Title"] = "ProductionData";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Engineering/SHCAGrinders/Index">SHCA Grinders</a>
+            </li>
+            <li class="breadcrumb-item active">Production Data</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                Grinder Production Data
+            </h6>
+            <div class="card-body">
+                <form id="submitform">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Select Grinder</label>
+                            @Html.DropDownListFor(x => x.GrindersSelect, Model.GrindersSelect, new { @id = "GrindersSelect", @class = "custom-select", @style = "btn-default" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">From Date</label>
+                            @Html.TextBoxFor(x => x.Fromdate.Date, new { @id = "fromdate", @class = "form-control" })
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label class="form-label">To Date</label>
+                            @Html.TextBoxFor(x => x.Todate.Date, new { @id = "todate", @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card" id="cardholder1">
+            <h8 class="card-header">
+                Shift 1 Production Data | Average = @Model.Shift1Avg | Total = @Model.Shift1Total
+            </h8>
+            <div class="card-body">
+                <div class="card-datatable table-responsive" id="tableholder1">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="table1">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Value</th>
+                                <th>Property</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var item in Model.Shift1DTO.OrderByDescending(x => x.Timestamp))
+                            {
+                                <tr>
+                                    <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card" id="cardholder2">
+            <h8 class="card-header">
+                Shift 2 Production Data | Average = @Model.Shift2Avg | Total = @Model.Shift2Total
+            </h8>
+            <div class="card-body">
+                <div class="card-datatable table-responsive" id="tableholder2">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="table2">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Value</th>
+                                <th>Property</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var item in Model.Shift2DTO.OrderByDescending(x => x.Timestamp))
+                            {
+                                <tr>
+                                    <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card" id="cardholder3">
+            <h8 class="card-header">
+                Shift 3 Production Data | Average = @Model.Shift3Avg | Total = @Model.Shift3Total
+            </h8>
+            <div class="card-body">
+                <div class="card-datatable table-responsive" id="tableholder3">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="table3">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Value</th>
+                                <th>Property</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var item in Model.Shift3DTO.OrderByDescending(x => x.Timestamp))
+                            {
+                                <tr>
+                                    <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+    <div class="col-lg-6">
+        <div class="card" id="cardholder4">
+            <h8 class="card-header">
+                Shift 4 Production Data | Average = @Model.Shift4Avg | Total = @Model.Shift4Total
+            </h8>
+            <div class="card-body">
+                <div class="card-datatable table-responsive" id="tableholder4">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="table4">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Value</th>
+                                <th>Property</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var item in Model.Shift4DTO.OrderByDescending(x => x.Timestamp))
+                            {
+                                <tr>
+                                    <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //function datatable1() {
+    //    var selectedInt = $("#GrindersSelect").val();
+
+    //    $('#table1').dataTable({
+    //        "processing": true,
+    //        "serverSide": true,
+    //        //"search":
+    //        //"info": true,
+    //        //"stateSave": true,
+    //        "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+    //        "ajax": {
+    //            "url": "/Engineering/SHCAGrinders/AjaxGetJsonProductionData",
+    //            "data": function (d) {
+    //                d.IntegrationPnt = selectedInt;
+    //                // d.custom = $('#myInput').val();
+    //                // etc
+    //            },
+    //            "type": "POST"
+    //        },
+    //        "language": {
+    //            "search": "",
+    //            "searchPlaceholder": "Search..."
+    //        },
+    //        "columns": [
+    //            { "data": "Timestamp", "orderable": true },
+    //            { "data": "Value", "orderable": true },
+    //            { "data": "Property", "orderable": false }
+    //        ],
+    //        "order": [[0, "asc"]]
+    //    });
+    //}
+
+    //function datatable2() {
+    //    var selectedInt = $("#GrindersSelect").val();
+
+    //    $('#table1').dataTable({
+    //        "processing": true,
+    //        "serverSide": true,
+    //        //"search":
+    //        //"info": true,
+    //        //"stateSave": true,
+    //        "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+    //        "ajax": {
+    //            "url": "/Engineering/SHCAGrinders/AjaxGetJsonProductionData",
+    //            "data": function (d) {
+    //                d.IntegrationPnt = selectedInt;
+    //                // d.custom = $('#myInput').val();
+    //                // etc
+    //            },
+    //            "type": "POST"
+    //        },
+    //        "language": {
+    //            "search": "",
+    //            "searchPlaceholder": "Search..."
+    //        },
+    //        "columns": [
+    //            { "data": "Timestamp", "orderable": true },
+    //            { "data": "Value", "orderable": true },
+    //            { "data": "Property", "orderable": false }
+    //        ],
+    //        "order": [[0, "asc"]]
+    //    });
+    //}
+
+    //function datatable3() {
+    //    var selectedInt = $("#GrindersSelect").val();
+
+    //    $('#table1').dataTable({
+    //        "processing": true,
+    //        "serverSide": true,
+    //        //"search":
+    //        //"info": true,
+    //        //"stateSave": true,
+    //        "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+    //        "ajax": {
+    //            "url": "/Engineering/SHCAGrinders/AjaxGetJsonProductionData",
+    //            "data": function (d) {
+    //                d.IntegrationPnt = selectedInt;
+    //                // d.custom = $('#myInput').val();
+    //                // etc
+    //            },
+    //            "type": "POST"
+    //        },
+    //        "language": {
+    //            "search": "",
+    //            "searchPlaceholder": "Search..."
+    //        },
+    //        "columns": [
+    //            { "data": "Timestamp", "orderable": true },
+    //            { "data": "Value", "orderable": true },
+    //            { "data": "Property", "orderable": false }
+    //        ],
+    //        "order": [[0, "asc"]]
+    //    });
+    //}
+
+    //function datatable4() {
+    //    var selectedInt = $("#GrindersSelect").val();
+
+    //    $('#table1').dataTable({
+    //        "processing": true,
+    //        "serverSide": true,
+    //        //"search":
+    //        //"info": true,
+    //        //"stateSave": true,
+    //        "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+    //        "ajax": {
+    //            "url": "/Engineering/SHCAGrinders/AjaxGetJsonProductionData",
+    //            "data": function (d) {
+    //                d.IntegrationPnt = selectedInt;
+    //                // d.custom = $('#myInput').val();
+    //                // etc
+    //            },
+    //            "type": "POST"
+    //        },
+    //        "language": {
+    //            "search": "",
+    //            "searchPlaceholder": "Search..."
+    //        },
+    //        "columns": [
+    //            { "data": "Timestamp", "orderable": true },
+    //            { "data": "Value", "orderable": true },
+    //            { "data": "Property", "orderable": false }
+    //        ],
+    //        "order": [[0, "asc"]]
+    //    });
+    //}
+
+    //$("#GrindersSelect").change(function () {
+    //    $.blockUI({
+    //        message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //        css: {
+    //            backgroundColor: 'transparent',
+    //            border: '0',
+    //            zIndex: 9999999
+    //        },
+    //        overlayCSS: {
+    //            backgroundColor: '#fff',
+    //            opacity: 0.8,
+    //            zIndex: 9999990
+    //        }
+    //    });
+
+    //    var selectedInt = $("#GrindersSelect").val();
+
+    //    var table1 = $('#table1').DataTable();
+    //    var table2 = $('#table2').DataTable();
+    //    var table3 = $('#table3').DataTable();
+    //    var table4 = $('#table4').DataTable();
+
+    //    table1.ajax.reload();
+    //    table2.ajax.reload();
+    //    table3.ajax.reload();
+    //    table4.ajax.reload();
+
+    //    $.unblockUI();
+
+    //    return false;
+    //});
+
+    $(document).ready(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var GrindersSelect = $('#GrindersSelect').val();
+        var Fromdate = $('#fromdate').val();
+        var Todate = $('#todate').val();
+
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/SHCAGrindersProductionResponse",
+            type: "POST",
+            data: {
+                selectedGrinder: GrindersSelect,
+                fromdate: Fromdate,
+                todate: Todate,
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    if (result.Table1.Result !== null) {
+                        $('#cardholder1').html(result.Table1.Result)
+                        $('#table1').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+                    }
+                    if (result.Table2.Result !== null) {
+                        $('#cardholder2').html(result.Table2.Result)
+                        $('#table2').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+
+                    }
+                    if (result.Table3.Result !== null) {
+                        $('#cardholder3').html(result.Table3.Result)
+                        $('#table3').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+
+                    }
+                    if (result.Table4.Result !== null) {
+                        $('#cardholder4').html(result.Table4.Result)
+                        $('#table4').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+
+                    }
+                }
+
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                //$.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+    });
+
+    $('#submitform').submit(function () {
+
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var GrindersSelect = $('#GrindersSelect').val();
+        var Fromdate = $('#fromdate').val();
+        var Todate = $('#todate').val();
+
+        $.ajax({
+            url: "/Engineering/SHCAGrinders/SHCAGrindersProductionResponse",
+            type: "POST",
+            data: {
+                selectedGrinder: GrindersSelect,
+                fromdate: Fromdate,
+                todate: Todate,
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    if (result.Table1.Result !== null) {
+                        $('#cardholder1').html(result.Table1.Result)
+                        $('#table1').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+                    }
+                    if (result.Table2.Result !== null) {
+                        $('#cardholder2').html(result.Table2.Result)
+                        $('#table2').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+
+                    }
+                    if (result.Table3.Result !== null) {
+                        $('#cardholder3').html(result.Table3.Result)
+                        $('#table3').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+
+                    }
+                    if (result.Table4.Result !== null) {
+                        $('#cardholder4').html(result.Table4.Result)
+                        $('#table4').DataTable({
+                            scrollY: '50vh',
+                            scrollX: true,
+                            scrollCollapse: true,
+                            deferRender: true
+                            //columnDefs: [
+                            //    {
+                            //        "targets": [7],
+                            //        "visible": false,
+                            //        "searchable": true
+                            //    }
+                            //]
+                        });
+
+                    }
+                }
+
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                //$.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    //function setTable() {
+    //    $(function () {
+    //        var $table = $('#bootstrap-table-example');
+    //        var $remove = $('#bootstrap-table-remove');
+    //        var selections = [];
+
+    //        function getIdSelections() {
+    //            return $.map($table.bootstrapTable('getSelections'), function (row) {
+    //                return row.id;
+    //            });
+    //        }
+
+    //        $table.bootstrapTable({
+    //            height: 500,
+    //            iconsPrefix: 'opacity-75 ion',
+    //            icons: {
+    //                paginationSwitchDown: 'ion-ios-arrow-down icon-chevron-down',
+    //                paginationSwitchUp: 'ion-ios-arrow-up icon-chevron-up',
+    //                refresh: 'ion-md-refresh icon-refresh',
+    //                columns: 'ion-md-apps icon-th',
+    //                detailOpen: 'ion-md-add icon-plus',
+    //                detailClose: 'ion-md-remove icon-minus',
+    //                export: 'ion-md-cloud-download icon-share'
+    //            },
+    //            detailFormatter: function detailFormatter(index, row) {
+    //                var html = [];
+
+    //                $.each(row, function (key, value) {
+    //                    html.push('<p><b>' + key + ':</b> ' + (typeof value === 'undefined' ? false : value) + '</p>');
+    //                });
+
+    //                return html.join('');
+    //            },
+    //            columns: [
+    //                //[
+    //                //  {
+    //                //    field: 'state',
+    //                //    checkbox: true,
+    //                //    rowspan: 2,
+    //                //    align: 'center',
+    //                //    valign: 'middle'
+    //                //  }, {
+    //                //    title: 'Item ID',
+    //                //    field: 'id',
+    //                //    rowspan: 2,
+    //                //    align: 'center',
+    //                //    valign: 'middle',
+    //                //    sortable: true,
+    //                //    footerFormatter: function totalTextFormatter(data) {
+    //                //      return 'Total';
+    //                //    }
+    //                //  }, {
+    //                //    title: 'Item Detail',
+    //                //    colspan: 3,
+    //                //    align: 'center'
+    //                //  }
+    //                //],
+    //                //[
+    //                //  {
+    //                //    field: 'name',
+    //                //    title: 'Item Name',
+    //                //    sortable: true,
+    //                //    editable: true,
+    //                //    footerFormatter: function totalNameFormatter(data) {
+    //                //      return data.length;
+    //                //    },
+    //                //    align: 'center'
+    //                //  }, {
+    //                //    field: 'price',
+    //                //    title: 'Item Price',
+    //                //    sortable: true,
+    //                //    align: 'center',
+    //                //    editable: {
+    //                //      type: 'text',
+    //                //      title: 'Item Price',
+    //                //      validate: function (value) {
+    //                //        value = $.trim(value);
+
+    //                //        if (!value) { return 'This field is required'; }
+    //                //        if (!/^\$/.test(value)) { return 'This field needs to start width $.' }
+
+    //                //        var data = $table.bootstrapTable('getData');
+    //                //        var index = $(this).parents('tr').data('index');
+
+    //                //        // console.log(data[index]);
+    //                //        return '';
+    //                //      }
+    //                //    },
+    //                //    footerFormatter: function totalPriceFormatter(data) {
+    //                //      var total = 0;
+
+    //                //      $.each(data, function (i, row) {
+    //                //        total += +(row.price.substring(1));
+    //                //      });
+
+    //                //      return '$' + total;
+    //                //    }
+    //                //  }, {
+    //                //    field: 'operate',
+    //                //    title: 'Item Operate',
+    //                //    align: 'center',
+    //                //    events: {
+    //                //      'click .like': function (e, value, row, index) {
+    //                //        alert('You click like action, row: ' + JSON.stringify(row));
+    //                //      },
+    //                //      'click .remove': function (e, value, row, index) {
+    //                //        $table.bootstrapTable('remove', {
+    //                //          field: 'id',
+    //                //          values: [row.id]
+    //                //        });
+    //                //      }
+    //                //    },
+    //                //    formatter: function operateFormatter(value, row, index) {
+    //                //      return [
+    //                //        '<a class="btn btn-xs icon-btn btn-outline-default borderless like" href="javascript:void(0)" title="Like">',
+    //                //        '<i class="ion ion-md-heart"></i>',
+    //                //        '</a>  ',
+    //                //        '<a class="btn btn-xs icon-btn btn-outline-danger borderless remove" href="javascript:void(0)" title="Remove">',
+    //                //        '<i class="ion ion-md-close"></i>',
+    //                //        '</a>'
+    //                //      ].join('');
+    //                //    }
+    //                //  }
+    //                //]
+    //            ]
+    //        });
+
+
+    //        // Make bootstrapTable compatible with Bootstrap 4
+    //        if ($('body').attr('dir') !== 'rtl' && $('html').attr('dir') !== 'rtl') {
+    //            $('.bootstrap-table .pull-right .dropdown-menu').addClass('dropdown-menu-right');
+    //            $('.bootstrap-table .pull-left .dropdown-menu').removeClass('dropdown-menu-right');
+    //        } else {
+    //            $('.bootstrap-table .pull-left .dropdown-menu').addClass('dropdown-menu-right');
+    //        }
+
+
+    //        // sometimes footer render error.
+    //        setTimeout(function () {
+    //            $table.bootstrapTable('resetView');
+    //        }, 200);
+
+    //        $table.on('check.bs.table uncheck.bs.table ' + 'check-all.bs.table uncheck-all.bs.table', function () {
+    //            $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+    //            // save your data, here just save the current page
+    //            selections = getIdSelections();
+    //            // push or splice the selections if you want to save all data selections
+    //        });
+
+    //        $table.on('all.bs.table', function (e, name, args) {
+    //            // console.log(name, args);
+    //        });
+
+    //        $remove.click(function () {
+    //            var ids = getIdSelections();
+
+    //            $table.bootstrapTable('remove', {
+    //                field: 'id',
+    //                values: ids
+    //            });
+    //            $remove.prop('disabled', true);
+    //        });
+
+    //    });
+
+    //}
+
+    //jQuery(document).ready(function () {
+    //    $('.chartjs-demo').each(function () {
+    //        $(this).wrap($('<div style="height:' + this.getAttribute('height') + 'px"></div>'));
+    //    });
+
+    //    $.blockUI({
+    //        message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //        css: {
+    //            backgroundColor: 'transparent',
+    //            border: '0',
+    //            zIndex: 9999999
+    //        },
+    //        overlayCSS: {
+    //            backgroundColor: '#fff',
+    //            opacity: 0.8,
+    //            zIndex: 9999990
+    //        }
+    //    });
+
+    //    var GrindersSelect = $('#GrindersSelect').val();
+    //    //var ShiftsSelect1 = $('#ShiftsSelect1').val()
+    //    //var ShiftsSelect2 = $('#ShiftsSelect2').val();
+    //    //var ShiftsSelect3 = $('#ShiftsSelect3').val();
+    //    //var ShiftsSelect4 = $('#ShiftsSelect4').val();
+    //    var Fromdate = $('#fromdate').val();
+    //    var Todate = $('#todate').val();
+
+    //    $.ajax({
+    //        url: "/Engineering/SHCAGrinders/SHCAGrindersProductionResponse",
+    //        type: "POST",
+    //        data: {
+    //            selectedGrinder: GrindersSelect,
+    //            //shiftSelect1: ShiftsSelect1,
+    //            //shiftSelect2: ShiftsSelect2,
+    //            //shiftSelect3: ShiftsSelect3,
+    //            //shiftSelect4: ShiftsSelect4,
+    //            fromdate: Fromdate,
+    //            todate: Todate,
+    //        },
+    //        cache: false,
+    //        success: function (result) {
+    //            $.unblockUI();
+
+    //            if (result.success) {
+    //                if (result.ShiftData1Times !== null) {
+    //                    var graphChart1 = new Chart(document.getElementById('chart1').getContext("2d"));
+    //                    var chart1 = new Chart(graphChart1, {
+    //                        type: 'line',
+    //                        data: {
+    //                            labels: result.vm.ShiftData1Times,
+    //                            datasets: [{
+    //                                label: '1st Shift',
+    //                                data: result.vm.ShiftData1Values,
+    //                                borderWidth: 1,
+    //                                backgroundColor: 'rgba(235, 64, 52, 0.3)',
+    //                                borderColor: '#FFC107',
+    //                                borderDash: [5, 5],
+    //                                fill: false
+    //                            }],
+    //                        },
+
+    //                        // Demo
+    //                        options: {
+    //                            responsive: true,
+    //                            maintainAspectRatio: false
+    //                        }
+    //                    });
+    //                    //var graphChart1 = new Chart(document.getElementById('chart1').getContext("2d"), {
+    //                    //    type: 'line',
+    //                    //    data: {
+    //                    //        labels: result.vm.ShiftData1Times,
+    //                    //        datasets: [{
+    //                    //            label: '1st Shift',
+    //                    //            data: result.vm.ShiftData1Values,
+    //                    //            borderWidth: 1,
+    //                    //            backgroundColor: 'rgba(235, 64, 52, 0.3)',
+    //                    //            borderColor: '#FFC107',
+    //                    //            borderDash: [5, 5],
+    //                    //            fill: false
+    //                    //        }],
+    //                    //    },
+
+    //                    //    // Demo
+    //                    //    options: {
+    //                    //        responsive: true,
+    //                    //        maintainAspectRatio: false
+    //                    //    }
+    //                    //});
+    //                }
+    //                if (result.ShiftData2Times !== null) {
+    //                    var graphChart2 = new Chart(document.getElementById('chart2').getContext("2d"), {
+    //                        type: 'line',
+    //                        data: {
+    //                            labels: result.vm.ShiftData2Times,
+    //                            datasets: [{
+    //                                label: '2nd Shift',
+    //                                data: result.vm.ShiftData2Values,
+    //                                borderWidth: 1,
+    //                                backgroundColor: 'rgba(235, 211, 52, 0.3)',
+    //                                borderColor: '#FFC107',
+    //                                borderDash: [5, 5],
+    //                                fill: false
+    //                            }],
+    //                        },
+
+    //                        // Demo
+    //                        options: {
+    //                            responsive: true,
+    //                            maintainAspectRatio: false
+    //                        }
+    //                    });
+    //                }
+    //                if (result.ShiftData3Times !== null) {
+    //                    var graphChart3 = new Chart(document.getElementById('chart3').getContext("2d"), {
+    //                        type: 'line',
+    //                        data: {
+    //                            labels: result.vm.ShiftData3Times,
+    //                            datasets: [{
+    //                                label: '3rd Shift',
+    //                                data: result.vm.ShiftData3Values,
+    //                                borderWidth: 1,
+    //                                backgroundColor: 'rgba(70, 235, 52, 0.3)',
+    //                                borderColor: '#FFC107',
+    //                                borderDash: [5, 5],
+    //                                fill: false
+    //                            }],
+    //                        },
+
+    //                        // Demo
+    //                        options: {
+    //                            responsive: true,
+    //                            maintainAspectRatio: false
+    //                        }
+    //                    });
+    //                }
+    //                if (result.ShiftData4Times !== null) {
+    //                    var graphChart4 = new Chart(document.getElementById('chart4').getContext("2d"), {
+    //                        type: 'line',
+    //                        data: {
+    //                            labels: result.vm.ShiftData4Times,
+    //                            datasets: [{
+    //                                label: '4th Shift',
+    //                                data: result.vm.ShiftData4Values,
+    //                                borderWidth: 1,
+    //                                backgroundColor: 'rgba(52, 171, 235, 0.3)',
+    //                                borderColor: '#FFC107',
+    //                                borderDash: [5, 5],
+    //                                fill: false
+    //                            }],
+    //                        },
+
+    //                        // Demo
+    //                        options: {
+    //                            responsive: true,
+    //                            maintainAspectRatio: false
+    //                        }
+    //                    });
+    //                }
+    //            }
+
+    //            else {
+    //                $.growl.error({
+    //                    message: result.message
+    //                });
+    //            }
+
+
+    //        },
+    //        error: function (result) {
+    //            //$.unblockUI();
+
+    //            $.growl.error({
+    //                message: result.statusText
+    //            });
+    //        }
+
+    //    });
+
+    //});
+
+</script>
+@*<script src="~/html-demo/assets/vendor/libs/chartjs/chartjs.js"></script>*@

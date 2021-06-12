@@ -1,0 +1,27 @@
+﻿@model Wildcat.App.ViewModels.SHCA.Grinders.GrinderProdVM
+<h8 class="card-header">
+    @Model.header
+</h8>
+<div class="card-body">
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id=@Model.tableid>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Value</th>
+                    <th>Property</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                @foreach (var item in Model.dto.OrderByDescending(x => x.Timestamp))
+                            {
+                <tr>
+                    <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                    <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                </tr>
+                            }
+            </tbody>
+        </table>
+    </div>
+</div>

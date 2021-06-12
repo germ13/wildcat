@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Wildcat.Entities.PCC.Wildcat.SideMenu>
+
+<ul class="sidenav-inner py-1">
+    @{foreach (var item in Model.Where(s => s.ParentId == null).Distinct().ToList())
+        {
+            if (Model.Where(x => x.ParentId == item.Id).Count() > 0)
+            {
+                <li class="sidenav-item" id="@item.Id" data-parent-id="@item.ParentId">
+                    <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+                        <i class="sidenav-icon @item.IconCss"></i>
+                        <div>@item.DisplayName</div>
+                    </a>
+                    <ul class="sidenav-menu">
+                        @{foreach (var firstItem in (Model.Where(s => s.ParentId == item.Id).OrderBy(x => x.SortOrder).ToList()))
+                            {
+                                if (Model.Where(x => x.ParentId == firstItem.Id).Count() > 0)
+                                {
+                                    <li class="sidenav-item" id="@firstItem.Id" data-parent-id="@firstItem.ParentId">
+                                        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+                                            <i class="sidenav-icon @firstItem.IconCss"></i>
+                                            <div>@firstItem.DisplayName</div>
+                                        </a>
+                                        <ul class="sidenav-menu">
+                                            @foreach (var secondItem in (Model.Where(s => s.ParentId == firstItem.Id).OrderBy(x => x.SortOrder).ToList()))
+                                            {
+                                                if (Model.Where(x => x.ParentId == secondItem.Id).Count() > 0)
+                                                {
+                                                    <li class="sidenav-item" id="@secondItem.Id" data-parent-id="@secondItem.ParentId">
+                                                        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+                                                            <i class="sidenav-icon @secondItem.IconCss"></i>
+                                                            @secondItem.DisplayName
+                                                        </a>
+                                                        <ul class="sidenav-menu">
+                                                            @foreach (var thirdItem in (Model.Where(s => s.ParentId == secondItem.Id).OrderBy(x => x.SortOrder).ToList()))
+                                                            {
+                                                                if (Model.Where(x => x.ParentId == thirdItem.Id).Count() > 0)
+                                                                {
+                                                                    <li class="sidenav-item" id="@thirdItem.Id" data-parent-id="@thirdItem.ParentId">
+                                                                        <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
+                                                                            <i class="sidenav-icon @thirdItem.IconCss"></i>
+                                                                            @thirdItem.DisplayName
+                                                                        </a>
+                                                                        <ul class="sidenav-menu">
+                                                                            @foreach (var fourthItem in (Model.Where(s => s.ParentId == thirdItem.Id).OrderBy(x => x.SortOrder).ToList()))
+                                                                            {
+                                                                                <li class="sidenav-item" id="@fourthItem.Id" data-parent-id="@fourthItem.ParentId">
+                                                                                    <a href="@fourthItem.Link" class="sidenav-link">
+                                                                                        <i class="sidenav-icon @fourthItem.IconCss"></i>
+                                                                                        @fourthItem.DisplayName
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    </li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li class="sidenav-item" id="@thirdItem.Id" data-parent-id="@thirdItem.ParentId">
+                                                                        <a href="@thirdItem.Link" class="sidenav-link">
+                                                                            <i class="sidenav-icon @thirdItem.IconCss"></i>
+                                                                            @thirdItem.DisplayName
+                                                                        </a>
+                                                                    </li>
+                                                                }
+                                                            }
+                                                        </ul>
+                                                    </li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="sidenav-item" id="@secondItem.Id" data-parent-id="@secondItem.ParentId">
+                                                        <a href="@secondItem.Link" class="sidenav-link">
+                                                            <i class="sidenav-icon @secondItem.IconCss"></i>
+                                                            @secondItem.DisplayName
+                                                        </a>
+                                                    </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="sidenav-item" id="@firstItem.Id" data-parent-id="@firstItem.ParentId">
+                                        <a href="@firstItem.Link" class="sidenav-link">
+                                            <i class="sidenav-icon @firstItem.IconCss"></i>
+                                            @firstItem.DisplayName
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li class="sidenav-item" id="@item.Id" data-parent-id="@item.ParentId">
+                    <a href="@item.Link" class="sidenav-link">
+                        <i class="sidenav-icon @item.IconCss"></i>
+                        @item.DisplayName
+                    </a>
+                </li>
+            }
+        }
+    }
+</ul>

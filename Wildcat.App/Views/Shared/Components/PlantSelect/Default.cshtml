@@ -1,0 +1,15 @@
+﻿@model Wildcat.App.Views.Shared.Components.PlantSelect.PlantSelectViewModel
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="PlantSelect" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @Model.SelectedPlant
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        @foreach (var m in Model.Plants)
+        {
+            @if (Model.SelectedPlant.ToLower() != m.Text.ToLowerInvariant())
+            {
+                <button class="dropdown-item" type="button" onclick="setLocationCookie(this)">@m.Text</button>
+            }
+        }
+    </div>
+</div>

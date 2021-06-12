@@ -1,0 +1,24 @@
+﻿@model Wildcat.App.ViewModels.Engineering.EditMachinePropertyValuePartialViewModel
+@Html.HiddenFor(x => x.editprop.Id, new { @id = "editpropMachineId" })
+@Html.HiddenFor(x => x.editprop.PropertyMetadataId, new { @id = "editpropPropertyMetadataId" })
+
+<div class="form-row">
+    <div class="form-group col-sm-12">
+        <label class="form-label">Select Property</label>
+        @Html.DropDownListFor(x => x.propertytypes, Model.propertytypes, new { @id = "editpropType", @class = "custom-select", @style = "btn-default" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-12">
+        <label class="form-label">Property Value</label>
+        @Html.TextBoxFor(x => x.editprop.Value, new { @class = "form-control", @id = "editpropValue" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-sm-3">
+        <label class="custom-control custom-checkbox m-0">
+            @Html.CheckBoxFor(x => x.editprop.Active, new { @id = "editpropActive", @class = "custom-control-input" })
+            <span class="custom-control-label">Active?</span>
+        </label>
+    </div>
+</div>
