@@ -51,20 +51,26 @@ namespace Wildcat.App
 
             app.UseEndpoints(endpoints =>
             {
+
+
+                //endpoints.MapControllerRoute(
+                //    name: "engineering",
+                //    pattern: "SHCA/Engineering/{controller=Home}/{action=Index}/{id?}");
+
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-
-                endpoints.MapAreaControllerRoute(
-                    name: "CCTV",
-                    areaName: "CCTV",
-                    pattern: "~/CCTV/{controller=Home}/{action=Index}/{id?}");
+                //endpoints.MapAreaControllerRoute(
+                //    name: "CCTV",
+                //    areaName: "CCTV",
+                //    pattern: "~/CCTV/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapAreaControllerRoute(
-                    name: "engineering",
-                    areaName: "Engineering",
-                    pattern: "~/Engineering/{controller=Workers}/{action=Index}/{id?}");
+                    name: "engineering2",
+                    areaName: "SHCA",
+                    pattern: "{area}/Engineering/{controller=Workers}/{action=Index}/{id?}"
+                    );
 
 
                 //    //routes.MapAreaRoute(

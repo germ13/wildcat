@@ -76,8 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Engineering\Views\Baghouse\" />
-    <Folder Include="Views\Areas\Engineering\" />
+    <Folder Include="Areas\SHCA\Views\Engineering\Baghouse\" />
   </ItemGroup>
 
 

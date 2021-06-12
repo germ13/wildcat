@@ -11,7 +11,7 @@ using Wildcat.Entities.PCC.Wildcat;
 
 namespace Wildcat.App.Controllers.Engineering
 {
-    //[Area("Engineering")]
+    [Area("SHCA")]
     public class FurnaceAlarmsController : Controller
     {
         private readonly WildcatContext _context;
