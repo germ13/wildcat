@@ -1,0 +1,152 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.AddHeatOpViewModel
+@{
+    IList<SelectListItem> coolRateItems = new List<SelectListItem>
+    {
+        new SelectListItem{Text = "Air Cool", Value = "A/C"},
+        new SelectListItem{Text = "Water Quench", Value = "W/Q"},
+        new SelectListItem{Text = "Oil Quench", Value = "O/Q"},
+    };
+}
+@*@Html.HiddenFor(x => x.SelectedJobType, new { @id = "SelectedJobType" })*@
+<div class="modal-header">
+    <h5 class="modal-title">
+        Add Heat Operations to Metallurgical Record
+        <br>
+        <small class="text-muted">Add heat operation to metallurgical record:</small>
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+</div>
+<div class="modal-body">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="form-label">Date</label>
+            @Html.TextBoxFor(x => x.NewOp.Date, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">No Pcs:</label>
+            @Html.TextBoxFor(x => x.NewOp.NoPcs, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">FCE No:</label>
+            @Html.TextBoxFor(x => x.NewOp.NoPcs, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Operation:</label>
+            @Html.TextBoxFor(x => x.NewOp.Operation, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Temp:</label>
+            @Html.TextBoxFor(x => x.NewOp.Temp, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Hold Time:</label>
+            @Html.TextBoxFor(x => x.NewOp.HoldTime, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-row">
+         <div class="form-group col-md-4">
+            <label class="form-label">Cool Rate:</label>
+            @*@Html.TextBoxFor(x => x.NewOp.CoolRate, new { @class = "form-control", @id = "AddCoolRate" })*@
+            @Html.DropDownListFor(x => x.NewOp.CoolRate, coolRateItems,  new { @class = "form-control", @id = "AddCoolRate"})
+        </div>
+        <div class="form-group col-md-4">
+            <label class="form-label">At Temp:</label>
+            @Html.TextBoxFor(x => x.NewOp.AtTemp, new { @class = "form-control", @id = "AddAtTemp" })
+        </div>
+        <div class="form-group col-md-4">
+            <label class="form-label">Hold Complete:</label>
+            @Html.TextBoxFor(x => x.NewOp.HoldComplete, new { @class = "form-control", @id = "AddHoldComplete" })
+        </div>
+    </div>
+    <div class="form-row">
+       <div class="form-group col-md-6">
+            <label class="form-label">Quench Temp Start:</label>
+            @Html.TextBoxFor(x => x.NewOp.QuenchTempStart, new { @class = "form-control", @id = "AddQuenchTempStart" })
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label">Quench Temp Finish:</label>
+            @Html.TextBoxFor(x => x.NewOp.QuenchTempFinish, new { @class = "form-control", @id = "AddQuenchTempFinish" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="card-datatable table-responsive">
+            <table class="datatables-demo table table-striped table-bordered display nowrap" id="modals-default-addheat-form-table">
+                <thead>
+                    <tr>
+                        <th>Op Key</th>
+                        <th>Die</th>
+                        <th>Operation</th>
+                        <th>Furnace</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var iheat in Model.HeatOperations)
+                    {
+                        <tr>
+                            <td>@iheat.OrderNo</td>
+                            <td>@iheat.NoPcs</td>
+                            <td>@iheat.Operation</td>
+                            <td>@iheat.FceNo</td>
+                            <td>@iheat.Date</td>
+                            <td>
+                                <a href="#" data-value="@iheat.RowId" class="btn btn-primary btn-sm openbtn editheatbtn">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>
+
+<script>
+        $('.editheatbtn').click(function (e) {
+        //$('#modals-default-editheat').modal('show');
+
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/MetRecord/EditHeatPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#modals-default-editheat-form').html(result.Form.Result);
+                $('#modals-default-editheat').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+
+</script>

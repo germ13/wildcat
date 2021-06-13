@@ -10,6 +10,7 @@ using Wildcat.App.ViewModels.Engineering;
 
 namespace Wildcat.App.Controllers.Engineering
 {
+    [Area("SHCA")]
     public class BaghouseController : Controller
     {
         private License _license = new License();

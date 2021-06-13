@@ -1,8 +1,58 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model Wildcat.App.ViewModels.Home.HomeViewModel
+@{
+    ViewBag.Title = "Wildcat Dashboard";
+    //var
 }
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">
+                <a class="breadcrumb-item active" href="/Home/Index">Home</a>
+            </li>
+        </ol>
+    </div>
+</h4>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-xl-12">
+        <div class="card-body">
+            <h1 style="text-align: center;">Welcome to Wildcat</h1>
+            <div style="text-align:center; margin: 0 auto;">
+                <br /><br />
+                @if (Model.PlantLocation == "SHCA")
+                {
+                    <img src="~/images/ShultzLogo.png" style="height: 500px; margin: 0 auto;" />
+                }
+                else if (Model.PlantLocation == "CFCA")
+                {
+                    <img src="~/images/CarltonLogo.png" style="height: 500px; margin: 0 auto;" />
+                }
+                else if (Model.PlantLocation == "MCNJ")
+                {
+                    <img src="~/images/McWilliamsLogo.png" style="height: 500px; margin: 0 auto;" />
+                }
+                else if (Model.PlantLocation == "SMCA")
+                {
+                    <img src="~/images/SummitLogo.png" style="height: 500px; margin: 0 auto;" />
+                }
+                else
+                {
+                    <img src="~/images/RippleLogo.png" style="height: 500px; margin: 0 auto;" />
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- exclusive div tag helper example -->
+@*<div class="row no-gutters row-bordered">
+    <div class="col-md-12 col-lg-12 col-xl-12" asp-authorize asp-policy="Team:Developers,Administrators">
+        <div class="card-body">
+            <h2>Only Developers can see this</h2>
+            <div style="height: 210px;">
+                <h3>Administrators can see anything.</h3>
+                <canvas id="statistics-chart-1"></canvas>
+            </div>
+        </div>
+    </div>
+</div>*@

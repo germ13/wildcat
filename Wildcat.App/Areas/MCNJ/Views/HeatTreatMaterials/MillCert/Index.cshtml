@@ -1,0 +1,82 @@
+﻿@model List<Wildcat.Entities.MCNJ.HeatsSecured.CertsMill>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Mill Certs</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Mill Certs
+        @Html.ActionLink("New Cert", "Add", "MillCert", null, new { @class = "btn btn-primary pull-right" })
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>CRN</th>
+                    <th>Mill ID</th>
+                    <th>Mill CN</th>
+                    <th>Heat</th>
+                    <th>Heat Desc</th>
+                    <th>Material</th>
+                    <th>Spec</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatMaterials/MillCert/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "Crn", "orderable": false },
+                { "data": "MillId", "orderable": false },
+                { "data": "MillCn", "orderable": false },
+                { "data": "Heat", "orderable": true },
+                { "data": "HtDesc", "orderable": true },
+                { "data": "Material", "orderable": true },
+                { "data": "Spec", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href=/MCNJ/HeatTreatMaterials/MillCert/Edit?id=' + data.Crn + ' type="button"   style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    });
+
+</script>

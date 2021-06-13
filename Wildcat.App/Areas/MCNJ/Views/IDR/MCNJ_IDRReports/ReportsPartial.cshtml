@@ -1,0 +1,34 @@
+﻿@model List<Wildcat.Entities.MCNJ.IDR.TblIdrdata>
+<table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+    <thead>
+        <tr>
+            <th>IDRNumber</th>
+            <th>Work Order</th>
+            <th>Heat Code</th>
+            <th>Die Number</th>
+            <th>Discrepancy1</th>
+            <th>Discrepancy2</th>
+            <th>Pre-Disp Status</th>
+            <th>Final-Disp Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        @foreach (var i in Model)
+        {
+        <tr>
+            <td>@i.Idrnumber</td>
+            <td>@i.WorkOrderNumber</td>
+            <td>@i.HeatCode</td>
+            <td>@i.DieNumber</td>
+            <td>@i.DiscrepancyType1</td>
+            <td>@i.DiscrepancyType2</td>
+            <td>@i.PreDispositionStatus</td>
+            <td>@i.FinalDisposition</td>
+            <td style="text-align:center;">
+                <a href="#" onclick="editheatbtn(@i.Idrnumber)" data-value="@i.Idrnumber" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn editopenbtn">Open</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

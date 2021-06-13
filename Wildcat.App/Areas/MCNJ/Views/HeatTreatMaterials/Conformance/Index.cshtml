@@ -1,0 +1,110 @@
+﻿@model List<Wildcat.Entities.MCNJ.HeatsSecured.CertsMcW>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Conformance Certificates</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Conformance Certificates
+        @Html.ActionLink("New Cert", "Add", "Conformance", null, new { @class = "btn btn-primary pull-right" })
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>McW Cert</th>
+                    <th>CRN</th>
+                    <th>Date</th>
+                    <th>CustId</th>
+                    <th>CustPo</th>
+                    <th>WorkOrder</th>
+                    <th>Heat</th>
+                    <th>GsMcW</th>
+                    <th>Hardness</th>
+                    <th>HeatTreatNotes</th>
+                    <th>CertificationNotes</th>
+                    <th>ProcessNo</th>
+                    <th>NoteType</th>
+                    <th>QtyShipped</th>
+                    <th>Die</th>
+                    <th>Work Order</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+    function ellipses() {
+    return function ( data, type, row ) {
+        return type === 'display' && data.length > 10 ?
+            data.substr( 0, 10 ) +'…' :
+            data;
+    }
+    };
+
+    $(document).ready(function () {
+        $('#m_table_2').dataTable({
+            "responsive": true,
+            "processing": true,
+            "serverSide": true,
+            //"search": 
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatMaterials/Conformance/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "McWCn", "orderable": true },
+                { "data": "Crn", "orderable": false },
+                { "data": "Date", "orderable": false },
+                { "data": "CustId", "orderable": false },
+                { "data": "CustPo", "orderable": false },
+                { "data": "WorkOrder", "orderable": false },
+                { "data": "Heat", "orderable": false },
+                { "data": "GsMcW", "orderable": false },
+                { "data": "Hardness", "orderable": false, "render": function ( data, type, row ) { return (data !== null && data.length > 15) ? data.substr( 0, 15 ) +'…' : data; } },
+                { "data": "HeatTreatNotes", "orderable": true, "render": function ( data, type, row ) { return (data !== null && data.length > 15) ? data.substr( 0, 15 ) +'…' : data; } },
+                { "data": "CertificationNotes", "orderable": true, "render": function ( data, type, row ) { return (data !== null && data.length > 15) ? data.substr( 0, 15 ) +'…' : data; } },
+                { "data": "ProcessNo", "orderable": true },
+                { "data": "NoteType", "orderable": true },
+                { "data": "QtyShipped", "orderable": false },
+                { "data": "Die", "orderable": true },
+                { "data": "WorkOrder", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        //return '<button type="button" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn" data-id="' + data.McWCn + '" title="Edit">Edit</i></button>';
+                        return '<a type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn" href=/MCNJ/HeatTreatBatchRecords/Conformance/Edit?id=' + data.McWCn + '>EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    });
+
+</script>

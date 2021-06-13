@@ -1,0 +1,879 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.IDR.IDRReportsViewModel
+@{
+    ViewData["Title"] = "IDR Reports";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Inspect Discrepancy Reports</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                IDR Reports
+            </h6>
+            <div class="card-body">
+                <form id="submitform">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label class="form-label">Select Report Type</label>
+                            @Html.DropDownListFor(x => x.SelectedReportType, Model.Reports, new { @id = "SelectedReportType", @class = "custom-select", @style = "btn-default" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="form-label">Select Tool Number</label>
+                            @Html.TextBoxFor(x => x.ToolNumber, new { @class = "form-control", @id = "ToolNumber" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="form-label">Start Date</label>
+                            @Html.TextBoxFor(x => x.StartDate, new { @class = "form-control", @id = "StartDate" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="form-label">End Date</label>
+                            @Html.TextBoxFor(x => x.EndDate, new { @class = "form-control", @id = "EndDate" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            @*<label class="form-label">Filter</label>*@
+                            <button type="submit" class="btn btn-primary" id="filter">Filter</button>
+                        </div>
+                    </div>
+                </form>
+                <br />
+                <div class="card-datatable table-responsive" id="tableholder">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                        <thead>
+                            <tr>
+                                <th>IDRNumber</th>
+                                <th>Work Order</th>
+                                <th>Heat Code</th>
+                                <th>Die Number</th>
+                                <th>Discrepancy1</th>
+                                <th>Discrepancy2</th>
+                                <th>Pre-Disp Status</th>
+                                <th>Final-Disp Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @foreach (var i in Model.IDR)
+                            {
+                                @*<tr>
+                                        <td>@i.Dcrnumber</td>
+                                        <td>@i.ToolNumber</td>
+                                        <td>@i.Unit</td>
+                                        <td>@i.EngApproval</td>
+                                        <td>@i.HoldProductionYesOrNo</td>
+                                        <td>@i.ToolsChangedYesOrNo</td>
+                                        <td>@i.DateRequired</td>
+                                        <td style="text-align:center;">
+                                            <a href="#" onclick="editheatbtn(@i.Dcrnumber)" data-value="@i.Dcrnumber" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn editopenbtn">Open</a>
+                                        </td>
+                                    </tr>*@
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    New IDR
+                    <br>
+                    <small class="text-muted">New Inspection Discrepancy.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="add-modal-form">
+                <div class="col-xl-12">
+                    <div class="nav-tabs-top mb-4">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#navs-top-add-general">General Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#navs-top-add-discrepancy">Discrepancy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#navs-top-add-predisposition">Pre-Disposition Status</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#navs-top-add-finaldisposition">Final Disposition Status</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navs-top-add-general">
+                                <div class="card-body">
+                                    @Html.HiddenFor(x => x.AddIDR.Idrnumber, new { @class = "form-control", @readonly = "readonly", @id = "AddIdrnumber" })
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Initiator:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.Initiator, new { @class = "form-control", @id = "AddInitiator" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Date:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.Date, new { @class = "form-control", @id = "AddDate" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Customer</label>
+                                            @Html.DropDownListFor(x => x.AddIDR.Customer, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "AddCustomer" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Work Order #:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.WorkOrderNumber, new { @class = "form-control", @id = "AddWorkOrderNumber" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Die Number:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.DieNumber, new { @class = "form-control", @id = "AddDieNumber" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Heat Code:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.HeatCode, new { @class = "form-control", @id = "AddHeatCode" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Work Order Quantity:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.WorkOrderQuantity, new { @class = "form-control", @id = "AddWorkOrderQuantity" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Serial Numbers:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.SerialNumbers, new { @class = "form-control", @id = "SerialNumbers", @rows = 3 })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Discrepant Quantity:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.DiscrepantQuantity, new { @class = "form-control", @id = "AddDiscrepantQuantity" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-add-discrepancy">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Select Discrepancy Type:</label>
+                                            @Html.DropDownListFor(x => x.AddIDR.DiscrepancyType1, Model.DiscrepancyTypes, new { @class = "custom-select", @style = "btn-default", @id = "AddDiscrepancyType1" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Select Discrepancy Type:</label>
+                                            @Html.DropDownListFor(x => x.AddIDR.DiscrepancyType2, Model.Discrepancy2TypeList, new { @class = "custom-select", @style = "btn-default", @id = "AddDiscrepancyType2" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Required:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.Required, new { @class = "form-control", @id = "AddRequired", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Actual:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.Actual, new { @class = "form-control", @id = "AddActual", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-add-predisposition">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Pre-Disposition Status:</label>
+                                            @Html.DropDownListFor(x => x.AddIDR.PreDispositionStatus, Model.PredispositionStatus, new { @class = "custom-select", @style = "btn-default", @id = "AddPreDispositionStatus" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Notes:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.PreDispositionStatusNotes, new { @class = "form-control", @id = "AddPreDispositionStatusNotes", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Required:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.Required, new { @class = "form-control", @id = "AddRequired", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Actual:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.Actual, new { @class = "form-control", @id = "AddActual", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-add-finaldisposition">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Pre-Disposition Status:</label>
+                                            @Html.DropDownListFor(x => x.AddIDR.FinalDisposition, Model.FinalDisposition, new { @class = "custom-select", @style = "btn-default", @id = "AddFinalDisposition" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Accepted Quantity:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.FinalAcceptedQuantity, new { @class = "form-control", @id = "AddFinalAcceptedQuantity" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Rejected Quantity:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.FinalRejectedQuantity, new { @class = "form-control", @id = "AddFinalRejectedQuantity" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Disposition By:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.FinalDispositionBy, new { @class = "form-control", @id = "AddFinalDispositionBy" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Disposition Date:</label>
+                                            @Html.TextBoxFor(x => x.AddIDR.FinalDispositionDate, new { @class = "form-control", @id = "AddFinalDispositionDate" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Disposition Summary:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.Required, new { @class = "form-control", @id = "AddRequired", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Special Shipping/Marking Instructions:</label>
+                                            @Html.TextAreaFor(x => x.AddIDR.FinalDispositionSpecialHandlingInstructions, new { @class = "form-control", @id = "AddFinalDispositionSpecialHandlingInstructions", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenew">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit IDR
+                    <br>
+                    <small class="text-muted">Edit Inspection Discrepancy.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                <div class="col-xl-12">
+                    <div class="nav-tabs-top mb-4">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#navs-top-edit-general">General Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#navs-top-edit-discrepancy">Discrepancy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#navs-top-edit-predisposition">Pre-Disposition Status</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#navs-top-edit-finaldisposition">Final Disposition Status</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navs-top-edit-general">
+                                <div class="card-body">
+                                    @Html.HiddenFor(x => x.EditIDR.Idrnumber, new { @class = "form-control", @readonly = "readonly", @id = "EditIdrnumber" })
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Initiator:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.Initiator, new { @class = "form-control", @id = "EditInitiator" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Date:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.Date, new { @class = "form-control", @id = "EditDate" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Customer</label>
+                                            @Html.DropDownListFor(x => x.EditIDR.Customer, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "EditCustomer" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Work Order #:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.WorkOrderNumber, new { @class = "form-control", @id = "EditWorkOrderNumber" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Die Number:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.DieNumber, new { @class = "form-control", @id = "EditDieNumber" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Heat Code:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.HeatCode, new { @class = "form-control", @id = "EditHeatCode" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Work Order Quantity:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.WorkOrderQuantity, new { @class = "form-control", @id = "EditWorkOrderQuantity" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Serial Numbers:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.SerialNumbers, new { @class = "form-control", @id = "SerialNumbers", @rows = 3 })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-label">Discrepant Quantity:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.DiscrepantQuantity, new { @class = "form-control", @id = "EditDiscrepantQuantity" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-edit-discrepancy">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Select Discrepancy Type:</label>
+                                            @Html.DropDownListFor(x => x.EditIDR.DiscrepancyType1, Model.DiscrepancyTypes, new { @class = "custom-select", @style = "btn-default", @id = "EditDiscrepancyType1" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Select Discrepancy Type:</label>
+                                            @Html.DropDownListFor(x => x.EditIDR.DiscrepancyType2, Model.Discrepancy2TypeList, new { @class = "custom-select", @style = "btn-default", @id = "EditDiscrepancyType2" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Required:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.Required, new { @class = "form-control", @id = "EditRequired", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Actual:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.Actual, new { @class = "form-control", @id = "EditActual", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-edit-predisposition">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Pre-Disposition Status:</label>
+                                            @Html.DropDownListFor(x => x.EditIDR.PreDispositionStatus, Model.PredispositionStatus, new { @class = "custom-select", @style = "btn-default", @id = "EditPreDispositionStatus" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Notes:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.PreDispositionStatusNotes, new { @class = "form-control", @id = "EditPreDispositionStatusNotes", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Required:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.Required, new { @class = "form-control", @id = "EditRequired", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Actual:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.Actual, new { @class = "form-control", @id = "EditActual", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-edit-finaldisposition">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Pre-Disposition Status:</label>
+                                            @Html.DropDownListFor(x => x.EditIDR.FinalDisposition, Model.FinalDisposition, new { @class = "custom-select", @style = "btn-default", @id = "EditFinalDisposition" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Accepted Quantity:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.FinalAcceptedQuantity, new { @class = "form-control", @id = "EditFinalAcceptedQuantity" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Rejected Quantity:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.FinalRejectedQuantity, new { @class = "form-control", @id = "EditFinalRejectedQuantity" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Disposition By:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.FinalDispositionBy, new { @class = "form-control", @id = "EditFinalDispositionBy" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label">Disposition Date:</label>
+                                            @Html.TextBoxFor(x => x.EditIDR.FinalDispositionDate, new { @class = "form-control", @id = "EditFinalDispositionDate" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Disposition Summary:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.Required, new { @class = "form-control", @id = "EditRequired", @rows = 3 })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="form-label">Special Shipping/Marking Instructions:</label>
+                                            @Html.TextAreaFor(x => x.EditIDR.FinalDispositionSpecialHandlingInstructions, new { @class = "form-control", @id = "EditFinalDispositionSpecialHandlingInstructions", @rows = 3 })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveedit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#filter').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var selectedReportType = $("#SelectedReportType").val();
+        var ToolNumber = $("#ToolNumber").val();
+        var StartDate = $("#StartDate").val();
+        var EndDate = $("#EndDate").val();
+
+        $.ajax({
+            url: "/MCNJ/IDR/MCNJ_IDRReports/GetSelectedReports",
+            type: "POST",
+            data: { ReportType: selectedReportType, ToolNumber: ToolNumber, StartDate: StartDate, EndDate: EndDate },
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#tableholder').html(result.Form.Result);
+                    $('#m_table_2').DataTable({
+                        scrollY: '50vh',
+                        scrollX: true,
+                        scrollCollapse: true,
+                        deferRender: true
+                    });
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+                $.unblockUI();
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.message
+                });
+            }
+
+        });
+        return false;
+    });
+
+    function editheatbtn(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/IDR/MCNJ_IDRReports/EditRequestPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    };
+
+    $('#savenew').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Idrnumber = $('#AddIdrnumber').val();
+        var Initiator = $('#AddInitiator').val()
+        var Operation = $('#AddOperation').val();
+        var Customer = $('#AddCustomer').val();
+        var HeatCode = $('#AddHeatCode').val();
+        var Date = $('#AddDate').val();
+        var DieNumber = $('#AddDieNumber').val();
+        var WorkOrderNumber = $('#AddWorkOrderNumber').val();
+        var WorkOrderQuantity = $('#AddWorkOrderQuantity').val();
+        var DiscrepantQuantity = $('#AddDiscrepantQuantity').val();
+        var SerialNumbers = $('#AddSerialNumbers').val();
+        var Required = $('#AddRequired').val();
+        var Actual = $('#AddActual').val();
+        var DiscrepancyType1 = $('#AddDiscrepancyType1').val();
+        var DiscrepancyType2 = $('#AddDiscrepancyType2').val();
+        var PreDispositionStatus = $('#AddPreDispositionStatus').val();
+        var PreDispositionStatusNotes = $('#AddPreDispositionStatusNotes').val();
+        var ReworkQuantity = $('#AddReworkQuantity').val();
+        var MrbsubmittalDate = $('#AddMrbsubmittalDate').val();
+        var MrbsubmittalNumber = $('#AddMrbsubmittalNumber').val();
+        var MrbsubmittalQuantity = $('#AddMrbsubmittalQuantity').val();
+        var MrbdispositionDate = $('#AddMrbdispositionDate').val();
+        var FinalAcceptedQuantity = $('#AddFinalAcceptedQuantity').val();
+        var FinalRejectedQuantity = $('#AddFinalRejectedQuantity').val();
+        var FinalDisposition = $('#AddFinalDisposition').val();
+        var FinalDispositionBy = $('#AddFinalDispositionBy').val();
+        var FinalDispositionDate = $('#AddFinalDispositionDate').val();
+        var FinalDispositionSummary = $('#AddFinalDispositionSummary').val();
+        var FinalDispositionSpecialHandlingInstructions = $('#AddFinalDispositionSpecialHandlingInstructions').val();
+        var UnitCost = $('#AddUnitCost').val();
+        var MaterialCost = $('#AddMaterialCost').val();
+        var LaborOverheadCost = $('#AddLaborOverheadCost').val();
+        var UnitSellPrice = $('#AddUnitSellPrice').val();
+        var ReworkCost = $('#AddReworkCost').val();
+        var RetestCost = $('#AddRetestCost').val();
+        var ReplacementTestCost = $('#AddReplacementTestCost').val();
+        var AdditionalTestForInfo = $('#AddAdditionalTestForInfo').val();
+        var ScrapCost = $('#AddScrapCost').val();
+        var SubmittalCost = $('#AddSubmittalCost').val();
+        var DollarsSubmitted = $('#AddDollarsSubmitted').val();
+        var Idrcost = $('#AddIdrcost').val();
+        var LostSales = $('#AddLostSales').val();
+        var TotalIdrcost = $('#AddTotalIdrcost').val();
+
+        $.ajax({
+            url: "/MCNJ/IDR/MCNJ_IDRReports/AddResult",
+            type: "POST",
+            data: {
+                Idrnumber: Idrnumber, Initiator: Initiator, Operation: Operation, Customer: Customer, HeatCode: HeatCode, Date: Date, DieNumber: DieNumber, WorkOrderNumber: WorkOrderNumber,
+                WorkOrderQuantity: WorkOrderQuantity, DiscrepantQuantity: DiscrepantQuantity, SerialNumbers: SerialNumbers, Required: Required, Actual: Actual, DiscrepancyType1: DiscrepancyType1,
+                DiscrepancyType2: DiscrepancyType2, PreDispositionStatus: PreDispositionStatus, PreDispositionStatusNotes: PreDispositionStatusNotes, ReworkQuantity: ReworkQuantity, MrbsubmittalDate: MrbsubmittalDate,
+                MrbsubmittalNumber: MrbsubmittalNumber, MrbsubmittalQuantity: MrbsubmittalQuantity, MrbdispositionDate: MrbdispositionDate, FinalAcceptedQuantity: FinalAcceptedQuantity, FinalRejectedQuantity: FinalRejectedQuantity,
+                FinalDisposition: FinalDisposition, FinalDispositionBy: FinalDispositionBy, FinalDispositionDate: FinalDispositionDate, FinalDispositionSummary: FinalDispositionSummary, FinalDispositionSpecialHandlingInstructions: FinalDispositionSpecialHandlingInstructions,
+                UnitCost: UnitCost, MaterialCost: MaterialCost, LaborOverheadCost: LaborOverheadCost, UnitSellPrice: UnitSellPrice, ReworkCost: ReworkCost,
+                RetestCost: RetestCost, ReplacementTestCost: ReplacementTestCost, AdditionalTestForInfo: AdditionalTestForInfo, ScrapCost: ScrapCost, SubmittalCost: SubmittalCost,
+                DollarsSubmitted: DollarsSubmitted, Idrcost: Idrcost, LostSales: LostSales, TotalIdrcost: TotalIdrcost
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    resetNewForm();
+                    $('#modals-default').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#saveedit').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Idrnumber = $('#EditIdrnumber').val();
+        var Initiator = $('#EditInitiator').val()
+        var Operation = $('#EditOperation').val();
+        var Customer = $('#EditCustomer').val();
+        var HeatCode = $('#EditHeatCode').val();
+        var Date = $('#EditDate').val();
+        var DieNumber = $('#EditDieNumber').val();
+        var WorkOrderNumber = $('#EditWorkOrderNumber').val();
+        var WorkOrderQuantity = $('#EditWorkOrderQuantity').val();
+        var DiscrepantQuantity = $('#EditDiscrepantQuantity').val();
+        var SerialNumbers = $('#EditSerialNumbers').val();
+        var Required = $('#EditRequired').val();
+        var Actual = $('#EditActual').val();
+        var DiscrepancyType1 = $('#EditDiscrepancyType1').val();
+        var DiscrepancyType2 = $('#EditDiscrepancyType2').val();
+        var PreDispositionStatus = $('#EditPreDispositionStatus').val();
+        var PreDispositionStatusNotes = $('#EditPreDispositionStatusNotes').val();
+        var ReworkQuantity = $('#EditReworkQuantity').val();
+        var MrbsubmittalDate = $('#EditMrbsubmittalDate').val();
+        var MrbsubmittalNumber = $('#EditMrbsubmittalNumber').val();
+        var MrbsubmittalQuantity = $('#EditMrbsubmittalQuantity').val();
+        var MrbdispositionDate = $('#EditMrbdispositionDate').val();
+        var FinalAcceptedQuantity = $('#EditFinalAcceptedQuantity').val();
+        var FinalRejectedQuantity = $('#EditFinalRejectedQuantity').val();
+        var FinalDisposition = $('#EditFinalDisposition').val();
+        var FinalDispositionBy = $('#EditFinalDispositionBy').val();
+        var FinalDispositionDate = $('#EditFinalDispositionDate').val();
+        var FinalDispositionSummary = $('#EditFinalDispositionSummary').val();
+        var FinalDispositionSpecialHandlingInstructions = $('#EditFinalDispositionSpecialHandlingInstructions').val();
+        var UnitCost = $('#EditUnitCost').val();
+        var MaterialCost = $('#EditMaterialCost').val();
+        var LaborOverheadCost = $('#EditLaborOverheadCost').val();
+        var UnitSellPrice = $('#EditUnitSellPrice').val();
+        var ReworkCost = $('#EditReworkCost').val();
+        var RetestCost = $('#EditRetestCost').val();
+        var ReplacementTestCost = $('#EditReplacementTestCost').val();
+        var AdditionalTestForInfo = $('#EditAdditionalTestForInfo').val();
+        var ScrapCost = $('#EditScrapCost').val();
+        var SubmittalCost = $('#EditSubmittalCost').val();
+        var DollarsSubmitted = $('#EditDollarsSubmitted').val();
+        var Idrcost = $('#EditIdrcost').val();
+        var LostSales = $('#EditLostSales').val();
+        var TotalIdrcost = $('#EditTotalIdrcost').val();
+
+        $.ajax({
+            url: "/MCNJ/IDR/MCNJ_IDRReports/EditResult",
+            type: "POST",
+            data: {
+                Idrnumber: Idrnumber, Initiator: Initiator, Operation: Operation, Customer: Customer, HeatCode: HeatCode, Date: Date, DieNumber: DieNumber, WorkOrderNumber: WorkOrderNumber,
+                WorkOrderQuantity: WorkOrderQuantity, DiscrepantQuantity: DiscrepantQuantity, SerialNumbers: SerialNumbers, Required: Required, Actual: Actual, DiscrepancyType1: DiscrepancyType1,
+                DiscrepancyType2: DiscrepancyType2, PreDispositionStatus: PreDispositionStatus, PreDispositionStatusNotes: PreDispositionStatusNotes, ReworkQuantity: ReworkQuantity, MrbsubmittalDate: MrbsubmittalDate,
+                MrbsubmittalNumber: MrbsubmittalNumber, MrbsubmittalQuantity: MrbsubmittalQuantity, MrbdispositionDate: MrbdispositionDate, FinalAcceptedQuantity: FinalAcceptedQuantity, FinalRejectedQuantity: FinalRejectedQuantity,
+                FinalDisposition: FinalDisposition, FinalDispositionBy: FinalDispositionBy, FinalDispositionDate: FinalDispositionDate, FinalDispositionSummary: FinalDispositionSummary, FinalDispositionSpecialHandlingInstructions: FinalDispositionSpecialHandlingInstructions,
+                UnitCost: UnitCost, MaterialCost: MaterialCost, LaborOverheadCost: LaborOverheadCost, UnitSellPrice: UnitSellPrice, ReworkCost: ReworkCost,
+                RetestCost: RetestCost, ReplacementTestCost: ReplacementTestCost, AdditionalTestForInfo: AdditionalTestForInfo, ScrapCost: ScrapCost, SubmittalCost: SubmittalCost,
+                DollarsSubmitted: DollarsSubmitted, Idrcost: Idrcost, LostSales: LostSales, TotalIdrcost: TotalIdrcost
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $(document).ready(function () {
+
+        var selectedReportType = $("#SelectedReportType").val();
+        var ToolNumber = $("#ToolNumber").val();
+        var StartDate = $("#StartDate").val();
+        var EndDate = $("#EndDate").val();
+
+        $.ajax({
+            url: "/MCNJ/IDR/MCNJ_IDRReports/GetSelectedReports",
+            type: "POST",
+            data: { ReportType: selectedReportType, ToolNumber: ToolNumber, StartDate: StartDate, EndDate: EndDate },
+            cache: false,
+            success: function (result) {
+                if (result.success) {
+                    $('#tableholder').html(result.Form.Result);
+                    $('#m_table_2').DataTable({
+                        scrollY: '50vh',
+                        scrollX: true,
+                        scrollCollapse: true,
+                        deferRender: true
+                    });
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+                $.unblockUI();
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.message
+                });
+            }
+
+        });
+        return false;
+
+    });
+</script>

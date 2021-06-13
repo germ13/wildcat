@@ -1,0 +1,725 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.AddMetRecordViewModel
+@{
+    ViewData["Title"] = "Add";
+    IList<SelectListItem> coolRateItems = new List<SelectListItem>
+    {
+        new SelectListItem{Text = "Air Cool", Value = "A/C"},
+        new SelectListItem{Text = "Water Quench", Value = "W/Q"},
+        new SelectListItem{Text = "Oil Quench", Value = "O/Q"},
+    };
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/MCNJ/HeatTreatBatchRecords/MetRecord/Index">Metallurgical Records</a>
+            </li>
+            <li class="breadcrumb-item active">Add Metallurgical Record</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                New Metallurgical Record
+            </h6>
+            <div class="card-body">
+                <form id="AddMetRecord">
+                    @Html.HiddenFor(x => x.AddMetRecord.RowId, new { @id = "RowId" })
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Die Number</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.DieNo, new { @class = "form-control", @id = "DieNo" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Order No:</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.OrderNo, new { @class = "form-control", @id = "OrderNo" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Quantity Run:</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.QuantityRun, new { @class = "form-control", @id = "QuantityRun" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Test Bars:</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.TestBars, new { @class = "form-control", @id = "TestBars" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Weight:</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.Weight, new { @class = "form-control", @id = "Weight" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Section Size:</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.SectionSize, new { @class = "form-control", @id = "SectionSize" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Approved By:</label>
+                            @Html.TextBoxFor(x => x.AddMetRecord.ApprovedBy, new { @class = "form-control", @id = "ApprovedBy" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Notes:</label>
+                            @Html.TextAreaFor(x => x.AddMetRecord.Notes, new { @class = "form-control", @rows = 4, @id = "Notes" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="FormSubmit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+
+            <h5 class="card-header text-align-center">
+                Heat Operations
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Heat Op</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Pieces</th>
+                            <th>Operation</th>
+                            <th>Furnace</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="htoperations">
+                        @foreach (var iheat in Model.HeatActual)
+                        {
+                            <tr>
+                                <td>@iheat.OrderNo</td>
+                                <td>@iheat.NoPcs</td>
+                                <td>@iheat.Operation</td>
+                                <td>@iheat.FceNo</td>
+                                <td>@iheat.Date</td>
+                                <td>
+                                    <a href="#" onclick="editheatbtn(@iheat.RowId)" data-value="@iheat.RowId" class="btn btn-primary btn-sm openbtn editheatbtn">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Heat:
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.NewOp.OrderNo, new { @id = "AddOrderNo" })
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Date</label>
+                        @Html.TextBoxFor(x => x.NewOp.Date, new { @class = "form-control", @id = "AddDate" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">No Pcs:</label>
+                        @Html.TextBoxFor(x => x.NewOp.NoPcs, new { @class = "form-control", @id = "AddNoPcs" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">FCE No:</label>
+                        @Html.TextBoxFor(x => x.NewOp.FceNo, new { @class = "form-control", @id = "AddFceNo" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Operation:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Operation, new { @class = "form-control", @id = "AddOperation" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Temp:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Temp, new { @class = "form-control", @id = "AddTemp" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Hold Time:</label>
+                        @Html.TextBoxFor(x => x.NewOp.HoldTime, new { @class = "form-control", @id = "AddHoldTime" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Cool Rate:</label>
+                        @*@Html.TextBoxFor(x => x.NewOp.CoolRate, new { @class = "form-control", @id = "AddCoolRate" })*@
+                        @Html.DropDownListFor(x => x.NewOp.CoolRate, coolRateItems,  new { @class = "form-control", @id = "AddCoolRate"})
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">At Temp:</label>
+                        @Html.TextBoxFor(x => x.NewOp.AtTemp, new { @class = "form-control", @id = "AddAtTemp" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Hold Complete:</label>
+                        @Html.TextBoxFor(x => x.NewOp.HoldComplete, new { @class = "form-control", @id = "AddHoldComplete" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Quench Temp Start:</label>
+                        @Html.TextBoxFor(x => x.NewOp.QuenchTempStart, new { @class = "form-control", @id = "AddQuenchTempStart" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Quench Temp Finish:</label>
+                        @Html.TextBoxFor(x => x.NewOp.QuenchTempFinish, new { @class = "form-control", @id = "AddQuenchTempFinish" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="NewOpSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-edit-form-heat">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Heat Operation:
+                    <br>
+                    <small class="text-muted">Edit the selected heat operation:</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-body-edit">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.EditOp.OrderNo, new { @id = "EditOrderNo" })
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Date</label>
+                        @Html.TextBoxFor(x => x.EditOp.Date, new { @class = "form-control", @id = "EditDate" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">No Pcs:</label>
+                        @Html.TextBoxFor(x => x.EditOp.NoPcs, new { @class = "form-control", @id = "EditNoPcs" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">FCE No:</label>
+                        @Html.TextBoxFor(x => x.EditOp.FceNo, new { @class = "form-control", @id = "EditFceNo" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Operation:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Operation, new { @class = "form-control", @id = "EditOperation" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Temp:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Temp, new { @class = "form-control", @id = "EditTemp" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Hold Time:</label>
+                        @Html.TextBoxFor(x => x.EditOp.HoldTime, new { @class = "form-control", @id = "EditHoldTime" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Cool Rate:</label>
+                        @Html.DropDownListFor(x => x.EditOp.CoolRate, coolRateItems,  new { @class = "form-control", @id = "AddCoolRate"})           
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">At Temp:</label>
+                        @Html.TextBoxFor(x => x.EditOp.AtTemp, new { @class = "form-control", @id = "EditAtTemp" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Hold Complete:</label>
+                        @Html.TextBoxFor(x => x.EditOp.HoldComplete, new { @class = "form-control", @id = "EditHoldComplete" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Quench Temp Start:</label>
+                        @Html.TextBoxFor(x => x.EditOp.QuenchTempStart, new { @class = "form-control", @id = "EditQuenchTempStart" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Quench Temp Finish:</label>
+                        @Html.TextBoxFor(x => x.EditOp.QuenchTempFinish, new { @class = "form-control", @id = "EditQuenchTempFinish" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="EditOpSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#DieNo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatBatchRecords/MetRecord/AutoCompleteDies?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#MillIdVal').val(i.item.val)
+            },
+            minLength: 1
+        });
+    });
+
+    function editheatbtn(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+                url: "/MCNJ/HeatTreatBatchRecords/MetRecord/EditHeatPartial/?ID=" + encodeURIComponent(id),
+                type: "GET",
+                cache: false,
+                success: function (result) {
+                    $.unblockUI();
+
+                    $('#modals-body-edit').html(result.Form.Result);
+                    $('#modals-default-edit').modal('show');
+                },
+                error: function (result) {
+                    $.unblockUI();
+
+                    $.growl.error({
+                        message: result.statusText
+                    });
+                }
+
+            });
+        return false;
+    };
+
+    $('#FormSubmit').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var DieNo = $('#DieNo').val();
+        var OrderNo = $('#OrderNo').val()
+        var QuantityRun = $('#QuantityRun').val();
+        var TestBars = $('#TestBars').val();
+        var TotalFurnaceTime = $('#TotalFurnaceTime').val();
+        var QuenchTempStart = $('#QuenchTempStart').val();
+        var QuenchTempFinish = $('#QuenchTempFinish').val();
+        var Notes = $('#Notes').val();
+        var ApprovedBy = $('#ApprovedBy').val();
+        var SectionSize = $('#SectionSize').val();
+        var Weight = $('#Weight').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/MetRecord/AddMetResult",
+            type: "POST",
+            data: {
+                DieNo: DieNo,
+                OrderNo: OrderNo,
+                QuantityRun: QuantityRun,
+                TestBars: TestBars,
+                TotalFurnaceTime: TotalFurnaceTime,
+                QuenchTempStart: QuenchTempStart,
+                QuenchTempFinish: QuenchTempFinish,
+                Notes: Notes,
+                ApprovedBy: ApprovedBy,
+                SectionSize: SectionSize,
+                Weight: Weight
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#RowId').val(result.Record.RowId);
+                    $('#OrderNo').val(result.Record.OrderNo);
+                    $('#AddOrderNo').val(result.Record.OrderNo);
+                    $('#htoperations').html(result.Form.Result);
+                    $('#FormSubmit').attr("disabled", true);
+                    //datatable();
+                    //var mytbl = $("#m_table_2").DataTable();
+                    //mytbl.ajax.reload(null, false);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#NewOpSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var OrderNo = $('#AddOrderNo').val();
+        var Date = $('#AddDate').val()
+        var NoPcs = $('#AddNoPcs').val();
+        var FceNo = $('#AddFceNo').val();
+        var Operation = $('#AddOperation').val();
+        var Temp = $('#AddTemp').val();
+        var HoldTime = $('#AddHoldTime').val();
+        var CoolRate = $('#AddCoolRate').val();
+        var AtTemp = $('#AddAtTemp').val();
+        var QuenchTempStart = $('#AddQuenchTempStart').val();
+        var QuenchTempFinish = $('#AddQuenchTempFinish').val();
+        var HoldComplete = $('#AddHoldComplete').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/MetRecord/AddHtActualResult",
+            type: "POST",
+            data: {
+                OrderNo: OrderNo,
+                Date: Date,
+                NoPcs: NoPcs,
+                FceNo: FceNo,
+                Operation: Operation,
+                Temp: Temp,
+                HoldTime: HoldTime,
+                CoolRate: CoolRate,
+                AtTemp: AtTemp,
+                QuenchTempStart: QuenchTempStart,
+                QuenchTempFinish: QuenchTempFinish,
+                HoldComplete: HoldComplete
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#htoperations').html(result.Form.Result);
+
+                    //datatable();
+                    //var mytbl = $("#m_table_2").DataTable();
+                    //mytbl.ajax.reload(null, false);
+
+                    $('#modals-default').modal('toggle');
+                    $('#modals-default-form').trigger('reset');
+
+                    var orderNo = $('#OrderNo').val();
+                    $('#AddOrderNo').val(orderNo);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditOpSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var RowId = $('#EditRowId').val();
+        var OrderNo = $('#EditOrderNo').val();
+        var Date = $('#EditDate').val()
+        var NoPcs = $('#EditNoPcs').val();
+        var FceNo = $('#EditFceNo').val();
+        var Operation = $('#EditOperation').val();
+        var Temp = $('#EditTemp').val();
+        var HoldTime = $('#EditHoldTime').val();
+        var CoolRate = $('#EditCoolRate').val();
+        var AtTemp = $('#EditAtTemp').val();
+        var QuenchTempStart = $('#EditQuenchTempStart').val();
+        var QuenchTempFinish = $('#EditQuenchTempFinish').val();
+        var HoldComplete = $('#EditHoldComplete').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/MetRecord/EditHtActualResult",
+            type: "POST",
+            data: {
+                RowId: RowId,
+                OrderNo: OrderNo,
+                Date: Date,
+                NoPcs: NoPcs,
+                FceNo: FceNo,
+                Operation: Operation,
+                Temp: Temp,
+                HoldTime: HoldTime,
+                CoolRate: CoolRate,
+                AtTemp: AtTemp,
+                QuenchTempStart: QuenchTempStart,
+                QuenchTempFinish: QuenchTempFinish,
+                HoldComplete: HoldComplete
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#htoperations').html(result.Form.Result);
+
+                    //datatable();
+                    //var mytbl = $("#m_table_2").DataTable();
+                    //mytbl.ajax.reload(null, false);
+
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    //$('#m_table_2 tbody').on('click', '.editheatbtn', function (e) {
+    //        var id = e.currentTarget.dataset.value;
+    //        $.blockUI({
+    //            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //            css: {
+    //                backgroundColor: 'transparent',
+    //                border: '0',
+    //                zIndex: 9999999
+    //            },
+    //            overlayCSS: {
+    //                backgroundColor: '#fff',
+    //                opacity: 0.8,
+    //                zIndex: 9999990
+    //            }
+    //        });
+
+    //        $.ajax({
+    //            url: "/MCNJ/HeatTreatBatchRecords/MetRecord/EditHeatPartial/?ID=" + encodeURIComponent(id),
+    //            type: "GET",
+    //            cache: false,
+    //            success: function (result) {
+    //                $.unblockUI();
+
+    //                $('#modal-body-edit').html(result.Form.Result);
+    //                $('#modals-default-edit').modal('show');
+    //            },
+    //            error: function (result) {
+    //                $.unblockUI();
+
+    //                $.growl.error({
+    //                    message: result.statusText
+    //                });
+    //            }
+
+    //        });
+
+    //        return false;
+    //});
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatBatchRecords/MetRecord/AjaxGetJsonDataHtActual/",
+                "type": "POST",
+                "data": function (d) {
+                    d.ID = $('#RowId').val();
+                    d.OrderNo = $('#OrderNo').val();
+                }
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "OrderNo", "orderable": true },
+                { "data": "NoPcs", "orderable": true },
+                { "data": "Operation", "orderable": true },
+                { "data": "FceNo", "orderable": true },
+                { "data": "Date", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

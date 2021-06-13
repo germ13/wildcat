@@ -8,6 +8,7 @@ using Wildcat.Logic.SHCA.Engineering.GasMeters;
 
 namespace Wildcat.App.Controllers.Engineering
 {
+    [Area("SHCA")]
     public class GasMeterController : Controller
     {
         private Gas _gas = null;

@@ -1,0 +1,20 @@
+﻿@model List<Wildcat.Entities.MCNJ.HeatsSecured.HeatReceipts>
+
+@foreach (var i in Model)
+{
+    <tr>
+        <td>@i.Hrn</td>
+        <td>@i.Date</td>
+        <td>@i.Size</td>
+        <td>@i.McWPo</td>
+        <td>@i.VendorId</td>
+        <td>@i.TotWt</td>
+        <td>@i.Billets</td>
+        <td>@i.BilletId</td>
+        <td>@i.Bsr</td>
+        <td>@i.CutBillets</td>
+        <td style="text-align:center;">
+            <a href="#" onclick="editopenclick(@i.Hrn)" data-value="@i.Hrn" class="btn btn-primary btn-sm openbtn editrecordbtn">EDIT</a>
+        </td>
+    </tr>
+}

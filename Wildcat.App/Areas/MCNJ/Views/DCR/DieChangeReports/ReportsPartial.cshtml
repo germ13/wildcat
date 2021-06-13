@@ -1,0 +1,32 @@
+﻿@model List<Wildcat.Entities.MCNJ.DCR.TblDcr>
+<table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+    <thead>
+        <tr>
+            <th>DCRNumber</th>
+            <th>Tool Number</th>
+            <th>Unit</th>
+            <th>Eng Approval</th>
+            <th>Hold Production</th>
+            <th>Tools Changed</th>
+            <th>DateRequired</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="tbody">
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Dcrnumber</td>
+                <td>@i.ToolNumber</td>
+                <td>@i.Unit</td>
+                <td>@i.EngApproval</td>
+                <td>@i.HoldProductionYesOrNo</td>
+                <td>@i.ToolsChangedYesOrNo</td>
+                <td>@i.DateRequired</td>
+                <td style="text-align:center;">
+                    <a href="#" onclick="editheatbtn(@i.Dcrnumber)" data-value="@i.Dcrnumber" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn editopenbtn">Open</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

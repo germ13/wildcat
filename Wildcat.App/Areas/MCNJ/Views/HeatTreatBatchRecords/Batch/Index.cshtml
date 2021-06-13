@@ -1,0 +1,558 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.BatchViewModel
+@{
+    ViewData["Title"] = "Heat Treat Batch Records - Batch Info";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+
+    .modal {
+        left: 30%;
+    }
+
+    .modal-backdrop.show {
+        opacity: 0.2;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Heat Batch Info</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Heat Batches
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Batch Record</button>
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Batch No</th>
+                    <th>Work Order</th>
+                    <th>Die No</th>
+                    <th>Qty</th>
+                    <th>Heat Code</th>
+                    <th>Heat No</th>
+                    <th>Material</th>
+                    <th>Weight</th>
+                    <th>Furnace</th>
+                    <th>Cycle</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @*@foreach (var i in Model.Batches)
+                {
+                    <tr>
+                        <td>@i.Date</td>
+                        <td>@i.BatchNo</td>
+                        <td>@i.WorkOrder</td>
+                        <td>@i.DieNo</td>
+                        <td>@i.Qty</td>
+                        <td>@i.HeatCode</td>
+                        <td>@i.Htno</td>
+                        <td>@i.MatL</td>
+                        <td>@i.Weight</td>
+                        <td>@i.Furnace</td>
+                        <td>@i.Cycle</td>
+                        <td style="        text-align: center;
+">
+                            <a href="#" data-value="@i.RunKey" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn editopenbtn">Edit</a>
+                        </td>
+                    </tr>
+                }*@
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade modal-top" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    New Batch Record
+                    <br>
+                    <small class="text-muted">Add New Batch Record.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="add-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Run Key:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.RunKey, new { @class = "form-control", @readonly = "readonly", @id = "AddBatchRunKey" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Die No:</label>
+                        @Html.DropDownListFor(x => x.EditBatch.DieNo, Model.Dies, new { @class = "custom-select", @style = "btn-default", @id = "AddBatchDieNo" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Work Order:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.WorkOrder, new { @class = "form-control", @id = "AddBatchWorkOrder" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Qty:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.Qty, new { @class = "form-control", @id = "AddBatchQty" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Weight:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.Weight, new { @class = "form-control", @id = "AddBatchWeight" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat Code:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.HeatCode, new { @class = "form-control", @id = "AddBatchHeatCode" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat No:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.Htno, new { @class = "form-control", @id = "AddBatchHtno" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Date</label>
+                        @Html.TextBoxFor(x => x.AddBatch.Date, new { @class = "form-control", @id = "AddBatchDate" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Customer:</label>
+                        @Html.DropDownListFor(x => x.AddBatch.Customer, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "AddBatchCustomer" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Batch No:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.BatchNo, new { @class = "form-control", @id = "AddBatchBatchNo" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Material:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.MatL, new { @class = "form-control", @id = "AddBatchMatL" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Furnace:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.Furnace, new { @class = "form-control", @id = "AddBatchFurnace" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Time At Temp:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.TimeAtTemp, new { @class = "form-control", @id = "AddBatchTimeAtTemp" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Cycle:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.Cycle, new { @class = "form-control", @id = "AddBatchCycle" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Run Temp:</label>
+                        @Html.TextBoxFor(x => x.AddBatch.RunTemp, new { @class = "form-control", @id = "AddBatchRunTemp" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenew">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade modal-top" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Heat Operations
+                    <br>
+                    <small class="text-muted">Edit Batch Record.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Run Key:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.RunKey, new { @class = "form-control", @readonly = "readonly", @id = "EditBatchRunKey" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Die No:</label>
+                        @Html.DropDownListFor(x => x.EditBatch.DieNo, Model.Dies, new { @class = "custom-select", @style = "btn-default", @id = "EditBatchDieNo" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Work Order:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.WorkOrder, new { @class = "form-control", @id = "EditBatchWorkOrder" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Qty:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.Qty, new { @class = "form-control", @id = "EditBatchQty" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Weight:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.Weight, new { @class = "form-control", @id = "EditBatchWeight" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat Code:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.HeatCode, new { @class = "form-control", @id = "EditBatchHeatCode" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat No:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.Htno, new { @class = "form-control", @id = "EditBatchHtno" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Date</label>
+                        @Html.TextBoxFor(x => x.EditBatch.Date, new { @class = "form-control", @id = "EditBatchDate" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Customer:</label>
+                        @Html.DropDownListFor(x => x.EditBatch.Customer, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "EditBatchCustomer" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Batch No:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.BatchNo, new { @class = "form-control", @id = "EditBatchBatchNo" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Material:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.MatL, new { @class = "form-control", @id = "EditBatchMatL" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Furnace:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.Furnace, new { @class = "form-control", @id = "EditBatchFurnace" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Time At Temp:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.TimeAtTemp, new { @class = "form-control", @id = "EditBatchTimeAtTemp" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Cycle:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.Cycle, new { @class = "form-control", @id = "EditBatchCycle" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Run Temp:</label>
+                        @Html.TextBoxFor(x => x.EditBatch.RunTemp, new { @class = "form-control", @id = "EditBatchRunTemp" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveedit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Batch/EditBatchPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#savenew').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var RunKey = $('#AddBatchRunKey').val();
+        var DieNo = $('#AddBatchDieNo').val()
+        var WorkOrder = $('#AddBatchWorkOrder').val();
+        var Date = $('#AddBatchDate').val();
+        var Qty = $('#AddBatchQty').val();
+        var Weight = $('#AddBatchWeight').val();
+        var BatchNo = $('#AddBatchBatchNo').val();
+        var Customer = $('#AddBatchCustomer').val();
+        var HeatCode = $('#AddBatchHeatCode').val();
+        var Htno = $('#AddBatchHtno').val();
+        var MatL = $('#AddBatchMatL').val();
+        var Furnace = $('#AddBatchFurnace').val();
+        var Cycle = $('#AddBatchCycle').val();
+        var RunTemp = $('#AddBatchRunTemp').val();
+        var TimeAtTemp = $('#AddBatchTimeAtTemp').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Batch/AddResult",
+            type: "POST",
+            data: { RunKey: RunKey, DieNo: DieNo, WorkOrder: WorkOrder, Date: Date, Qty: Qty, Weight: Weight, BatchNo: BatchNo, Customer: Customer, HeatCode: HeatCode, Htno: Htno, MatL: MatL, Furnace: Furnace, Cycle: Cycle, RunTemp: RunTemp, TimeAtTemp: TimeAtTemp },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    resetNewForm();
+                    $('#modals-default').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#saveedit').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var RunKey = $('#EditBatchRunKey').val();
+        var DieNo = $('#EditBatchDieNo').val()
+        var WorkOrder = $('#EditBatchWorkOrder').val();
+        var Date = $('#EditBatchDate').val();
+        var Qty = $('#EditBatchQty').val();
+        var Weight = $('#EditBatchWeight').val();
+        var BatchNo = $('#EditBatchBatchNo').val();
+        var Customer = $('#EditBatchCustomer').val();
+        var HeatCode = $('#EditBatchHeatCode').val();
+        var Htno = $('#EditBatchHtno').val();
+        var MatL = $('#EditBatchMatL').val();
+        var Furnace = $('#EditBatchFurnace').val();
+        var Cycle = $('#EditBatchCycle').val();
+        var RunTemp = $('#EditBatchRunTemp').val();
+        var TimeAtTemp = $('#EditBatchTimeAtTemp').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Batch/EditResult",
+            type: "POST",
+            data: { RunKey: RunKey, DieNo: DieNo, WorkOrder: WorkOrder, Date: Date, Qty: Qty, Weight: Weight, BatchNo: BatchNo, Customer: Customer, HeatCode: HeatCode, Htno: Htno, MatL: MatL, Furnace: Furnace, Cycle: Cycle, RunTemp: RunTemp, TimeAtTemp: TimeAtTemp },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    function resetNewForm() {
+        //Set Default value to dropdownlist
+        $('select').each(function () {
+            $(this).find('option:eq(0)').prop("selected", "selected");
+        });
+        //Clear the values from textboxes
+        $('input:text').each(function () {
+            $(this).val("");
+        });
+    }
+
+    function datatable()
+    {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatBatchRecords/Batch/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "Date", "orderable": false },
+                { "data": "BatchNo", "orderable": true },
+                { "data": "WorkOrder", "orderable": true },
+                { "data": "DieNo", "orderable": true },
+                { "data": "Qty", "orderable": false },
+                { "data": "HeatCode", "orderable": true },
+                { "data": "Htno", "orderable": true },
+                { "data": "MatL", "orderable": true },
+                { "data": "Weight", "orderable": false },
+                { "data": "Furnace", "orderable": true },
+                { "data": "Cycle", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' +data.RunKey + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[1, "desc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+
+</script>

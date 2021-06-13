@@ -1,0 +1,556 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatMaterials.EditPackingSlipsViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .pac-container {
+        z-index: 9999;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/MCNJ/HeatTreatMaterials/Packing/Index">Packing Slips</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Packing Slip</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                Edit Packing Slip
+            </h6>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">PSN:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.Psn, new { @class = "form-control", @readonly = "readonly", @id = "Psn" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">McW-CN:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.McWCn, new { @class = "form-control", @id = "McWCn" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Date:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.Date, new { @class = "form-control", @id = "Date" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Die:</label>
+                            @*@Html.TextBox("Select Die", null, new { @class = "form-control ui-widget", @id = "Die" })*@
+                            @Html.TextBoxFor(x => x.PackingSlip.Die, new { @class = "form-control ui-widget", @id = "Die" })
+
+                            @*@Html.DropDownListFor(x => x.PackingSlip.Die, Model.Dies, new { @class = "custom-select", @style = "btn-default", @id = "TransferSettingDDL" })*@
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Part #:</label>
+                            @Html.TextBoxFor(x => x.PartNumber, new { @class = "form-control", @readonly = "readonly", @id = "DiePartNumber" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Revision:</label>
+                            @Html.TextBoxFor(x => x.RevisionNumber, new { @class = "form-control", @readonly = "readonly", @id = "DieRevision" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Sales Order:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.WorkOrder, new { @class = "form-control", @id = "WorkOrder" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Cust PO:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.CustPo, new { @class = "form-control", @id = "CustPo" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Item #:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.ItemNumber, new { @class = "form-control", @id = "ItemNumber" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Quantity:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.Quantity, new { @class = "form-control", @id = "Quantity" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label"># Skids:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.NumberOfSkids, new { @class = "form-control", @id = "NumberOfSkids" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label"># Boxes:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.NumberOfBoxes, new { @class = "form-control", @id = "NumberOfBoxes" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Freight:</label>
+                            @Html.DropDownListFor(x => x.PackingSlip.Freight, Model.Freight, new { @class = "custom-select", @style = "btn-default", @id = "Freight" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Ship Via:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.ShipVia, new { @class = "form-control", @id = "ShipVia" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Weight:</label>
+                            @Html.TextBoxFor(x => x.PackingSlip.TotalWeight, new { @class = "form-control", @id = "TotalWeight" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="custom-control custom-checkbox">
+                                @Html.CheckBoxFor(x => x.PackingSlip.ShipAir, new { @class = "custom-control-input", @id = "ShipAir" })
+                                <span class="custom-control-label">Ship Air?</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Serial Number(s):</label>
+                            @Html.TextAreaFor(x => x.PackingSlip.SerialNumber, new { @class = "form-control", @rows = 3, @id = "SerialNumber" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Notes:</label>
+                            @Html.TextAreaFor(x => x.PackingSlip.Notes, new { @class = "form-control", @rows = 3, @id = "Notes" })
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Ship To:</label>
+                            @Html.TextBoxFor(x => x.ShipTo.CustomerName, new { @class = "form-control ui-widget", @id = "ShipTo" })
+                            @*@Html.TextBox("Select Customer", null, new { @class = "form-control ui-widget", @id = "ShipTo" })*@
+                            @Html.HiddenFor(x => x.PackingSlip.ShipTo, new { @id = "ShipToHidden" })
+                            @*@Html.DropDownListFor(x => x.PackingSlip.Die, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "TransferSettingDDL" })*@
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Sold To:</label>
+                            @Html.TextBoxFor(x => x.SoldTo.CustomerName, new { @class = "form-control ui-widget", @id = "SoldTo" })
+                            @*@Html.TextBox("Select Customer", null, new { @class = "form-control ui-widget", @id = "SoldTo" })*@
+                            @Html.HiddenFor(x => x.PackingSlip.SoldTo, new { @id = "SoldToHidden" })
+                            @*@Html.DropDownListFor(x => x.PackingSlip.Die, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "TransferSettingDDL" })*@
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="form-label">Address 1:</label>
+                                    @Html.TextBoxFor(x => x.ShipTo.Addr1, new { @class = "form-control", @id = "ShipToAddress", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To Name", null, new { @class = "form-control", @id = "ShipToName", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="form-label">Address 2:</label>
+                                    @Html.TextBoxFor(x => x.ShipTo.Addr2, new { @class = "form-control", @id = "ShipToAddress2", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To Address", null, new { @class = "form-control", @id = "ShipToAddress2", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">City:</label>
+                                    @Html.TextBoxFor(x => x.ShipTo.City, new { @class = "form-control", @id = "ShipToCity", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To City", null, new { @class = "form-control", @id = "ShipToCity", @readonly = "readonly" })*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">State:</label>
+                                    @Html.TextBoxFor(x => x.ShipTo.State, new { @class = "form-control", @id = "ShipToState", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To State", null, new { @class = "form-control", @id = "ShipToState", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Zip:</label>
+                                    @Html.TextBoxFor(x => x.ShipTo.Zip, new { @class = "form-control", @id = "ShipToZip", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To Zip", null, new { @class = "form-control", @id = "ShipToZip", @readonly = "readonly" })*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Country:</label>
+                                    @Html.TextBoxFor(x => x.ShipTo.Country, new { @class = "form-control", @id = "ShipToCountry", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To Country", null, new { @class = "form-control", @id = "ShipToCountry", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="form-label">Address 1:</label>
+                                    @Html.TextBoxFor(x => x.SoldTo.Addr1, new { @class = "form-control", @id = "SoldToAddress", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To Name", null, new { @class = "form-control", @id = "ShipToName", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="form-label">Address 2:</label>
+                                    @Html.TextBoxFor(x => x.SoldTo.Addr2, new { @class = "form-control", @id = "SoldToAddress2", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To Address", null, new { @class = "form-control", @id = "ShipToAddress2", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">City:</label>
+                                    @Html.TextBoxFor(x => x.SoldTo.City, new { @class = "form-control", @id = "SoldToCity", @readonly = "readonly" })
+                                    @*@Html.TextBox("Sold To City", null, new { @class = "form-control", @id = "SoldToCity", @readonly = "readonly" })*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">State:</label>
+                                    @Html.TextBoxFor(x => x.SoldTo.State, new { @class = "form-control", @id = "SoldToState", @readonly = "readonly" })
+                                    @*@Html.TextBox("Ship To State", null, new { @class = "form-control", @id = "SoldToState", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Zip:</label>
+                                    @Html.TextBoxFor(x => x.SoldTo.Zip, new { @class = "form-control", @id = "SoldToZip", @readonly = "readonly" })
+                                    @*@Html.TextBox("Sold To Zip", null, new { @class = "form-control", @id = "SoldToZip", @readonly = "readonly" })*@
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label">Country:</label>
+                                    @Html.TextBoxFor(x => x.SoldTo.Country, new { @class = "form-control", @id = "SoldToCountry", @readonly = "readonly" })
+                                    @*@Html.TextBox("Sold To Country", null, new { @class = "form-control", @id = "SoldToCountry", @readonly = "readonly" })*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<script type="text/javascript">
+    $(function () {
+        $("#Die").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/AutoCompleteDies?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/GetDiesInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#DiePartNumber').val(data[0].PartNum)
+                        $('#DieRevision').val(data[0].Revision)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#ShipTo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/AutoCompleteCustomers?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $("#ShipToHidden").val(i.item.val);
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/GetCustomerInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#ShipToName').val(data[0].CustomerName)
+                        $('#ShipToAddress').val(data[0].Addr1)
+                        $('#ShipToCity').val(data[0].City)
+                        $('#ShipToState').val(data[0].State)
+                        $('#ShipToZip').val(data[0].Zip)
+                        $('#ShipToCountry').val(data[0].Country)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#SoldTo").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/AutoCompleteCustomers?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $("#SoldToHidden").val(i.item.val);
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/GetCustomerInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#SoldToName').val(data[0].CustomerName)
+                        $('#SoldToAddress').val(data[0].Addr1)
+                        $('#SoldToCity').val(data[0].City)
+                        $('#SoldToState').val(data[0].State)
+                        $('#SoldToZip').val(data[0].Zip)
+                        $('#SoldToCountry').val(data[0].Country)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#ShipVia").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Packing/AutoCompleteShipVia?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $("#ShipVia").val(i.item.val);
+            },
+            minLength: 1
+        });
+    });
+
+    $('#Submit').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Psn = $('#Psn').val();
+        var McWCn = $('#McWCn').val()
+        var Date = $('#Date').val();
+        var Die = $('#Die').val();
+        var WorkOrder = $('#WorkOrder').val();
+        var CustPo = $('#CustPo').val();
+        var Quantity = $('#Quantity').val();
+        var ProcessNo = $('#ProcessNo').val();
+        var SerialNumber = $('#SerialNumber').val();
+        var Freight = $('#Freight').val();
+        var ItemNumber = $('#ItemNumber').val();
+        var ShipVia = $('#ShipVia').val();
+        var NumberOfSkids = $('#NumberOfSkids').val();
+        var NumberOfBoxes = $('#NumberOfBoxes').val();
+        var TotalWeight = $('#TotalWeight').val();
+        var Notes = $('#Notes').val();
+        var ShipAir = $('#ShipAir').val();
+        var Crn2 = $('#Crn2').val();
+        var Crn = $('#Crn').val();
+        var ShipTo = $('#ShipToHidden').val();
+        var SoldTo = $('#SoldToHidden').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Packing/EditResult",
+            type: "POST",
+            data: {
+                Psn: Psn,
+                McWCn: McWCn,
+                Date: Date,
+                Die: Die,
+                WorkOrder: WorkOrder,
+                CustPo: CustPo,
+                Quantity: Quantity,
+                ProcessNo: ProcessNo,
+                SerialNumber: SerialNumber,
+                Freight: Freight,
+                ItemNumber: ItemNumber,
+                ShipVia: ShipVia,
+                NumberOfSkids: NumberOfSkids,
+                NumberOfBoxes: NumberOfBoxes,
+                TotalWeight: TotalWeight,
+                Notes: Notes,
+                ShipAir: ShipAir,
+                Crn2: Crn2,
+                Crn: Crn,
+                ShipTo: ShipTo,
+                SoldTo: SoldTo
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#AddCrn').val(result.Crn);
+                    $('#Submit').attr("disabled", true);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+</script>

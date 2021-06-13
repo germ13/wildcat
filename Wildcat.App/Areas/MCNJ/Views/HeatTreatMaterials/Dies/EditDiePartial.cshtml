@@ -1,0 +1,37 @@
+﻿@model Wildcat.Entities.MCNJ.HeatsSecured.Dies
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">Die:</label>
+        @Html.TextBoxFor(x => x.Die, new { @class = "form-control", @id = "EditDieDie" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Customer Part No:</label>
+        @Html.TextBoxFor(x => x.PartNum, new { @class = "form-control", @id = "EditDiePartNum" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label class="form-label">Revision:</label>
+        @Html.TextBoxFor(x => x.Revision, new { @class = "form-control", @id = "EditDieRevision" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Aux Doc:</label>
+        @Html.TextBoxFor(x => x.AuxDoc, new { @class = "form-control", @id = "EditDieAuxDoc" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Process No:</label>
+        @Html.TextBoxFor(x => x.ProcessNo, new { @class = "form-control", @id = "EditDieProcessNo" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label class="form-label">Cert Notes:</label>
+        @Html.TextAreaFor(x => x.StdcertNotes, new { @class = "form-control", @rows = 4, @id = "EditDieStdcertNotes" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label class="form-label">Heat Treat Notes:</label>
+        @Html.TextAreaFor(x => x.StdhtrNotes, new { @class = "form-control", @rows = 4, @id = "EditDieStdhtrNotes" })
+    </div>
+</div>

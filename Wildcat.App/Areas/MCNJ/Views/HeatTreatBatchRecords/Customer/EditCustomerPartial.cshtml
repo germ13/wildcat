@@ -1,0 +1,13 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.EditCustomerViewModel
+
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label class="form-label">Run Key:</label>
+        @Html.TextBoxFor(x => x.Customer.CustId, new { @class = "form-control", @readonly = "readonly", @id = "EditCustomerCustId" })
+    </div>
+    <div class="form-group col-md-9">
+        <label class="form-label">Die No:</label>
+        @Html.TextBoxFor(x => x.Customer.Name, new { @class = "form-control", @id = "EditCustomerName" })
+    </div>
+</div>
+

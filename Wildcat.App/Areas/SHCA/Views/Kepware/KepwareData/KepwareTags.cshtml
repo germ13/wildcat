@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewData["Title"] = "KepwareTags";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/SHCA/Kepware/KepwareData/Index">Kepware</a>
+            </li>
+            <li class="breadcrumb-item active">Tag Administration</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Kepware Tags
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">Options</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#modals-add-tag">Add Tag</a>
+                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#modals-view-properties">View Properties</a>
+                    </div>
+                </div>
+            </h5>
+            <div class="card-body">
+                <div class="card-datatable table-responsive" id="tableholder">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                        <thead>
+                            <tr>
+                                <th>Tag</th>
+                                <th>Display</th>
+                                <th>Machine</th>
+                                <th>Table</th>
+                                <th>Property</th>
+                                <th>Active</th>
+                                <th>Added</th>
+                                <th>Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @*@foreach (var item in Model.DTO.OrderByDescending(x => x.Timestamp))
+                        {
+                            <tr>
+                                <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            </tr>
+                        }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/SHCA/Kepware/KepwareData/AjaxGetJsonKepwareTagData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "KepwareTagName", "orderable": true },
+                { "data": "KepwareTagDisplay", "orderable": true },
+                { "data": "KepwareMachineId", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "KepwareTable", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "KepwareProperty", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "Active", "orderable": true },
+                { "data": "Added", "orderable": true },
+                { "data": "Updated", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' + data.KepwareTagId + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwobjectbtn">View Object</a> | <a href="#" data-value=' + data.KepwareTagId + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwexceptionbtn">View Exception</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

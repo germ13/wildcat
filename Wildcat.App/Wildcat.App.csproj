@@ -75,9 +75,5 @@
     </Reference>-->
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\SHCA\Views\Engineering\Baghouse\" />
-  </ItemGroup>
-
 
 </Project>

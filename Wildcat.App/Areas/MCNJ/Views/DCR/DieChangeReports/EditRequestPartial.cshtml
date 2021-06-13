@@ -1,0 +1,73 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.DCR.EditDCRViewModel
+@Html.HiddenFor(x => x.EditDCR.Dcrnumber, new { @class = "form-control", @readonly = "readonly", @id = "EditDCRNumber" })
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">Requested By</label>
+        @Html.DropDownListFor(x => x.EditDCR.RequestedBy, Model.RequestedBy, new { @class = "custom-select", @style = "btn-default", @id = "EditRequestedBy" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Requested Date:</label>
+        @Html.TextBoxFor(x => x.EditDCR.RequestedDate, new { @class = "form-control", @id = "EditRequestedDate" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label class="form-label">Tool Number:</label>
+        @Html.TextBoxFor(x => x.EditDCR.ToolNumber, new { @class = "form-control", @id = "EditToolNumber" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">SP/Hammer:</label>
+        @Html.DropDownListFor(x => x.EditDCR.Unit, Model.Units, new { @class = "custom-select", @style = "btn-default", @id = "EditUnit" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Date Required:</label>
+        @Html.TextBoxFor(x => x.EditDCR.DateRequired, new { @class = "form-control", @id = "EditDateRequired" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label class="form-label">Reason:</label>
+        @Html.TextAreaFor(x => x.EditDCR.Reason, new { @class = "form-control", @rows = 4, @id = "EditReason" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label class="form-label">Description:</label>
+        @Html.TextAreaFor(x => x.EditDCR.Description, new { @class = "form-control", @rows = 4, @id = "EditDescription" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label class="form-label">Eng Approval:</label>
+        @Html.TextBoxFor(x => x.EditDCR.EngApproval, new { @class = "form-control", @id = "EditEngApproval" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Approval Signature:</label>
+        @Html.DropDownListFor(x => x.EditDCR.EngApprovalSignature, Model.Approvals, new { @class = "custom-select", @style = "btn-default", @id = "EditEngApprovalSignature" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Approval Date:</label>
+        @Html.TextBoxFor(x => x.EditDCR.EngApprovalDate, new { @class = "form-control", @id = "EditEngApprovalDate" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">Tools Changed? (yes/No):</label>
+        @Html.TextBoxFor(x => x.EditDCR.ToolsChangedYesOrNo, new { @class = "form-control", @id = "EditToolsChangedYesOrNo" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Hold Production? (yes/No):</label>
+        @Html.TextBoxFor(x => x.EditDCR.HoldProductionYesOrNo, new { @class = "form-control", @id = "EditHoldProductionYesOrNo" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">Die Shop Signature:</label>
+        @Html.TextBoxFor(x => x.EditDCR.DieShopSignature, new { @class = "form-control", @id = "EditDieShopSignature" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Die Shop Signature Date:</label>
+        @Html.TextBoxFor(x => x.EditDCR.DieShopSignatureDate, new { @class = "form-control", @id = "EditDieShopSignatureDate" })
+    </div>
+</div>
+            </div>

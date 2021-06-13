@@ -15,6 +15,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.Engineering
 {
+    [Area("SHCA")]
     public class SHCAGrindersController : Controller
     {
         #region Private Fields

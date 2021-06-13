@@ -1,0 +1,371 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.CustomerViewModel
+@{
+    ViewData["Title"] = "Heat Treat Batch Records - Customers";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+
+
+    .modal-backdrop.show {
+        opacity: 0.2;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Customers</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Customers
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Customer</button>
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>CustId</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade modal-top" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    New Customer
+                    <br>
+                    <small class="text-muted">Add New Customer.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="add-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Run Key:</label>
+                        @Html.TextBoxFor(x => x.AddCustomer.CustId, new { @class = "form-control", @readonly = "readonly", @id = "AddCustomerCustId" })
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label class="form-label">Die No:</label>
+                        @Html.TextBoxFor(x => x.AddCustomer.Name,  new { @class = "form-control", @id = "AddCustomerName" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenew">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade modal-top" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Customer
+                    <br>
+                    <small class="text-muted">Edit Customer Record.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Customer Id</label>
+                        @Html.TextBoxFor(x => x.EditCustomer.CustId, new { @class = "form-control", @readonly = "readonly", @id = "EditCustomerCustId" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Name</label>
+                        @Html.TextBoxFor(x => x.EditCustomer.Name, new { @class = "form-control", @id = "EditCustomerName" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveedit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Customer/EditCustomerPartial/?CustId=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#savenew').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var CustId = $('#AddCustomerCustId').val();
+        var Name = $('#AddCustomerName').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Customer/AddResult",
+            type: "POST",
+            data: { CustId: CustId, Name: Name},
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    resetNewForm();
+                    $('#modals-default').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#saveedit').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var CustId = $('#EditCustomerCustId').val();
+        var Name = $('#EditCustomerName').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Customer/EditResult",
+            type: "POST",
+            data: { CustId: CustId, Name: Name},
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    function resetNewForm() {
+        //Set Default value to dropdownlist
+        $('select').each(function () {
+            $(this).find('option:eq(0)').prop("selected", "selected");
+        });
+        //Clear the values from textboxes
+        $('input:text').each(function () {
+            $(this).val("");
+        });
+    }
+
+    function datatable()
+    {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatBatchRecords/Customer/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "CustId", "orderable": true },
+                { "data": "Name", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' +data.CustId + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[1, "asc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+
+</script>

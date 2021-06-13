@@ -1,0 +1,838 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatMaterials.EditMillCertViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .pac-container {
+        z-index: 9999;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/MCNJ/HeatTreatBatchRecords/MillCert/Index">Mill Certs</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Mill Cert</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                New Mill Receipt
+            </h6>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">CRN</label>
+                            @Html.TextBoxFor(x => x.CertsMill.Crn, new { @id = "Crn", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Mill ID:</label>
+                            @Html.TextBoxFor(x => x.Vendor, new { @id = "MillId", @class = "form-control ui-widget" })
+                            @Html.HiddenFor(x => x.CertsMill.MillId, new { @id = "MillIdVal" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Mill CN:</label>
+                            @Html.TextBoxFor(x => x.CertsMill.MillCn, new { @id = "MillCn", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Heat</label>
+                            @Html.TextBoxFor(x => x.CertsMill.Heat, new { @id = "Heat", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Heat Desc:</label>
+                            @Html.TextBoxFor(x => x.CertsMill.HtDesc, new { @id = "HtDesc", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Date In:</label>
+                            @Html.TextBoxFor(x => x.CertsMill.DateIn, new { @id = "DateIn", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Beta Transus</label>
+                            @Html.TextBoxFor(x => x.CertsMill.BetaTransus, new { @id = "BetaTransus", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Material:</label>
+                            @Html.TextBoxFor(x => x.CertsMill.Material, new { @id = "Material", @class = "form-control ui-widget" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">PW Code:</label>
+                            @Html.TextBoxFor(x => x.CertsMill.Pwcode, new { @id = "Pwcode", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Spec:</label>
+                            @Html.TextAreaFor(x => x.CertsMill.Spec, new { @id = "Spec", @class = "form-control", @rows = 4 })
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Heat Receipts
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Heat Receipt</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                    <thead>
+                        <tr>
+                            <th>Hrn</th>
+                            <th>Date</th>
+                            <th>Size</th>
+                            <th>McWPo</th>
+                            <th>VendorId</th>
+                            <th>Tot Wt</th>
+                            <th>Billets</th>
+                            <th>BilletId</th>
+                            <th>Bsr</th>
+                            <th>CutBillets</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var i in Model.HeatReceipts)
+                        {
+                            <tr>
+                                <td>@i.Hrn</td>
+                                <td>@i.Date</td>
+                                <td>@i.Size</td>
+                                <td>@i.McWPo</td>
+                                <td>@i.VendorId</td>
+                                <td>@i.TotWt</td>
+                                <td>@i.Billets</td>
+                                <td>@i.BilletId</td>
+                                <td>@i.Bsr</td>
+                                <td>@i.CutBillets</td>
+                                <td style="text-align:center;">
+                                    <a href="#" onclick="editopenclick(@i.Hrn)" data-value="@i.Hrn" class="btn btn-primary btn-sm openbtn editrecordbtn">EDIT</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Heat Receipts
+                    <br>
+                    <small class="text-muted">Add Heat Receipt To Mill Cert.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Crn:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.Crn, new { @id = "AddCrn", @class = "form-control", @readonly = "readonly" })
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Date:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.Date, new { @id = "AddDate", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">McW Po:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.McWPo, new { @id = "AddMcWPo", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Vendor:</label>
+                        @Html.TextBoxFor(x => x.AddVendorHeat, new { @id = "AddVendorHeat", @class = "form-control ui-widget" })
+                        @Html.HiddenFor(x => x.HeatReceipt.VendorId, new { @id = "AddVendorId" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Billet Id:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.BilletId, new { @id = "AddBilletId", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">No of Billets:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.Billets, new { @id = "AddBillets", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Size:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.Size, new { @id = "AddSize", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Tot-Wt:</label>
+                        @Html.TextBoxFor(x => x.HeatReceipt.TotWt, new { @id = "AddTotWt", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Remarks:</label>
+                        @Html.TextAreaFor(x => x.HeatReceipt.Remarks, new { @id = "AddRemarks", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.HeatReceipt.Bsr, new { @id = "AddBsr", @class = "custom-control-input" })
+                            <span class="custom-control-label">Billet Slices Rec'd?</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.HeatReceipt.CutBillets, new { @id = "AddCutBillets", @class = "custom-control-input" })
+                            <span class="custom-control-label">Cut Billets?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="AddSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-edit-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Heat Receipts
+                    <br>
+                    <small class="text-muted">Edit Heat Receipt.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-body-edit">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.EditHeatReceipts.Hrn, new { @id = "EditHrn" })
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Crn:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.Crn, new { @id = "EditCrn", @class = "form-control", @readonly = "readonly" })
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Date:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.Date, new { @id = "EditDate", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">McW Po:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.McWPo, new { @id = "EditMcWPo", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Vendor:</label>
+                        @Html.TextBoxFor(x => x.EditVendorHeat, new { @id = "EditVendorHeat", @class = "form-control ui-widget" })
+                        @Html.HiddenFor(x => x.EditHeatReceipts.VendorId, new { @id = "EditVendorId" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Billet Id:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.BilletId, new { @id = "EditBilletId", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">No of Billets:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.Billets, new { @id = "EditBillets", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Size:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.Size, new { @id = "EditSize", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Tot-Wt:</label>
+                        @Html.TextBoxFor(x => x.EditHeatReceipts.TotWt, new { @id = "EditTotWt", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Remarks:</label>
+                        @Html.TextAreaFor(x => x.EditHeatReceipts.Remarks, new { @id = "EditRemarks", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.EditHeatReceipts.Bsr, new { @id = "EditBsr", @class = "custom-control-input" })
+                            <span class="custom-control-label">Billet Slices Rec'd?</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.EditHeatReceipts.CutBillets, new { @id = "EditCutBillets", @class = "custom-control-input" })
+                            <span class="custom-control-label">Cut Billets?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="EditSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#Material").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/MillCert/AutoCompleteMaterial?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#Material').val(i.item.val)
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#MillId").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/MillCert/AutoCompleteVendors?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#MillIdVal').val(i.item.val)
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#AddVendorHeat").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/MillCert/AutoCompleteVendors?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#AddVendorId').val(i.item.val)
+
+                //$.ajax({
+                //    url: '/MCNJ/HeatTreatMaterials/Conformance/GetHeatInfo?prefix=' + i.item.val,
+                //    dataType: "json",
+                //    type: "POST",
+                //    contentType: "application/json; charset=utf-8",
+                //    success: function (data) {
+                //        $('#Material').val(i.item.val)
+                //    },
+                //    error: function (response) {
+                //        alert(response.responseText);
+                //    },
+                //    failure: function (response) {
+                //        alert(response.responseText);
+                //    }
+                //});
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#EditVendorHeat").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/MillCert/AutoCompleteVendors?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#EditVendorId').val(i.item.val)
+
+                //$.ajax({
+                //    url: '/MCNJ/HeatTreatMaterials/Conformance/GetHeatInfo?prefix=' + i.item.val,
+                //    dataType: "json",
+                //    type: "POST",
+                //    contentType: "application/json; charset=utf-8",
+                //    success: function (data) {
+                //        $('#Material').val(i.item.val)
+                //    },
+                //    error: function (response) {
+                //        alert(response.responseText);
+                //    },
+                //    failure: function (response) {
+                //        alert(response.responseText);
+                //    }
+                //});
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#Heat").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/MillCert/AutoCompleteHeats?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#Heat').val(i.item.val)
+                $('#Heat').text(i.item.val)
+                $('#HtDesc').val(i.item.val)
+
+                //$.ajax({
+                //    url: '/MCNJ/HeatTreatMaterials/Conformance/GetHeatInfo?prefix=' + i.item.val,
+                //    dataType: "json",
+                //    type: "POST",
+                //    contentType: "application/json; charset=utf-8",
+                //    success: function (data) {
+                //        $('#Material').val(i.item.val)
+                //    },
+                //    error: function (response) {
+                //        alert(response.responseText);
+                //    },
+                //    failure: function (response) {
+                //        alert(response.responseText);
+                //    }
+                //});
+            },
+            minLength: 1
+        });
+    });
+
+    function editopenclick(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/MillCert/EditHeatPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                //$('#modals-default-edit-form').html(result.Form.Result);
+
+                $('#EditCrn').val(result.vm.EditHeatReceipts.Crn);
+                $('#EditHrn').val(result.vm.EditHeatReceipts.Hrn);
+                $('#EditDate').val(result.vm.EditHeatReceipts.Date)
+                $('#EditSize').val(result.vm.EditHeatReceipts.Size);
+                $('#EditMcWPo').val(result.vm.EditHeatReceipts.McWPo);
+                $('#EditTotWt').val(result.vm.EditHeatReceipts.TotWt);
+                $('#EditBillets').val(result.vm.EditHeatReceipts.Billets);
+                $('#EditBilletId').val(result.vm.EditHeatReceipts.BilletId);
+                $('#EditBsr').val(result.vm.EditHeatReceipts.Bsr);
+                $('#EditCutBillets').val(result.vm.EditHeatReceipts.CutBillets);
+                $('#EditRemarks').val(result.vm.EditHeatReceipts.Remarks);
+
+                $('#EditVendorHeat').val(result.vm.EditVendorHeat);
+                $('#EditVendorId').val(result.vm.EditVendorId);
+
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    };
+
+    $('#Submit').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Crn = $('#Crn').val();
+        var DateIn = $('#DateIn').val()
+        var MillId = $('#MillIdVal').val();
+        var MillCn = $('#MillCn').val();
+        var Heat = $('#Heat').val();
+        var HtDesc = $('#HtDesc').val();
+        var Material = $('#Material').val();
+        var Spec = $('#Spec').val();
+        var Pwcode = $('#Pwcode').val();
+        var BetaTransus = $('#BetaTransus').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/MillCert/EditResult",
+            type: "POST",
+            data: {
+                Crn: Crn,
+                DateIn: DateIn,
+                MillId: MillId,
+                MillCn: MillCn,
+                Heat: Heat,
+                HtDesc: HtDesc,
+                Material: Material,
+                Spec: Spec,
+                Pwcode: Pwcode,
+                BetaTransus: BetaTransus
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#AddCrn').val(result.Crn);
+                    $('#Submit').attr("disabled", true);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#AddSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Crn = $('#AddCrn').val();
+        var Hrn = $('#AddHrn').val();
+        var Date = $('#AddDate').val()
+        var Size = $('#AddSize').val();
+        var McWPo = $('#AddMcWPo').val();
+        var Vendor = $('#AddVendorId').val();
+        var TotWt = $('#AddTotWt').val();
+        var Billets = $('#AddBillets').val();
+        var BilletId = $('#AddBilletId').val();
+        var Bsr = $('#AddBsr').val();
+        var CutBillets = $('#AddCutBillets').val();
+        var Remarks = $('#AddRemarks').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/MillCert/AddOpResult",
+            type: "POST",
+            data: {
+                Crn: Crn,
+                Hrn: Hrn,
+                Date: Date,
+                Size: Size,
+                McWPo: McWPo,
+                Vendor: Vendor,
+                TotWt: TotWt,
+                Billets: Billets,
+                BilletId: BilletId,
+                Bsr: Bsr,
+                CutBillets: CutBillets,
+                Remarks: Remarks
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.Form.Result);
+                    $('#modals-default-form').trigger('reset');
+                    $('#modals-default').modal('toggle');
+                    $('#AddCrn').val(result.Crn);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Crn = $('#EditCrn').val();
+        var Hrn = $('#EditHrn').val();
+        var Date = $('#EditDate').val()
+        var Size = $('#EditSize').val();
+        var McWPo = $('#EditMcWPo').val();
+        var Vendor = $('#EditVendorId').val();
+        var TotWt = $('#EditTotWt').val();
+        var Billets = $('#EditBillets').val();
+        var BilletId = $('#EditBilletId').val();
+        var Bsr = $('#EditBsr').val();
+        var CutBillets = $('#EditCutBillets').val();
+        var Remarks = $('#EditRemarks').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/MillCert/EditOpResult",
+            type: "POST",
+            data: {
+                Crn: Crn,
+                Hrn: Hrn,
+                Date: Date,
+                Size: Size,
+                McWPo: McWPo,
+                Vendor: Vendor,
+                TotWt: TotWt,
+                Billets: Billets,
+                BilletId: BilletId,
+                Bsr: Bsr,
+                CutBillets: CutBillets,
+                Remarks: Remarks
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.Form.Result);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+</script>

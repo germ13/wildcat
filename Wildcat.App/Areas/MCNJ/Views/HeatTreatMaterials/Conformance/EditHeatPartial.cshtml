@@ -1,0 +1,21 @@
+﻿@model Wildcat.Entities.MCNJ.HeatsSecured.TblDieWoqtyHt
+<div class="form-row">
+    @Html.HiddenFor(x => x.Crn, new { @id = "EditTblDieWoqtyHtCrn" })
+    @Html.HiddenFor(x => x.RowId, new { @id = "EditTblDieWoqtyHtRowId" })
+    <div class="form-group col-md-3">
+        <label class="form-label">Process No</label>
+        @Html.TextBoxFor(x => x.ProcessNo, new { @id = "EditTblDieWoqtyHtProcessNo", @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="form-group col-md-3">
+        <label class="form-label">Work Order:</label>
+        @Html.TextBoxFor(x => x.WorkOrder, new { @id = "EditTblDieWoqtyHtWorkOrder", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-3">
+        <label class="form-label">Wo qty:</label>
+        @Html.TextBoxFor(x => x.Woqty, new { @id = "EditTblDieWoqtyHtWoqty", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-3">
+        <label class="form-label">Mcw Ht Codes:</label>
+        @Html.TextBoxFor(x => x.McwHtCodes, new { @id = "EditTblDieWoqtyHtMcwHtCodes", @class = "form-control" })
+    </div>
+</div>

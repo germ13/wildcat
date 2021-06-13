@@ -1,0 +1,42 @@
+﻿@model Wildcat.Entities.MCNJ.SecureHeatTreatBatchBook.TblHtoperations
+
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label class="form-label">OpKey</label>
+        @Html.TextBoxFor(x => x.OpKey, new { @id = "EditOpOpKey", @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">DieNo:</label>
+        @Html.TextBoxFor(x => x.DieNo, new { @id = "EditOpDieNo", @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Operation:</label>
+        @Html.TextBoxFor(x => x.Operation, new { @id = "EditOpOperation", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Furnace:</label>
+        @Html.TextBoxFor(x => x.Furnace, new { @id = "EditOpFurnace", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Zone:</label>
+        @Html.TextBoxFor(x => x.Zone, new { @id = "EditOpZone", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Temperature:</label>
+        @Html.TextBoxFor(x => x.Temperature, new { @id = "EditOpTemperature", @class = "form-control" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label class="form-label">Push Time:</label>
+        @Html.TextBoxFor(x => x.PushTime, new { @id = "EditOpPushTime", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Hold Time:</label>
+        @Html.TextBoxFor(x => x.HoldTime, new { @id = "EditOpHoldTime", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Quench:</label>
+        @Html.TextBoxFor(x => x.Quench, new { @id = "EditOpQuench", @class = "form-control" })
+    </div>
+</div>

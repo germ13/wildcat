@@ -8,6 +8,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.Engineering
 {
+    [Area("SHCA")]
     public class MachineController : Controller
     {
         #region Private Fields

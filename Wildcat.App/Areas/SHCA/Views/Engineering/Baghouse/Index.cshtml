@@ -1,0 +1,97 @@
+﻿@model Wildcat.App.ViewModels.Engineering.BaghouseReport
+
+<link rel="stylesheet" href="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+<link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css">
+<link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css">
+<link rel="stylesheet" href="~/assets/vendor/libs/bootstrap-material-datetimepicker/bootstrap-material-datetimepicker.css">
+<link rel="stylesheet" href="~/assets/vendor/libs/timepicker/timepicker.css">
+<link rel="stylesheet" href="~/assets/vendor/libs/minicolors/minicolors.css">
+
+<div class="container-fluid flex-grow-1 container-p-y">
+    <div>
+        <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a class="breadcrumb-item" href="/Home/Index">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a class="breadcrumb-item">Engineering</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    Baghouse Metrics
+                </li>
+            </ol>
+        </h4>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div class="card" style="max-width: 54rem;">
+                <div class="card-body">
+                    <form id="DownloadParameters">
+
+                        <input type="hidden" id="HiddenDurationSelected" asp-for="SelectedDurationOption" />
+
+                        <input type="hidden" id="HiddenDatabasesSelected1" asp-for="SelectedDatabases1" />
+                        <input type="hidden" id="HiddenDatabasesSelected2" asp-for="SelectedDatabases2" />
+                        <input type="hidden" id="HiddenDatabasesSelected3" asp-for="SelectedDatabases3" />
+
+                        <input type="hidden" id="HiddenMinValueSelected" asp-for="SelectedMinValueOption" />
+
+                        <table border="0" cellpadding="5" cellspacing="0" style="width: 780px">
+                            <tr>
+                                <td colspan="4">
+                                    <h5 class="card-title">Time Frame</h5>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" style="width: 330px" class="form-control" id="daterange-2" placeholder="Time Frame" asp-for="TimeSpanAsString"></td>
+                                <td rowspan="8">@Model.ListBox("ddlDatabase1", Model.DataBaseOptions1, "Data Source", Model.SelectedDatabases1, 100)</td>
+                                <td rowspan="8">@Model.ListBox("ddlDatabase2", Model.DataBaseOptions2, "Data Source", Model.SelectedDatabases2, 100)</td>
+                                <td style="vertical-align: top;" rowspan="7">@Model.ListBox("ddlDatabase3", Model.DataBaseOptions3, "Data Source", Model.SelectedDatabases3, 100)</td>
+                            </tr>
+                            <tr>
+                                <td><h5 class="card-title" style="width: 370px"></h5></td>
+                            </tr>
+                            <tr>
+                                <td><h5 class="card-title">Minimum Value</h5></td>
+                            </tr>
+                            <tr>
+                                <td>@Model.Dropdown("ddlMinValue", Model.MinValueOptions, "Minimum Value", Model.SelectedMinValueOption, 160)</td>
+                            </tr>
+                            <tr>
+                                <td><h5 class="card-title"></h5></td>
+                            </tr>
+                            <tr>
+                                <td><h5 class="card-title">Duration</h5></td>
+                            </tr>
+                            <tr>
+                                <td>@Model.Dropdown("ddlDuration", Model.DurationOptions, "Duration", Model.SelectedDurationOption, 160)</td>                                
+                            </tr>
+                        </table>
+                    </form>
+                    <table border="0" cellpadding="5" cellspacing="0" style="width: 780px">
+                        <tr>
+                            <td style="width: 657px">&nbsp;</td>
+                            <td>
+                                <button id="Button1" type="submit" class="btn btn-primary">Download</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Libs -->
+<script src="~/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="~/assets/vendor/libs/moment/moment.js"></script>
+<script src="~/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script src="~/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
+<script src="~/assets/vendor/libs/bootstrap-material-datetimepicker/bootstrap-material-datetimepicker.js"></script>
+<script src="~/assets/vendor/libs/timepicker/timepicker.js"></script>
+<script src="~/assets/vendor/libs/minicolors/minicolors.js"></script>
+
+<script type="text/javascript" src="~/scripts/Engineering/Baghouse.js"></script>
+<script type="text/javascript" src="~/assets/js/forms_pickers.js"></script>
+

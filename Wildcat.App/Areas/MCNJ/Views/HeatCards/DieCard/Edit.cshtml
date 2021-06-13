@@ -1,0 +1,639 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatCards.EditDiesViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+
+    ul.ui-autocomplete {
+        z-index: 1100;
+    }
+
+    .pac-container {
+        z-index: 9999;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/MCNJ/HeatCards/DieCard/Index">Die Cards</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Die Card</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                New Die
+            </h6>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Die</label>
+                            @Html.TextBoxFor(x => x.Die.Die, new { @id = "Die", @class = "form-control", onkeyup = "this.value = this.value.toUpperCase();" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Customer:</label>
+                            @Html.TextBoxFor(x => x.Customer, new { @id = "Customer", @class = "form-control" })
+                            @Html.HiddenFor(x => x.Die.CustId, new { @id = "CustId", @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Customer Part:</label>
+                            @Html.TextBoxFor(x => x.Die.CustomerPart, new { @id = "CustomerPart", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Part Type:</label>
+                            @Html.TextBoxFor(x => x.Die.PartType, new { @id = "PartType", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Material:</label>
+                            @Html.TextBoxFor(x => x.Die.Material, new { @id = "Material", @class = "form-control" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+
+            <h5 class="card-header text-align-center">
+                Heat Cards
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Heat Card</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                @*@await Component.InvokeAsync("RawScanJobs", new { _vm = Model })*@
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                    <thead>
+                        <tr>
+                            <th>Die Number</th>
+                            <th>Nuc Prefix</th>
+                            <th>Heat Code</th>
+                            <th>Heat Number</th>
+                            <th>Shop Order Number</th>
+                            <th>Quantity</th>
+                            <th>Range</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var i in Model.HeatCards)
+                        {
+                            <tr>
+                                <td>@i.DieNumber</td>
+                                <td>@i.NucPrefix</td>
+                                <td>@i.HeatCode</td>
+                                <td>@i.HeatNumber</td>
+                                <td>@i.ShopOrderNumber</td>
+                                <td>@i.QuantityOrderedCut</td>
+                                <td>@i.Range</td>
+                                <td>@i.Notes</td>
+                                <td style="text-align:center;">
+                                    <a href="#" onclick="editopenclick(@i.Hcn)" data-value="@i.Hcn" class="btn btn-primary btn-sm openbtn editrecordbtn">EDIT</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            @*@Html.HiddenFor(x => x.SelectedJobType, new { @id = "SelectedJobType" })*@
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Heat Card
+                    <br>
+                    <small class="text-muted">Add Heat Card.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.AddHeat.Hcn, new { @id = "AddHcn" })
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Die Number</label>
+                        @Html.TextBoxFor(x => x.AddHeat.DieNumber, new { @id = "AddDieNumber", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Date:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.Date, new { @id = "AddDate", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat Code:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.HeatCode, new { @id = "AddHeatCode", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat Number:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.HeatNumber, new { @id = "AddHeatNumber", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Nuc Prefix:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.NucPrefix, new { @id = "AddNucPrefix", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Shop Order Number:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.ShopOrderNumber, new { @id = "AddShopOrderNumber", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Quantity Ordered Cut:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.QuantityOrderedCut, new { @id = "AddQuantityOrderedCut", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Range:</label>
+                        @Html.TextBoxFor(x => x.AddHeat.Range, new { @id = "AddRange", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Notes:</label>
+                        @Html.TextAreaFor(x => x.AddHeat.Notes, new { @id = "AddNotes", @class = "form-control", @rows = 4 })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="AddSubmit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form-edit">
+            @*@Html.HiddenFor(x => x.SelectedJobType, new { @id = "SelectedJobType" })*@
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Heat Card
+                    <br>
+                    <small class="text-muted">Edit Heat Card.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-modal-body-edit">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.EditHeat.Hcn, new { @id = "EditHcn" })
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Die Number</label>
+                        @Html.TextBoxFor(x => x.EditHeat.DieNumber, new { @id = "EditDieNumber", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Date:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.Date, new { @id = "EditDate", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat Code:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.HeatCode, new { @id = "EditHeatCode", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Heat Number:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.HeatNumber, new { @id = "EditHeatNumber", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Nuc Prefix:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.NucPrefix, new { @id = "EditNucPrefix", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Shop Order Number:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.ShopOrderNumber, new { @id = "EditShopOrderNumber", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Quantity Ordered Cut:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.QuantityOrderedCut, new { @id = "EditQuantityOrderedCut", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Range:</label>
+                        @Html.TextBoxFor(x => x.EditHeat.Range, new { @id = "EditRange", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Notes:</label>
+                        @Html.TextAreaFor(x => x.EditHeat.Notes, new { @id = "EditNotes", @class = "form-control", @rows = 4 })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="EditSubmit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#Customer").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatCards/DieCard/AutoCompleteCustomers?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#CustId').val(i.item.val)
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#Material").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatCards/DieCard/AutoCompleteMaterial?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#Material').val(i.item.val)
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#PartType").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatCards/DieCard/AutoCompletePartType?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $('#PartType').val(i.item.val)
+            },
+            minLength: 1
+        });
+    });
+
+    function editopenclick(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatCards/DieCard/EditHeatCardPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                //$('#modals-default-edit-form').html(result.Form.Result);
+
+                $('#EditHcn').val(result.EditHeat.Hcn);
+                $('#EditDieNumber').val(result.EditHeat.DieNumber);
+                $('#EditDate').val(result.EditHeat.Date)
+                $('#EditNucPrefix').val(result.EditHeat.NucPrefix);
+                $('#EditHeatCode').val(result.EditHeat.HeatCode);
+                $('#EditHeatNumber').val(result.EditHeat.HeatNumber);
+                $('#EditShopOrderNumber').val(result.EditHeat.ShopOrderNumber);
+                $('#EditQuantityOrderedCut').val(result.EditHeat.QuantityOrderedCut);
+                $('#EditRange').val(result.EditHeat.Range);
+                $('#EditNotes').val(result.EditHeat.Notes);
+
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    };
+
+    $('#Submit').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Die = $('#Die').val();
+        var CustomerPart = $('#CustomerPart').val();
+        var CustId = $('#CustId').val()
+        var PartType = $('#PartType').val();
+        var Material = $('#Material').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatCards/DieCard/EditResult",
+            type: "POST",
+            data: { Die: Die, CustomerPart: CustomerPart, CustId: CustId, PartType: PartType, Material: Material },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+
+                    $('#Die').attr('readonly', 'readonly');
+                    //$('#Submit').attr("disabled", true);
+
+                    var Die = $('#Die').val();
+                    $('#AddDieNumber').val(Die);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#AddSubmit').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Hcn = $('#AddHcn').val();
+        var DieNumber = $('#AddDieNumber').val();
+        var Date = $('#AddDate').val()
+        var NucPrefix = $('#AddNucPrefix').val();
+        var HeatCode = $('#AddHeatCode').val();
+        var HeatNumber = $('#AddHeatNumber').val();
+        var ShopOrderNumber = $('#AddShopOrderNumber').val();
+        var QuantityOrderedCut = $('#AddQuantityOrderedCut').val();
+        var Range = $('#AddRange').val();
+        var Notes = $('#AddNotes').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatCards/DieCard/AddHeatResult",
+            type: "POST",
+            data: { Hcn: Hcn, DieNumber: DieNumber, Date: Date, NucPrefix: NucPrefix, HeatCode: HeatCode, HeatNumber: HeatNumber, ShopOrderNumber: ShopOrderNumber, QuantityOrderedCut: QuantityOrderedCut, Range: Range, Notes: Notes },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.Form.Result);
+                    $('#modals-default').modal('toggle');
+                    $('#modals-default-form').trigger('reset');
+
+                    var Die = $('#Die').val();
+                    $('#AddDieNumber').val(Die);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditSubmit').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Hcn = $('#EditHcn').val();
+        var DieNumber = $('#EditDieNumber').val();
+        var Date = $('#EditDate').val()
+        var NucPrefix = $('#EditNucPrefix').val();
+        var HeatCode = $('#EditHeatCode').val();
+        var HeatNumber = $('#EditHeatNumber').val();
+        var ShopOrderNumber = $('#EditShopOrderNumber').val();
+        var QuantityOrderedCut = $('#EditQuantityOrderedCut').val();
+        var Range = $('#EditRange').val();
+        var Notes = $('#EditNotes').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatCards/DieCard/EditHeatResult",
+            type: "POST",
+            data: { Hcn: Hcn, DieNumber: DieNumber, Date: Date, NucPrefix: NucPrefix, HeatCode: HeatCode, HeatNumber: HeatNumber, ShopOrderNumber: ShopOrderNumber, QuantityOrderedCut: QuantityOrderedCut, Range: Range, Notes: Notes },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.Form.Result);
+                    $('#modals-default-form-edit').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+</script>

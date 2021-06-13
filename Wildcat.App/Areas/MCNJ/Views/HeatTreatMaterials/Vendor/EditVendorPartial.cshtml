@@ -1,0 +1,47 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatMaterials.EditVendorModel
+
+<div class="form-row">
+    @Html.HiddenFor(x => x.EditVendor.MillId, new { @id = "EditVendorMillId" })
+    <div class="form-group col-md-6">
+        <label class="form-label">Name</label>
+        @Html.TextBoxFor(x => x.EditVendor.Name, new { @id = "EditVendorName", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Contact:</label>
+        @Html.TextBoxFor(x => x.EditVendor.Contact, new { @id = "EditVendorContact", @class = "form-control" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label class="form-label">Address:</label>
+        @Html.TextBoxFor(x => x.EditVendor.Address, new { @id = "EditVendorAddress", @class = "form-control" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">City:</label>
+        @Html.TextBoxFor(x => x.EditVendor.City, new { @id = "EditVendorCity", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">State:</label>
+        @Html.TextBoxFor(x => x.EditVendor.State, new { @id = "EditVendorState", @class = "form-control" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">ZipCode:</label>
+        @Html.TextBoxFor(x => x.EditVendor.ZipCode, new { @id = "EditVendorZipCode", @class = "form-control" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Country:</label>
+        @Html.TextBoxFor(x => x.EditVendor.Country, new { @id = "EditVendorCountry", @class = "form-control" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-2">
+        <label class="custom-control custom-checkbox">
+            @Html.CheckBoxFor(x => x.EditVendor.Print, new { @id = "EditVendorPrint", @class = "custom-control-input" })
+            <span class="custom-control-label">Print?</span>
+        </label>
+    </div>
+</div>

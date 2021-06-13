@@ -1,0 +1,100 @@
+﻿@model List<Wildcat.Entities.MCNJ.SecureHeatTreatBatchBook.TblDieCard>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Die Cards</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Die Cards
+        @Html.ActionLink("New Card", "Add", "DieCards", null, new { @class = "btn btn-primary pull-right" })
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>Die No</th>
+                    <th>Section</th>
+                    <th>Material</th>
+                    <th>Forgings Per</th>
+                    <th>BHN</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    //$('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+    //    var id = e.currentTarget.dataset.value;
+    //    $.blockUI({
+    //        message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //        css: {
+    //            backgroundColor: 'transparent',
+    //            border: '0',
+    //            zIndex: 9999999
+    //        },
+    //        overlayCSS: {
+    //            backgroundColor: '#fff',
+    //            opacity: 0.8,
+    //            zIndex: 9999990
+    //        }
+    //    });
+
+    //    window.location = "/MCNJ/HeatTreatBatchRecords/DieCards/Edit?ID=" + encodeURIComponent(id)
+
+    //    return false;
+    //});
+
+    $(document).ready(function () {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatBatchRecords/DieCards/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "DieNo", "orderable": true },
+                { "data": "SectionSize", "orderable": true },
+                { "data": "MatL", "orderable": true },
+                { "data": "ForgingsPerTray", "orderable": true },
+                { "data": "Bhn", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        ////return '<a href="#" type="button" data-value=' + data.DieNo + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                        return '<a type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn" href=/MCNJ/HeatTreatBatchRecords/DieCards/Edit?id=' + data.DieNo.trim() + '>EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    });
+
+</script>

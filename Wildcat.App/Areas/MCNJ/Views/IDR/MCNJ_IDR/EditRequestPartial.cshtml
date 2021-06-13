@@ -1,0 +1,168 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.IDR.EditIDRViewModel
+<div class="col-xl-12">
+
+    <div class="nav-tabs-top mb-4">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#navs-top-edit-general">General Info</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#navs-top-edit-discrepancy">Discrepancy</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#navs-top-edit-predisposition">Pre-Disposition Status</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#navs-top-edit-finaldisposition">Final Disposition Status</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="navs-top-edit-general">
+                <div class="card-body">
+                    @Html.HiddenFor(x => x.EditIDR.Idrnumber, new { @class = "form-control", @readonly = "readonly", @id = "EditIdrnumber" })
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Initiator:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.Initiator, new { @class = "form-control", @id = "EditInitiator" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Date:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.Date, new { @class = "form-control", @id = "EditDate" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Customer</label>
+                            @Html.DropDownListFor(x => x.EditIDR.Customer, Model.Customers, new { @class = "custom-select", @style = "btn-default", @id = "EditCustomer" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Work Order #:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.WorkOrderNumber, new { @class = "form-control", @id = "EditWorkOrderNumber" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Die Number:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.DieNumber, new { @class = "form-control", @id = "EditDieNumber" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Heat Code:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.HeatCode, new { @class = "form-control", @id = "EditHeatCode" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Work Order Quantity:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.WorkOrderQuantity, new { @class = "form-control", @id = "EditWorkOrderQuantity" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Serial Numbers:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.SerialNumbers, new { @class = "form-control", @id = "SerialNumbers", @rows = 3 })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Discrepant Quantity:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.DiscrepantQuantity, new { @class = "form-control", @id = "EditDiscrepantQuantity" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="navs-top-edit-discrepancy">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Select Discrepancy Type:</label>
+                            @Html.DropDownListFor(x => x.EditIDR.DiscrepancyType1, Model.DiscrepancyTypes, new { @class = "custom-select", @style = "btn-default", @id = "EditDiscrepancyType1" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Select Discrepancy Type:</label>
+                            @Html.DropDownListFor(x => x.EditIDR.DiscrepancyType2, Model.Discrepancy2TypeList, new { @class = "custom-select", @style = "btn-default", @id = "EditDiscrepancyType2" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Required:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.Required, new { @class = "form-control", @id = "EditRequired", @rows = 3 })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Actual:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.Actual, new { @class = "form-control", @id = "EditActual", @rows = 3 })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="navs-top-edit-predisposition">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Pre-Disposition Status:</label>
+                            @Html.DropDownListFor(x => x.EditIDR.PreDispositionStatus, Model.PredispositionStatus, new { @class = "custom-select", @style = "btn-default", @id = "EditPreDispositionStatus" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Notes:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.PreDispositionStatusNotes, new { @class = "form-control", @id = "EditPreDispositionStatusNotes", @rows = 3 })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Required:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.Required, new { @class = "form-control", @id = "EditRequired", @rows = 3 })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Actual:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.Actual, new { @class = "form-control", @id = "EditActual", @rows = 3 })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="navs-top-edit-finaldisposition">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Pre-Disposition Status:</label>
+                            @Html.DropDownListFor(x => x.EditIDR.FinalDisposition, Model.FinalDisposition, new { @class = "custom-select", @style = "btn-default", @id = "EditFinalDisposition" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Accepted Quantity:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.FinalAcceptedQuantity, new { @class = "form-control", @id = "EditFinalAcceptedQuantity" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Rejected Quantity:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.FinalRejectedQuantity, new { @class = "form-control", @id = "EditFinalRejectedQuantity" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Disposition By:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.FinalDispositionBy, new { @class = "form-control", @id = "EditFinalDispositionBy" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Disposition Date:</label>
+                            @Html.TextBoxFor(x => x.EditIDR.FinalDispositionDate, new { @class = "form-control", @id = "EditFinalDispositionDate" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Disposition Summary:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.Required, new { @class = "form-control", @id = "EditRequired", @rows = 3 })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Special Shipping/Marking Instructions:</label>
+                            @Html.TextAreaFor(x => x.EditIDR.FinalDispositionSpecialHandlingInstructions, new { @class = "form-control", @id = "EditFinalDispositionSpecialHandlingInstructions", @rows = 3 })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

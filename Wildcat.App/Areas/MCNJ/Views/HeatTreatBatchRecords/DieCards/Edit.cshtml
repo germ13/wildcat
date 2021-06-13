@@ -1,0 +1,476 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.EditDieCardsViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/MCNJ/HeatTreatBatchRecords/DieCards/Index">Die Cards</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Die Card</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                Edit Die: @Model.DieCard.DieNo
+            </h6>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Die Number</label>
+                            @Html.TextBoxFor(x => x.DieCard.DieNo, new { @id="DieCardDieNo", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Forgings Per Tray:</label>
+                            @Html.TextBoxFor(x => x.DieCard.ForgingsPerTray, new { @id="DieCardForgingsPerTray", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Section Size:</label>
+                            @Html.TextBoxFor(x => x.DieCard.SectionSize, new { @id="DieCardSectionSize", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">BHN:</label>
+                            @Html.TextBoxFor(x => x.DieCard.Bhn, new { @id="DieCardBhn", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Material:</label>
+                            @Html.TextBoxFor(x => x.DieCard.MatL, new { @id="DieCardMatL", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Weight:</label>
+                            @Html.TextBoxFor(x => x.DieCard.Weight, new { @id="DieCardWeight", @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label">Remarks:</label>
+                            @Html.TextAreaFor(x => x.DieCard.Remarks, new { @id="DieCardRemarks", @class = "form-control", @rows = 4 })
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="EditDieSave">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Heat Operations
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Heat Op</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                @*@await Component.InvokeAsync("RawScanJobs", new { _vm = Model })*@
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                    <thead>
+                        <tr>
+                            <th>Op Key</th>
+                            <th>Die</th>
+                            <th>Operation</th>
+                            <th>Furnace</th>
+                            <th>Zone</th>
+                            <th>Temp</th>
+                            <th>Push Time</th>
+                            <th>Hold Time</th>
+                            <th>Quench</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var i in Model.Operations)
+                        {
+                            <tr>
+                                <td>@i.OpKey</td>
+                                <td>@i.DieNo</td>
+                                <td>@i.Operation</td>
+                                <td>@i.Furnace</td>
+                                <td>@i.Zone</td>
+                                <td>@i.Temperature</td>
+                                <td>@i.PushTime</td>
+                                <td>@i.HoldTime</td>
+                                <td>@i.Quench</td>
+                                <td style="text-align:center;">
+                                    <a href="#" onclick="editopenclick(@i.OpKey)" data-value="@i.OpKey" class="btn btn-primary btn-sm openbtn editrecordbtn">EDIT</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            @*@Html.HiddenFor(x => x.SelectedJobType, new { @id = "SelectedJobType" })*@
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Heat Operations
+                    <br>
+                    <small class="text-muted">Add Heat Operation Data to Die Card.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="form-label">OpKey</label>
+                        @Html.TextBoxFor(x => x.NewOp.OpKey, new { @id = "NewOpOpKey", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">DieNo:</label>
+                        @Html.TextBoxFor(x => x.NewOp.DieNo, new { @id = "NewOpDieNo", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Operation:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Operation, new { @id = "NewOpOperation", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Furnace:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Furnace, new { @id = "NewOpFurnace", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Zone:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Zone, new { @id = "NewOpZone", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Temperature:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Temperature, new { @id = "NewOpTemperature", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Push Time:</label>
+                        @Html.TextBoxFor(x => x.NewOp.PushTime, new { @id = "NewOpPushTime", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Hold Time:</label>
+                        @Html.TextBoxFor(x => x.NewOp.HoldTime, new { @id = "NewOpHoldTime", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Quench:</label>
+                        @Html.TextBoxFor(x => x.NewOp.Quench, new { @id = "NewOpQuench", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="NewOpSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-edit-form">
+            @*@Html.HiddenFor(x => x.SelectedJobType, new { @id = "SelectedJobType" })*@
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Heat Operations
+                    <br>
+                    <small class="text-muted">Edit Heat Operation Data.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-edit-modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="form-label">OpKey</label>
+                        @Html.TextBoxFor(x => x.EditOp.OpKey, new { @id="EditOpOpKey", @class = "form-control", @readonly="readonly" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">DieNo:</label>
+                        @Html.TextBoxFor(x => x.EditOp.DieNo, new { @id="EditOpDieNo", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Operation:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Operation, new { @id="EditOpOperation", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Furnace:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Furnace, new { @id="EditOpFurnace", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Zone:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Zone, new { @id="EditOpZone", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Temperature:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Temperature, new { @id="EditOpTemperature", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Push Time:</label>
+                        @Html.TextBoxFor(x => x.EditOp.PushTime, new { @id="EditOpPushTime", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Hold Time:</label>
+                        @Html.TextBoxFor(x => x.EditOp.HoldTime, new { @id="EditOpHoldTime", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Quench:</label>
+                        @Html.TextBoxFor(x => x.EditOp.Quench, new { @id="EditOpQuench", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="EditOpSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    function editopenclick(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/DieCards/EditHeatPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $('#modals-default-edit-modal-body').html(result.Form.Result);
+                    $('#modals-default-edit').modal('show');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    };
+
+    $('#EditDieSave').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var DieCardDieNo = $('#DieCardDieNo').val();
+        var DieCardForgingsPerTray = $('#DieCardForgingsPerTray').val()
+        var DieCardSectionSize = $('#DieCardSectionSize').val();
+        var DieCardBhn = $('#DieCardBhn').val();
+        var DieCardMatL = $('#DieCardMatL').val();
+        var DieCardWeight = $('#DieCardWeight').val();
+        var DieCardRemarks = $('#DieCardRemarks').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/MCNJ/HeatTreatBatchRecords/DieCards/EditDieResult",
+            data: { DieNo: DieCardDieNo, SectionSize: DieCardSectionSize, MatL: DieCardMatL, ForgingsPerTray: DieCardForgingsPerTray, Remarks: DieCardRemarks, Bhn: DieCardBhn, Weight: DieCardWeight },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#NewOpSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var NewOpOpKey = $('#NewOpOpKey').val();
+        var NewOpDieNo = $('#NewOpDieNo').val()
+        var NewOpOperation = $('#NewOpOperation').val();
+        var NewOpFurnace = $('#NewOpFurnace').val();
+        var NewOpZone = $('#NewOpZone').val();
+        var NewOpTemperature = $('#NewOpTemperature').val();
+        var NewOpPushTime = $('#NewOpPushTime').val();
+        var NewOpHoldTime = $('#NewOpHoldTime').val();
+        var NewOpQuench = $('#NewOpQuench').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/MCNJ/HeatTreatBatchRecords/DieCards/AddHeatResult",
+            data: { OpKey: NewOpOpKey, DieNo: NewOpDieNo, Operation: NewOpOperation, Furnace: NewOpFurnace, Zone: NewOpZone, Temperature: NewOpTemperature, PushTime: NewOpPushTime, HoldTime: NewOpHoldTime, Quench: NewOpQuench },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.FormTable.Result);
+                    $('#modals-default').modal('toggle');
+                    $('#modals-default-form').trigger('reset');
+
+                    var DieCardDieNo = $('#DieCardDieNo').val();
+                    $('#NewOpDieNo').val(DieCardDieNo);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditOpSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var EditOpOpKey = $('#EditOpOpKey').val();
+        var EditOpDieNo = $('#EditOpDieNo').val()
+        var EditOpOperation = $('#EditOpOperation').val();
+        var EditOpFurnace = $('#EditOpFurnace').val();
+        var EditOpZone = $('#EditOpZone').val();
+        var EditOpTemperature = $('#EditOpTemperature').val();
+        var EditOpPushTime = $('#EditOpPushTime').val();
+        var EditOpHoldTime = $('#EditOpHoldTime').val();
+        var EditOpQuench = $('#EditOpQuench').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/MCNJ/HeatTreatBatchRecords/DieCards/EditHeatResult",
+            data: { OpKey: EditOpOpKey, DieNo: EditOpDieNo, Operation: EditOpOperation, Furnace: EditOpFurnace, Zone: EditOpZone, Temperature: EditOpTemperature, PushTime: EditOpPushTime, HoldTime: EditOpHoldTime, Quench: EditOpQuench },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+
+                    $('#tbody').html(result.FormTable.Result);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+</script>

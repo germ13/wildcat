@@ -1,0 +1,14 @@
+﻿@model List<Wildcat.Entities.MCNJ.HeatsSecured.TblDieWoqtyHt>
+
+@foreach (var i in Model)
+{
+    <tr>
+        <td>@i.ProcessNo</td>
+        <td>@i.WorkOrder</td>
+        <td>@i.Woqty</td>
+        <td>@i.McwHtCodes</td>
+        <td style="text-align:center;">
+            <a href="#" onclick="editopenclick(@i.RowId)" data-value="@i.RowId" class="btn btn-primary btn-sm openbtn editrecordbtn">EDIT</a>
+        </td>
+    </tr>
+}

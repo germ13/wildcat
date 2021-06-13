@@ -1,0 +1,55 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.EditMetRecordViewModel
+<div class="modal-header">
+    <h5 class="modal-title">
+        Edit Metallurgical Record: @Model.EditMetRecord.RowId
+        <br>
+        <small class="text-muted">Edit the selected metallurgical record.</small>
+    </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+</div>
+<div class="modal-body">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="form-label">Die Number</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.DieNo, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Order No:</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.OrderNo, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Quantity Run:</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.QuantityRun, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Test Bars:</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.TestBars, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Weight:</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.Weight, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Section Size:</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.SectionSize, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label class="form-label">Approved By:</label>
+            @Html.TextBoxFor(x => x.EditMetRecord.ApprovedBy, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label class="form-label">Notes:</label>
+            @Html.TextAreaFor(x => x.EditMetRecord.Notes, new { @class = "form-control", @rows = 4 })
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>

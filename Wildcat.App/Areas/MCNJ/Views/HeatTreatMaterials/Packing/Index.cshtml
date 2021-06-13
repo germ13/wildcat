@@ -1,0 +1,153 @@
+﻿@model List<Wildcat.Entities.MCNJ.HeatsSecured.TblPackingSlips>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Packing Slips</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Packing Slips
+        @Html.ActionLink("New Packing Slip", "Add", "Packing", null, new { @class = "btn btn-primary pull-right" })
+        @*<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Job</button>*@
+    </h5>
+    <div class="card-datatable table-responsive">
+        @*@await Component.InvokeAsync("RawScanJobs", new { _vm = Model })*@
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>PSN</th>
+                    <th>McW-CN</th>
+                    <th>Die</th>
+                    <th>Work Order</th>
+                    <th>Cust-PO</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model)
+                {
+                <tr>
+                    <td>@i.Psn</td>
+                    <td>@i.McWCn</td>
+                    <td>@i.Die</td>
+                    <td>@i.WorkOrder</td>
+                    <td>@i.CustPo</td>
+                    <td>@i.Date.Value.ToShortDateString()</td>
+                    <td style="text-align:center;">
+                        <button type="button" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn" onclick="location.href='@Url.Action("Edit", "Packing", new { PSN = i.Psn })'">EDIT</button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatMaterials/Packing/AjaxGetJsonData",
+                "type": "GET"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "Psn", "orderable": false },
+                { "data": "McWCn", "orderable": true },
+                { "data": "Die", "orderable": true },
+                { "data": "WorkOrder", "orderable": true },
+                { "data": "CustPo", "orderable": true },
+                { "data": "Date", "orderable": false },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        //return '<button type="button" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn" data-id="' + data.McWCn + '" title="Edit">Edit</i></button>';
+                        return '<a href=/MCNJ/HeatTreatMaterials/Packing/Edit?PSN=' + data.Psn + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    });
+
+
+
+    //$('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+    //    var id = e.currentTarget.dataset.value;
+    //    $.blockUI({
+    //        message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //        css: {
+    //            backgroundColor: 'transparent',
+    //            border: '0',
+    //            zIndex: 9999999
+    //        },
+    //        overlayCSS: {
+    //            backgroundColor: '#fff',
+    //            opacity: 0.8,
+    //            zIndex: 9999990
+    //        }
+    //    });
+
+    //    $.ajax({
+    //        url: "/MCNJ/HeatTreatBatchRecords/Dies/EditDiePartial/?ID=" + encodeURIComponent(id),
+    //        type: "GET",
+    //        cache: false,
+    //        success: function (result) {
+    //            $.unblockUI();
+
+    //            $('#edit-modal-form').html(result.Form.Result);
+    //            //$('#m_table_2').DataTable({
+    //            //    scrollY: '50vh',
+    //            //    scrollX: true,
+    //            //    scrollCollapse: true,
+    //            //    columnDefs: [{
+    //            //        orderable: false,
+    //            //        className: 'select-checkbox',
+    //            //        targets: 0
+    //            //    }],
+    //            //    select: {
+    //            //        style: 'multi',
+    //            //        selector: 'td:first-child'
+    //            //    }
+    //            //});
+    //            $('#modals-default-edit').modal('show');
+
+    //        },
+    //        error: function (result) {
+    //            $.unblockUI();
+
+    //            $.growl.error({
+    //                message: result.statusText
+    //            });
+    //        }
+
+    //    });
+
+    //    return false;
+    //});
+
+</script>

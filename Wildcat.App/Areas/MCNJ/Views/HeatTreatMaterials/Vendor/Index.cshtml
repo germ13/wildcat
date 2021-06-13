@@ -1,0 +1,401 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatMaterials.VendorModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Vendors</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Vendors
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Vendor</button>
+    </h5>
+    <div class="card-datatable table-responsive">
+        @*@await Component.InvokeAsync("RawScanJobs", new { _vm = Model })*@
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>ZipCode</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model.Vendors)
+                {
+                    <tr>
+                        <td>@i.Name</td>
+                        <td>@i.Address</td>
+                        <td>@i.City</td>
+                        <td>@i.State</td>
+                        <td>@i.ZipCode</td>
+                        <td>@i.Contact</td>
+                        <td style="text-align:center;">
+                            <button type="button" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn editopenbtn" data-value="@i.MillId">EDIT</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    New Vendor
+                    <br>
+                    <small class="text-muted">Add New Vendor.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Name</label>
+                        @Html.TextBoxFor(x => x.AddVendor.Name, new { @id = "AddVendorName", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Contact:</label>
+                        @Html.TextBoxFor(x => x.AddVendor.Contact, new { @id = "AddVendorContact", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Address:</label>
+                        @Html.TextBoxFor(x => x.AddVendor.Address, new { @id = "AddVendorAddress", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">City:</label>
+                        @Html.TextBoxFor(x => x.AddVendor.City, new { @id = "AddVendorCity", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">State:</label>
+                        @Html.TextBoxFor(x => x.AddVendor.State, new { @id = "AddVendorState", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">ZipCode:</label>
+                        @Html.TextBoxFor(x => x.AddVendor.ZipCode, new { @id = "AddVendorZipCode", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Country:</label>
+                        @Html.TextBoxFor(x => x.AddVendor.Country, new { @id = "AddVendorCountry", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.AddVendor.Print, new { @id = "AddVendorPrint", @class = "custom-control-input" })
+                            <span class="custom-control-label">Print?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="newsave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-edit-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Vendor
+                    <br>
+                    <small class="text-muted">Edit Vendor.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-edit-body">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.EditVendor.MillId, new { @id = "EditVendorMillId" })
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Name</label>
+                        @Html.TextBoxFor(x => x.EditVendor.Name, new { @id = "EditVendorName", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Contact:</label>
+                        @Html.TextBoxFor(x => x.EditVendor.Contact, new { @id = "EditVendorContact", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Address:</label>
+                        @Html.TextBoxFor(x => x.EditVendor.Address, new { @id = "EditVendorAddress", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">City:</label>
+                        @Html.TextBoxFor(x => x.EditVendor.City, new { @id = "EditVendorCity", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">State:</label>
+                        @Html.TextBoxFor(x => x.EditVendor.State, new { @id = "EditVendorState", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">ZipCode:</label>
+                        @Html.TextBoxFor(x => x.EditVendor.ZipCode, new { @id = "EditVendorZipCode", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Country:</label>
+                        @Html.TextBoxFor(x => x.EditVendor.Country, new { @id = "EditVendorCountry", @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.EditVendor.Print, new { @id = "EditVendorPrint", @class = "custom-control-input" })
+                            <span class="custom-control-label">Print?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="editsave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#newsave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Name = $('#AddVendorName').val();
+        var Address = $('#AddVendorAddress').val();
+        var City = $('#AddVendorCity').val()
+        var State = $('#AddVendorState').val();
+        var ZipCode = $('#AddVendorZipCode').val();
+        var Country = $('#AddVendorCountry').val();
+        var Contact = $('#AddVendorContact').val();
+        var Print = $('#AddVendorPrint').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Vendor/AddVendorResult",
+            type: "POST",
+            data: { Name: Name, Address: Address, City: City, State: State, ZipCode: ZipCode, Country: Country, Contact: Contact, Print: Print },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#modals-default-form').trigger('reset');
+                    $('#modals-default').modal('toggle');
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#editsave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var MillId = $('#EditVendorMillId').val();
+        var Name = $('#EditVendorName').val();
+        var Address = $('#EditVendorAddress').val();
+        var City = $('#EditVendorCity').val()
+        var State = $('#EditVendorState').val();
+        var ZipCode = $('#EditVendorZipCode').val();
+        var Country = $('#EditVendorCountry').val();
+        var Contact = $('#EditVendorContact').val();
+        var Print = $('#EditVendorPrint').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Vendor/EditVendorResult",
+            type: "POST",
+            data: { MillId: MillId, Name: Name, Address: Address, City: City, State: State, ZipCode: ZipCode, Country: Country, Contact: Contact, Print: Print },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    //$('#tbody').html(result.FormTable.Result);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $(document).ready(function () {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatMaterials/Vendor/AjaxGetJsonData",
+                "type": "GET"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "Name", "orderable": false },
+                { "data": "Address", "orderable": true },
+                { "data": "City", "orderable": true },
+                { "data": "State", "orderable": true },
+                { "data": "ZipCode", "orderable": true },
+                { "data": "Contact", "orderable": false },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        //return '<button type="button" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn" data-id="' + data.McWCn + '" title="Edit">Edit</i></button>';
+                        return '<a href="#" type="button" data-value=' +data.MillId + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    });
+
+
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Vendor/EditVendorPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+                if (result.success) {
+                    $('#modals-default-edit-body').html(result.Form.Result);
+                    $('#modals-default-edit').modal('show');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+</script>

@@ -1,0 +1,684 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatMaterials.EditConformanceCertsViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<style>
+    .ui-corner-all {
+        -moz-border-radius: 4px 4px 4px 4px;
+    }
+
+    .ui-widget-content {
+        border: 1px solid black;
+        color: #222222;
+        background-color: white;
+    }
+
+    .ui-widget {
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 15px;
+    }
+
+    .ui-menu {
+        display: block;
+        float: left;
+        list-style: none outside none;
+        margin: 0;
+        padding: 2px;
+    }
+
+    .ui-autocomplete {
+        cursor: default;
+        position: absolute;
+    }
+
+    .ui-menu .ui-menu-item {
+        clear: left;
+        float: left;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+        .ui-menu .ui-menu-item a {
+            display: block;
+            padding: 3px 3px 3px 3px;
+            text-decoration: none;
+            cursor: pointer;
+            background-color: Green;
+        }
+
+            .ui-menu .ui-menu-item a:hover {
+                display: block;
+                padding: 3px 3px 3px 3px;
+                text-decoration: none;
+                color: White;
+                cursor: pointer;
+                background-color: ButtonText;
+            }
+
+    .ui-widget-content a {
+        color: #222222;
+    }
+</style>
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/MCNJ/HeatTreatMaterials/Conformance/Index">Conformance Certs</a>
+            </li>
+            <li class="breadcrumb-item active">Edit</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Edit Conformance Cert
+                @*<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Heat Op</button>*@
+
+            </h5>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Heat:</label>
+                            @Html.TextBoxFor(x => x.Cert.Heat, new { @id = "CertHeat", @class = "form-control ui-widget" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">CRN - Order No:</label>
+                            @Html.TextBoxFor(x => x.Cert.Crn, new { @id = "CertCrn", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">McW-Cn:</label>
+                            @Html.TextBoxFor(x => x.Cert.McWCn, new { @id = "CertMcWCn", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Date:</label>
+                            @Html.TextBoxFor(x => x.Cert.Date, new { @id = "CertDate", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">CustPo:</label>
+                            @Html.TextBoxFor(x => x.Cert.CustPo, new { @id = "CertCustPo", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Select Disclaimer:</label>
+                            @Html.DropDownListFor(x => x.Cert.NoteType, Model.Disclaimers, new { @id = "Disclaimers", @class = "custom-select", @style = "btn-default" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Qty Shipped:</label>
+                            @Html.TextBoxFor(x => x.Cert.QtyShipped, new { @id = "CertQtyShipped", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Die:</label>
+                            @Html.TextBoxFor(x => x.Cert.Die, new { @id = "CertDie", @class = "form-control ui-widget" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Work Order:</label>
+                            @Html.TextBoxFor(x => x.Cert.WorkOrder, new { @id = "CertWorkOrder", @class = "form-control" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Process No:</label>
+                            @Html.TextBoxFor(x => x.Die.ProcessNo, new { @id = "DieProcessNo", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Part No:</label>
+                            @Html.TextBoxFor(x => x.Die.PartNum, new { @id = "DiePartNum", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Aux Doc:</label>
+                            @Html.TextBoxFor(x => x.Die.AuxDoc, new { @id = "DieAuxDoc", @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="custom-control custom-checkbox">
+                                @Html.CheckBoxFor(x => x.DisplayQty, new { @id = "DisplayQty", @class = "custom-control-input" })
+                                <span class="custom-control-label">Display Qty?</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Heat Treat Notes:</label>
+                            @Html.TextAreaFor(x => x.Cert.HeatTreatNotes, new { @id = "CertHeatTreatNotes", @class = "form-control", @rows = 4 })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Hardness:</label>
+                            @Html.TextAreaFor(x => x.Cert.Hardness, new { @id = "CertHardness", @class = "form-control", @rows = 4 })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Certification Notes:</label>
+                            @Html.TextAreaFor(x => x.Cert.CertificationNotes, new { @id = "CertCertificationNotes", @class = "form-control", @rows = 4 })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="CertSave">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h5 class="card-header text-align-center">
+                Operations
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Heat Op</button>
+            </h5>
+            <div class="card-datatable table-responsive">
+                <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                    <thead>
+                        <tr>
+                            <th>Process No</th>
+                            <th>Work Order</th>
+                            <th>Wo qty</th>
+                            <th>Mcw Ht Codes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var i in Model.TblDieWoqtyHts)
+                        {
+                            <tr>
+                                <td>@i.ProcessNo</td>
+                                <td>@i.WorkOrder</td>
+                                <td>@i.Woqty</td>
+                                <td>@i.McwHtCodes</td>
+                                <td style="text-align:center;">
+                                    <a href="#" onclick="editopenclick(@i.RowId)" data-value="@i.RowId" class="btn btn-primary btn-sm openbtn">EDIT</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Operations
+                    <br>
+                    <small class="text-muted">Add Operation Data to Cert.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-body">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.NewTblDieWoqtyHt.Crn, new { @id = "NewTblDieWoqtyHtCrn" })
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Process No</label>
+                        @Html.TextBoxFor(x => x.NewTblDieWoqtyHt.ProcessNo, new { @id = "NewTblDieWoqtyHtProcessNo", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Work Order:</label>
+                        @Html.TextBoxFor(x => x.NewTblDieWoqtyHt.WorkOrder, new { @id = "NewTblDieWoqtyHtWorkOrder", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Wo qty:</label>
+                        @Html.TextBoxFor(x => x.NewTblDieWoqtyHt.Woqty, new { @id = "NewTblDieWoqtyHtWoqty", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Mcw Ht Codes:</label>
+                        @Html.TextBoxFor(x => x.NewTblDieWoqtyHt.McwHtCodes, new { @id = "NewTblDieWoqtyHtMcwHtCodes", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<a href="#" class="btn btn-primary" onclick="NewOpSave()" id="NewOpSave">Save</a>*@
+                <button type="button" class="btn btn-primary" id="NewOpSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-edit-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Operations
+                    <br>
+                    <small class="text-muted">Edit Operation Data to Cert.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="modals-default-edit-body">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.EditTblDieWoqtyHt.Crn, new { @id = "EditTblDieWoqtyHtCrn" })
+                    @Html.HiddenFor(x => x.EditTblDieWoqtyHt.RowId, new { @id = "EditTblDieWoqtyHtRowId" })
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Process No</label>
+                        @Html.TextBoxFor(x => x.EditTblDieWoqtyHt.ProcessNo, new { @id = "EditTblDieWoqtyHtProcessNo", @class = "form-control", @readonly = "readonly" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Work Order:</label>
+                        @Html.TextBoxFor(x => x.EditTblDieWoqtyHt.WorkOrder, new { @id = "EditTblDieWoqtyHtWorkOrder", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Wo qty:</label>
+                        @Html.TextBoxFor(x => x.EditTblDieWoqtyHt.Woqty, new { @id = "EditTblDieWoqtyHtWoqty", @class = "form-control" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Mcw Ht Codes:</label>
+                        @Html.TextBoxFor(x => x.EditTblDieWoqtyHt.McwHtCodes, new { @id = "EditTblDieWoqtyHtMcwHtCodes", @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="EditOpSave">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function editopenclick(e) {
+        var id = e;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Conformance/EditHeatPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $('#modals-default-edit-body').html(result.Form.Result);
+                    $('#modals-default-edit').modal('show');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    };
+
+    $('#CertSave').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var McWCn = $('#CertMcWCn').val();
+        var Crn = $('#CertCrn').val()
+        var Date = $('#CertDate').val();
+        var CustId = $('#DieCardBhn').val();
+        var CustPo = $('#CertCustPo').val();
+        var GsMcW = $('#DieCardWeight').val();
+        var Heat = $('#CertHeat').val();
+        var Hardness = $('#CertHardness').val();
+        var HeatTreatNotes = $('#CertHeatTreatNotes').val();
+        var CertCertificationNotes = $('#CertCertificationNotes').val();
+        var ProcessNo = $('#DieProcessNo').val();
+        var NoteType = $('#Disclaimers').val();
+        var QtyShipped = $('#CertQtyShipped').val();
+        var Die = $('#CertDie').val();
+        var WorkOrder = $('#CertWorkOrder').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Conformance/EditResult",
+            type: "POST",
+            data: { McWCn: McWCn, Crn: Crn, Date: Date, CustId: CustId, CustPo: CustPo, Heat: Heat, GsMcW: GsMcW, Hardness: Hardness, HeatTreatNotes: HeatTreatNotes, CertificationNotes: CertCertificationNotes, ProcessNo: ProcessNo, NoteType: NoteType, QtyShipped: QtyShipped, Die: Die, WorkOrder: WorkOrder },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#NewTblDieWoqtyHtCrn').val(result.DieNum);
+                    $("#CertDie").prop("readonly", true);
+                    $('#tbody').html(result.FormTable.Result);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+
+    //function CertSave() {
+    //    $.blockUI({
+    //        message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+    //        css: {
+    //            backgroundColor: 'transparent',
+    //            border: '0',
+    //            zIndex: 9999999
+    //        },
+    //        overlayCSS: {
+    //            backgroundColor: '#fff',
+    //            opacity: 0.8,
+    //            zIndex: 9999990
+    //        }
+    //    });
+
+    //    var McWCn = $('#CertMcWCn').val();
+    //    var Crn = $('#CertCrn').val()
+    //    var Date = $('#CertDate').val();
+    //    var CustId = $('#DieCardBhn').val();
+    //    var CustPo = $('#CertCustPo').val();
+    //    var GsMcW = $('#DieCardWeight').val();
+    //    var Heat = $('#CertHeat').val();
+    //    var Hardness = $('#CertHardness').val();
+    //    var HeatTreatNotes = $('#CertHeatTreatNotes').val();
+    //    var CertCertificationNotes = $('#CertCertificationNotes').val();
+    //    var ProcessNo = $('#DieCardRemarks').val();
+    //    var NoteType = $('#Disclaimers').val();
+    //    var QtyShipped = $('#CertQtyShipped').val();
+    //    var Die = $('#CertDie').val();
+    //    var WorkOrder = $('#CertWorkOrder').val();
+
+    //    $.ajax({
+    //        url: "/MCNJ/HeatTreatMaterials/Conformance/AddResult",
+    //        type: "POST",
+    //        data: { McWCn: McWCn, Crn: Crn, Date: Date, CustId: null, CustPo: CustPo, Heat: Heat, GsMcW: null, HeatTreatNotes: HeatTreatNotes, CertificationNotes: CertCertificationNotes, ProcessNo: ProcessNo, NoteType: NoteType, QtyShipped: QtyShipped, Die: Die, WorkOrder: WorkOrder },
+    //        cache: false,
+    //        success: function (result) {
+    //            $.unblockUI();
+
+    //            if (result.success) {
+    //                $.growl.notice({
+    //                    message: result.message
+    //                });
+    //                $('#NewOpDieNo').val(result.DieNum);
+    //            }
+    //            else {
+    //                $.growl.error({
+    //                    message: result.message
+    //                });
+    //            }
+    //        },
+    //        error: function (result) {
+    //            $.unblockUI();
+
+    //            $.growl.error({
+    //                message: result.statusText
+    //            });
+    //        }
+
+    //    });
+
+    //    return false;
+
+    //};
+
+    $('#NewOpSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Crn = $('#NewTblDieWoqtyHtCrn').val();
+        var ProcessNo = $('#NewTblDieWoqtyHtProcessNo').val();
+        var WorkOrder = $('#NewTblDieWoqtyHtWorkOrder').val()
+        var Woqty = $('#NewTblDieWoqtyHtWoqty').val();
+        var McwHtCodes = $('#NewTblDieWoqtyHtMcwHtCodes').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Conformance/AddOpResult",
+            type: "POST",
+            data: { Crn: Crn, ProcessNo: ProcessNo, WorkOrder: WorkOrder, Woqty: Woqty, McwHtCodes: McwHtCodes },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.FormTable.Result);
+                    $('#modals-default-form').trigger('reset');
+                    $('#NewTblDieWoqtyHtProcessNo').val(result.DieNum);
+                    $('#NewTblDieWoqtyHtCrn').val(result.CrnResult);
+                    $('#modals-default').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $('#EditOpSave').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Crn = $('#EditTblDieWoqtyHtCrn').val();
+        var RowId = $('#EditTblDieWoqtyHtRowId').val();
+        var ProcessNo = $('#EditTblDieWoqtyHtProcessNo').val();
+        var WorkOrder = $('#EditTblDieWoqtyHtWorkOrder').val()
+        var Woqty = $('#EditTblDieWoqtyHtWoqty').val();
+        var McwHtCodes = $('#EditTblDieWoqtyHtMcwHtCodes').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Conformance/EditOpResult",
+            type: "POST",
+            data: { Crn: Crn, ProcessNo: ProcessNo, WorkOrder: WorkOrder, Woqty: Woqty, McwHtCodes: McwHtCodes, RowId: RowId },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#tbody').html(result.FormTable.Result);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    $(function () {
+        $("#CertHeat").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/AutoCompleteHeat?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/GetHeatInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#CertCrn').val(data[0].Crn)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+    $(function () {
+        $("#CertDie").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/AutoCompleteDies?prefix=' + request.term,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return item;
+                        }))
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            select: function (e, i) {
+                $.ajax({
+                    url: '/MCNJ/HeatTreatMaterials/Conformance/GetDiesInfo?prefix=' + i.item.val,
+                    dataType: "json",
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        $('#CertDie').val(data[0].Die)
+                        $('#DieProcessNo').val(data[0].Die)
+                        $('#DiePartNum').val(data[0].PartNum)
+                        $('#DieAuxDoc').val(data[0].AuxDoc)
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            },
+            minLength: 1
+        });
+    });
+
+
+</script>

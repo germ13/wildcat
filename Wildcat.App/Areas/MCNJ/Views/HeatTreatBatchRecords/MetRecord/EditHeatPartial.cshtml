@@ -1,0 +1,64 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatBatchRecords.EditHeatOpViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+
+    IList<SelectListItem> coolRateList = new List<SelectListItem>
+    {
+        new SelectListItem{Text = "Air Cool", Value = "A/C"},
+        new SelectListItem{Text = "Water Quench", Value = "W/Q"},
+        new SelectListItem{Text = "Oil Quench", Value = "O/Q"},
+    };
+}
+<div class="form-row">
+    @Html.HiddenFor(x => x.EditOp.RowId, new { @id = "EditRowId" })
+    @Html.HiddenFor(x => x.EditOp.OrderNo, new { @id = "EditOrderNo" })
+    <div class="form-group col-md-2">
+        <label class="form-label">Date</label>
+        @Html.TextBoxFor(x => x.EditOp.Date, new { @class = "form-control", @id = "EditDate" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">No Pcs:</label>
+        @Html.TextBoxFor(x => x.EditOp.NoPcs, new { @class = "form-control", @id = "EditNoPcs" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">FCE No:</label>
+        @Html.TextBoxFor(x => x.EditOp.FceNo, new { @class = "form-control", @id = "EditFceNo" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Operation:</label>
+        @Html.TextBoxFor(x => x.EditOp.Operation, new { @class = "form-control", @id = "EditOperation" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Temp:</label>
+        @Html.TextBoxFor(x => x.EditOp.Temp, new { @class = "form-control", @id = "EditTemp" })
+    </div>
+    <div class="form-group col-md-2">
+        <label class="form-label">Hold Time:</label>
+        @Html.TextBoxFor(x => x.EditOp.HoldTime, new { @class = "form-control", @id = "EditHoldTime" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label class="form-label">Cool Rate:</label>
+        @Html.DropDownListFor(x => x.EditOp.CoolRate, coolRateList,  new { @class = "form-control", @id = "EditCoolRate"})           
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">At Temp:</label>
+        @Html.TextBoxFor(x => x.EditOp.AtTemp, new { @class = "form-control", @id = "EditAtTemp" })
+    </div>
+    <div class="form-group col-md-4">
+        <label class="form-label">Hold Complete:</label>
+        @Html.TextBoxFor(x => x.EditOp.HoldComplete, new { @class = "form-control", @id = "EditHoldComplete" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">Quench Temp Start:</label>
+        @Html.TextBoxFor(x => x.EditOp.QuenchTempStart, new { @class = "form-control", @id = "EditQuenchTempStart" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Quench Temp Finish:</label>
+        @Html.TextBoxFor(x => x.EditOp.QuenchTempFinish, new { @class = "form-control", @id = "EditQuenchTempFinish" })
+    </div>
+</div>

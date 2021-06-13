@@ -8,7 +8,6 @@ using Wildcat.Entities.PCC.Wildcat;
 namespace Wildcat.App.Controllers.Engineering
 {
     [Area("SHCA")]
-
     public class WorkersController : Controller
     {
         private readonly WildcatContext _context;

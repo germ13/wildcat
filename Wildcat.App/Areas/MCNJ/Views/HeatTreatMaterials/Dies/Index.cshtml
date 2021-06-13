@@ -1,0 +1,383 @@
+﻿@model Wildcat.App.ViewModels.MCNJ.HeatTreatMaterials.DiesViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Dies</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Die Cards
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">New Die</button>
+    </h5>
+    <div class="card-datatable table-responsive">
+        @*@await Component.InvokeAsync("RawScanJobs", new { _vm = Model })*@
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+            <tr>
+                <th>Die</th>
+                <th>Part No</th>
+                <th>Aux Doc</th>
+                <th>Rev</th>
+                <th>Process No</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            @foreach (var i in Model.Dies)
+            {
+            <tr>
+                <td>@i.Die</td>
+                <td>@i.PartNum</td>
+                <td>@i.AuxDoc</td>
+                <td>@i.Revision</td>
+                <td>@i.ProcessNo</td>
+                <td style="text-align:center;">
+                    <button type="button" style="display:block;margin:auto;" class="btn btn-primary btn-sm openbtn editopenbtn" data-value="@i.Die">EDIT</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    New Die
+                    <br>
+                    <small class="text-muted">Add New Die.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Die:</label>
+                        @Html.TextBoxFor(x => x.NewDie.Die, new { @class = "form-control", @id = "NewDieDie" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Customer Part No:</label>
+                        @Html.TextBoxFor(x => x.NewDie.PartNum, new { @class = "form-control", @id = "NewDiePartNum" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Revision:</label>
+                        @Html.TextBoxFor(x => x.NewDie.Revision, new { @class = "form-control", @id = "NewDieRevision" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Aux Doc:</label>
+                        @Html.TextBoxFor(x => x.NewDie.AuxDoc, new { @class = "form-control", @id = "NewDieAuxDoc" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Process No:</label>
+                        @Html.TextBoxFor(x => x.NewDie.ProcessNo, new { @class = "form-control", @id = "NewDieProcessNo" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Cert Notes:</label>
+                        @Html.TextAreaFor(x => x.NewDie.StdcertNotes, new { @class = "form-control", @rows = 4, @id = "NewDieStdcertNotes" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Heat Treat Notes:</label>
+                        @Html.TextAreaFor(x => x.NewDie.StdhtrNotes, new { @class = "form-control", @rows = 4, @id = "NewDieStdhtrNotes" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenew">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content"id="modals-default-edit-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit Die
+                    <br>
+                    <small class="text-muted">Edit Die.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Die:</label>
+                        @Html.TextBoxFor(x => x.EditDie.Die, new { @class = "form-control", @id = "EditDieDie" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Customer Part No:</label>
+                        @Html.TextBoxFor(x => x.EditDie.PartNum, new { @class = "form-control", @id = "EditDiePartNum" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Revision:</label>
+                        @Html.TextBoxFor(x => x.EditDie.Revision, new { @class = "form-control", @id = "EditDieRevision" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Aux Doc:</label>
+                        @Html.TextBoxFor(x => x.EditDie.AuxDoc, new { @class = "form-control", @id = "EditDieAuxDoc" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="form-label">Process No:</label>
+                        @Html.TextBoxFor(x => x.EditDie.ProcessNo, new { @class = "form-control", @id = "EditDieProcessNo" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Cert Notes:</label>
+                        @Html.TextAreaFor(x => x.EditDie.StdcertNotes, new { @class = "form-control", @rows = 4, @id = "EditDieStdcertNotes" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Heat Treat Notes:</label>
+                        @Html.TextAreaFor(x => x.EditDie.StdhtrNotes, new { @class = "form-control", @rows = 4, @id = "EditDieStdhtrNotes" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveedit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#savenew').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var NewDieDie = $('#NewDieDie').val();
+        var NewDiePartNum = $('#NewDiePartNum').val()
+        var NewDieRevision = $('#NewDieRevision').val();
+        var NewDieAuxDoc = $('#NewDieAuxDoc').val();
+        var NewDieProcessNo = $('#NewDieProcessNo').val();
+        var NewDieStdcertNotes = $('#NewDieStdcertNotes').val();
+        var NewDieStdhtrNotes = $('#NewDieStdhtrNotes').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Dies/AddResult",
+            type: "POST",
+            data: { Die: NewDieDie  ,PartNum: NewDiePartNum  ,AuxDoc: NewDieAuxDoc  ,Revision: NewDieRevision  ,ProcessNo:  NewDieProcessNo ,StdhtrNotes: NewDieStdhtrNotes  ,StdcertNotes: NewDieStdcertNotes },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    //var mytbl = $("#m_table_2").DataTable();
+                    //mytbl.ajax.reload(null, false);
+
+                    $('#modals-default-form').trigger('reset')
+                    $('#modals-default').modal('toggle');
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#saveedit').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var EditDieDie = $('#EditDieDie').val();
+        var EditDiePartNum = $('#EditDiePartNum').val()
+        var EditDieRevision = $('#EditDieRevision').val();
+        var EditDieAuxDoc = $('#EditDieAuxDoc').val();
+        var EditDieProcessNo = $('#EditDieProcessNo').val();
+        var EditDieStdcertNotes = $('#EditDieStdcertNotes').val();
+        var EditDieStdhtrNotes = $('#EditDieStdhtrNotes').val();
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatMaterials/Dies/EditResult",
+            type: "POST",
+            data: { Die: EditDieDie  ,PartNum: EditDiePartNum  ,AuxDoc: EditDieAuxDoc  ,Revision: EditDieRevision  ,ProcessNo:  EditDieProcessNo ,StdhtrNotes: EditDieStdhtrNotes  ,StdcertNotes: EditDieStdcertNotes },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#modals-default-edit-form').trigger('reset');
+                    $('#modals-default-edit').modal('toggle');
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $(document).ready(function () {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/MCNJ/HeatTreatMaterials/Dies/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "Die", "orderable": true },
+                { "data": "PartNum", "orderable": true },
+                { "data": "AuxDoc", "orderable": true },
+                { "data": "Revision", "orderable": true },
+                { "data": "ProcessNo", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" type="button" data-value=' +data.Die + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    });
+
+
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/Dies/EditDiePartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $('#edit-modal-form').html(result.Form.Result);
+                    $('#modals-default-edit').modal('show');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+</script>

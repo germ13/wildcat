@@ -1,0 +1,68 @@
+﻿@model List<Wildcat.Entities.MCNJ.SecureHeatTreatBatchBook.TblHtoperations>
+
+@foreach (var i in Model)
+{
+    <tr>
+        <td>@i.OpKey</td>
+        <td>@i.DieNo</td>
+        <td>@i.Operation</td>
+        <td>@i.Furnace</td>
+        <td>@i.Zone</td>
+        <td>@i.Temperature</td>
+        <td>@i.PushTime</td>
+        <td>@i.HoldTime</td>
+        <td>@i.Quench</td>
+        <td style="text-align:center;">
+            <a href="#" onclick="editopenclick(@i.OpKey)" data-value="@i.OpKey" class="btn btn-primary btn-sm openbtn editrecordbtn">EDIT</a>
+        </td>
+    </tr>
+}
+
+@*<script>
+    $('.editrecordbtn').click(function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/MCNJ/HeatTreatBatchRecords/DieCards/EditHeatPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $('#modals-default-edit-modal-body').html(result.Form.Result);
+                    $('#modals-default-edit').modal('show');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+</script>*@
