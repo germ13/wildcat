@@ -1,0 +1,388 @@
+﻿@model Wildcat.App.ViewModels.PCC03.Integrations.RequestsViewModel
+@{
+    ViewData["Title"] = "Integration Requests";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Requests</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                Integration Requests
+            </h6>
+            <div class="card-body">
+                <form id="submitform">
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Select Integration Point</label>
+                            @Html.DropDownListFor(x => x.IntPoints, Model.IntPoints, new { @id = "IntegrationSelect", @class = "custom-select", @style = "btn-default" })
+                        </div>
+                    </div>
+                </form>
+                <br />
+                <div class="card-datatable table-responsive" id="tableholder">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                        <thead>
+                            <tr>
+                                <th>Oracle Id</th>
+                                <th>PCC03 Id</th>
+                                <th>Json</th>
+                                <th>JsonChild</th>
+                                <th>Response</th>
+                                <th>Exception</th>
+                                <th>Status</th>
+                                <th>Added</th>
+                                <th>Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @*@foreach (var item in Model.DTO.OrderByDescending(x => x.Timestamp))
+                                {
+                                    <tr>
+                                        <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    </tr>
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-json">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    JSON Object
+                    <br>
+                    <small class="text-muted">JSON Object.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="json-modal-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<button type="submit" class="btn btn-primary" id="savenew">Save</button>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-response">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    RESPONSE Object
+                    <br>
+                    <small class="text-muted">RESPONSE Object.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="response-modal-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<button type="submit" class="btn btn-primary" id="savenew">Save</button>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-exception">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    EXCEPTION Object
+                    <br>
+                    <small class="text-muted">EXCEPTION Object.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="exception-modal-form">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @*<button type="submit" class="btn btn-primary" id="savenew">Save</button>*@
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.vwobjectbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var selectedInt = $("#IntegrationSelect").val();
+
+        $.ajax({
+            url: "/PCC03/Integration/JsonRequestPartial/?Table=" + selectedInt + '&' + "ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#json-modal-form').html(result.Form.Result);
+                $('#modals-json').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#m_table_2 tbody').on('click', '.vwresponsebtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var selectedInt = $("#IntegrationSelect").val();
+
+        $.ajax({
+            url: "/PCC03/Integration/ResponseRequestPartial/?Table=" + selectedInt + '&' + "ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#response-modal-form').html(result.Form.Result);
+                $('#modals-response').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#m_table_2 tbody').on('click', '.vwexceptionbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var selectedInt = $("#IntegrationSelect").val();
+
+        $.ajax({
+            url: "/PCC03/Integration/ExceptionRequestPartial/?Table=" + selectedInt + '&' + "ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#exception-modal-form').html(result.Form.Result);
+                $('#modals-exception').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#m_table_2 tbody').on('click', '.releasebtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var selectedInt = $("#IntegrationSelect").val();
+
+        $.ajax({
+            url: "/PCC03/Integration/ReleaseRequestResult/?Table=" + selectedInt + '&' + "Id=" + encodeURIComponent(id),
+            type: "POST",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    function datatable() {
+        var selectedInt = $("#IntegrationSelect").val();
+
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/PCC03/Integration/AjaxGetJsonData",
+                "data": function (d) {
+                    d.IntegrationPnt = $("#IntegrationSelect").val();
+                    // d.custom = $('#myInput').val();
+                    // etc
+                },
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "OracleId", "orderable": true },
+                { "data": "Pcc03Id", "orderable": true },
+                { "data": "Json", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "JsonChild", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "Response", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "Exception", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "Status", "orderable": true },
+                { "data": "Added", "orderable": true },
+                { "data": "Updated", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        if (data.Exception) {
+                            return '<a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwobjectbtn">View Object</a> | <a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwresponsebtn">View Response</a> | <a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwexceptionbtn">View Exception</a>';
+                        }
+                        else {
+                            return '<a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwobjectbtn">View Object</a> | <a href="#" data-value=' + data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn vwresponsebtn">View Response</a>';
+                        }
+                        return str;
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[7, "desc"]]
+        });
+    }
+
+    $("#IntegrationSelect").change(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var table = $('#m_table_2').DataTable();
+        var selectedInt = $("#IntegrationSelect").val();
+
+        table.ajax.reload();
+
+        $.unblockUI();
+
+        return false;
+    });
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

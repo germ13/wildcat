@@ -1,0 +1,230 @@
+﻿@model Wildcat.App.ViewModels.PCC03.Integrations.JobsMasterViewModel
+@{
+    ViewData["Title"] = "Jobs Master";
+}
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Jobs Master</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <h6 class="card-header">
+                Integration Requests
+            </h6>
+            <div class="card-body">
+                <div class="card-datatable table-responsive" id="tableholder">
+                    <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+                        <thead>
+                            <tr>
+                                <th>Oracle Id</th>
+                                <th>PCC03 Id</th>
+                                <th>Note</th>
+                                <th>Added</th>
+                                <th>Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            @*@foreach (var item in Model.DTO.OrderByDescending(x => x.Timestamp))
+                                {
+                                    <tr>
+                                        <td data-sort="YYYYMMDD">@item.Timestamp</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Value)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    </tr>
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-note">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="modals-default-form">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Job Notes
+                    <br>
+                    <small class="text-muted">Job Notes.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="note-modal-form">
+                <div class="form-row">
+                    @Html.HiddenFor(x => x.job.Id, new { @id = "jobid" })
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Job Oracle Id:</label>
+                        @Html.TextBoxFor(x => x.job.OracleId, new { @class = "form-control", @id = "joboracle" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Job Pcc03 Id:</label>
+                        @Html.TextBoxFor(x => x.job.Pcc03Id, new { @class = "form-control", @id = "jobpcc03" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label class="form-label">Job Note:</label>
+                        @Html.TextAreaFor(x => x.job.Note, new { @class = "form-control", @id = "jobnote" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenote">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/PCC03/Integration/JobNoteRequestPartial?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#note-modal-form').html(result.Form.Result);
+                $('#modals-note').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#savenote').click(function (e) {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var Id = $('#jobid').val();
+        var Note = $('#jobnote').val()
+
+        $.ajax({
+            url: "/PCC03/Integration/EditJobMasterNoteResult",
+            type: "POST",
+            data: {
+                Id: Id,
+                Note: Note
+            },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#modals-note').modal('toggle');
+                    $('#modals-default-form').trigger('reset');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+
+    });
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/PCC03/Integration/AjaxGetJobMasterJsonData",
+                "data": function (d) {
+                    //d.IntegrationPnt = $("#IntegrationSelect").val();
+                    //// d.custom = $('#myInput').val();
+                    //// etc
+                },
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "OracleId", "orderable": true },
+                { "data": "Pcc03Id", "orderable": true },
+                { "data": "Note", "orderable": true, "render": function (data, type, row) { return (data !== null && data.length > 40) ? data.substr(0, 40) + '…' : data; } },
+                { "data": "Added", "orderable": true },
+                { "data": "Updated", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' +data.Id + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

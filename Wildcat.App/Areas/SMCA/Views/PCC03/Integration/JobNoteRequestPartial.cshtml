@@ -1,0 +1,21 @@
+﻿@model Wildcat.App.ViewModels.PCC03.Integrations.JobNoteViewModel
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="form-row">
+    @Html.HiddenFor(x => Model.master.Id, new { @id = "jobid" })
+    <div class="form-group col-md-6">
+        <label class="form-label">Job Oracle Id:</label>
+        @Html.TextBoxFor(x => Model.master.OracleId, new { @class = "form-control", @id = "joboracle", @readonly = "readonly" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Job Pcc03 Id:</label>
+        @Html.TextBoxFor(x => Model.master.Pcc03Id, new { @class = "form-control", @id = "jobpcc03", @readonly = "readonly" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label class="form-label">Job Note:</label>
+        @Html.TextAreaFor(x => Model.master.Note, new { @class = "form-control", @id = "jobnote", @rows = 10 })
+    </div>
+</div>

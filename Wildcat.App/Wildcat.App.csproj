@@ -86,6 +86,8 @@
     <Folder Include="Areas\CFCA\Data\" />
     <Folder Include="Areas\CFCA\Models\" />
     <Folder Include="Areas\SHCA\Controllers\Accounting\" />
+    <Folder Include="Areas\SMCA\Data\" />
+    <Folder Include="Areas\SMCA\Models\" />
   </ItemGroup>
 
 

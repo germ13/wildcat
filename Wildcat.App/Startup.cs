@@ -13,6 +13,7 @@ using Wildcat.Entities.MCNJ.HeatsSecured;
 using Wildcat.Entities.MCNJ.IDR;
 using Wildcat.Entities.MCNJ.SecureHeatCards;
 using Wildcat.Entities.MCNJ.SecureHeatTreatBatchBook;
+using Wildcat.Entities.PCC.PCC03Integration;
 using Wildcat.Entities.PCC.Wildcat;
 using Wildcat.Entities.SHCA.EngineeringData;
 using Wildcat.Entities.SHCA.Grinders.Wildcat;
@@ -40,7 +41,8 @@ namespace Wildcat.App
             ConfigureAreas(services);
             ConfigureDbContexts(services);
 
-            //TODO This appears to be a really bad pattern.  Appears to hijack the entire rendering engine
+            //TODO This appears to be a bad pattern. 
+            //Appears to hijack the entire rendering engine
             services.AddScoped<IViewRenderService, ViewRenderService>();
         }
 
@@ -142,6 +144,12 @@ namespace Wildcat.App
                     pattern: "{area}/Security/{controller=Workers}/{action=Index}/{id?}"
                 );
 
+                // :: SMCA :: //
+                endpoints.MapAreaControllerRoute(
+                    name: "SMCA_PCC03",
+                    areaName: "SMCA",
+                    pattern: "{area}/PCC03/{controller=Workers}/{action=Index}/{id?}"
+                );
                 //endpoints.MapControllerRoute(
                 //    name: "engineering",
                 //    pattern: "SHCA/Engineering/{controller=Home}/{action=Index}/{id?}");
@@ -166,16 +174,13 @@ namespace Wildcat.App
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Kepware/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Accounting/{1}/{0}.cshtml");
 
-
-
                 // :: MCNJ :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/DCR/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatCards/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatTreatBatchRecords/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatTreatMaterials/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/IDR/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-
+  
                 // :: CFCA :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Saws/{1}/{0}.cshtml");
                 //options.AreaViewLocationFormats.Add("Areas/{2}/Views/Planning/{1}/{0}.cshtml");
@@ -183,6 +188,11 @@ namespace Wildcat.App
                 // :: Administration :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Security/{1}/{0}.cshtml");
 
+                // :: SMCA :: //
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/PCC03/{1}/{0}.cshtml");
+                //options.AreaViewLocationFormats.Add("Areas/{2}/Views/Planning/{1}/{0}.cshtml");
+
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
 
             });
         }
@@ -223,6 +233,11 @@ namespace Wildcat.App
             services.AddDbContext<IDRContext>(
                 options => options.UseSqlServer(
                     Configuration.GetConnectionString("IDR")));
+
+            // :: SMCA :: //
+            services.AddDbContext<PCC03_IntegrationContext>(
+                options => options.UseSqlServer(
+                    Configuration.GetConnectionString("PCC03Integration")));
         }
 
     }
