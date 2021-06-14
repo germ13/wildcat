@@ -100,6 +100,21 @@ namespace Wildcat.App
                    areaName: "MCNJ",
                    pattern: "{area}/HeatCards/{controller=Workers}/{action=Index}/{id?}"
                 );
+                endpoints.MapAreaControllerRoute(
+                   name: "MCNJ_HEATTREATBATCHRECORDS",
+                   areaName: "MCNJ",
+                   pattern: "{area}/HeatTreatBatchRecords/{controller=Workers}/{action=Index}/{id?}"
+                );
+                endpoints.MapAreaControllerRoute(
+                   name: "MCNJ",
+                   areaName: "MCNJ",
+                   pattern: "{area}/HeatTreatMaterials/{controller=Workers}/{action=Index}/{id?}"
+                );
+                endpoints.MapAreaControllerRoute(
+                   name: "MCNJ_HEATCARDS",
+                   areaName: "MCNJ",
+                   pattern: "{area}/IDR/{controller=Workers}/{action=Index}/{id?}"
+                );
 
                 //endpoints.MapControllerRoute(
                 //    name: "engineering",
@@ -119,12 +134,18 @@ namespace Wildcat.App
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.AreaViewLocationFormats.Clear();
+
+                // :: SHCA :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Engineering/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Kepware/{1}/{0}.cshtml");
 
 
+                // :: MCNJ :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/DCR/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatCards/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatTreatBatchRecords/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatTreatMaterials/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/IDR/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
         }

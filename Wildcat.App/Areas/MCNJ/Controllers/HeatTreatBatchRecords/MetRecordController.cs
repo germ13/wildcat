@@ -13,6 +13,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.MCNJ.HeatTreatBatchRecords
 {
+    [Area("MCNJ")]
     public class MetRecordController : Controller
     {
         #region Private Fields

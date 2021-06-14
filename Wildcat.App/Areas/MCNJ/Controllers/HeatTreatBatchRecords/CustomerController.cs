@@ -10,6 +10,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.MCNJ.HeatTreatBatchRecords
 {
+    [Area("MCNJ")]
     public class CustomerController : Controller
     {
         #region Private Fields

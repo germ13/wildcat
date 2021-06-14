@@ -10,6 +10,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.MCNJ.IDR
 {
+    [Area("MCNJ")]
     public class MCNJ_IDRReportsController : Controller
     {
         #region Private Fields

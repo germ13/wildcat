@@ -10,6 +10,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.MCNJ.HeatTreatMaterials
 {
+    [Area("MCNJ")]
     public class DiesController : Controller
     {
         #region Private Fields

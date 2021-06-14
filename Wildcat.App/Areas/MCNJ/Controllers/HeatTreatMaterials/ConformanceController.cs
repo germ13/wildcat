@@ -11,6 +11,7 @@ using Wildcat.Utilities;
 
 namespace Wildcat.App.Controllers.MCNJ.HeatTreatMaterials
 {
+    [Area("MCNJ")]
     public class ConformanceController : Controller
     {
         #region Private Fields
