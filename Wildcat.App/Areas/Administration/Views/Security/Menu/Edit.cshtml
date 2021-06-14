@@ -1,0 +1,346 @@
+﻿@model Wildcat.App.ViewModels.EditNavigationMenuViewModel
+@{ 
+    ViewData["Title"] = "Edit";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Administration/Menu/Index">Menu Settings</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Menu</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card treeviewHeight" id="treeView">
+            <h6 class="card-header">
+                Select Menu Parent
+            </h6>
+            <div id="m_tree_6" class="tree-demo m-scrollable m-scrollable--track overflow-scroll" data-scrollable="true">
+            </div>
+        </div>
+        <!--begin::Portlet-->
+        <!--end::Portlet-->
+    </div>
+    <div class="col-lg-6 h-100">
+        <div class="card">
+            <h6 class="card-header">
+                File Results
+            </h6>
+            <div class="card-body">
+                <form>
+                    @Html.HiddenFor(x => x.MenuItem.Id, new { @id = "menuid" })
+                    @Html.HiddenFor(x => x.MenuItem.ParentId, new { @id = "id" })
+                    @Html.HiddenFor(x => x.ListOrder, new { @id = "ListOrder" })
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="custom-control custom-checkbox m-0">
+                                @Html.CheckBoxFor(x => x.AddToRoot, new { @id = "IsRoot", @class = "custom-control-input" })
+                                <span class="custom-control-label">Add to root?</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="custom-control custom-checkbox m-0">
+                                @Html.CheckBoxFor(x => x.MenuItem.Active, new { @class = "custom-control-input", @id="Active" })
+                                <span class="custom-control-label">Active?</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Selected Parent Node</label>
+                        @Html.TextBoxFor(m => m.NodeDisplay, new { @id = "ParentNodeLabel", @class = "form-control", @readonly = "readonly" })
+                        @*<input type="text" class="form-control" placeholder="Selected Parent Node" id="ParentNodeLabel" readonly>*@
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">App Name</label>
+                            @Html.TextBoxFor(x => x.MenuItem.AppName, new { @class = "form-control", @id="AppName" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Display Name</label>
+                            @Html.TextBoxFor(x => x.MenuItem.DisplayName, new { @class = "form-control", @id="DisplayName" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Server\Controller</label>
+                            @Html.TextBoxFor(x => x.MenuItem.ControllerName, new { @class = "form-control", @id="ControllerName" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Site\Action</label>
+                            @Html.TextBoxFor(x => x.MenuItem.ActionName, new { @class = "form-control", @id="ActionName" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-label">Link</label>
+                            @Html.TextBoxFor(x => x.MenuItem.Link, new { @class = "form-control", @id="Link" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Tool Tip</label>
+                            @Html.TextBoxFor(x => x.MenuItem.ToolTip, new { @class = "form-control", @id="ToolTip" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Icon Css</label>
+                            @Html.TextBoxFor(x => x.MenuItem.IconCss, new { @class = "form-control", @id="IconCss" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label class="form-label">Sort Order</label>
+                            @Html.TextBoxFor(x => x.MenuItem.SortOrder, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card treeviewHeight" id="menulist">
+            <h6 class="card-header">
+                Set Menu Order
+            </h6>
+            <div id="menuOrder" class="tree-demo m-scrollable m-scrollable--track overflow-scroll" data-scrollable="true">
+                <form id="fileForm">
+                    @*@Html.HiddenFor(Model => Model.MenuItem.Id, new { @id = "MenuID" })*@
+                    <ul id="sortable2" class="connectedSortable">
+                        @foreach (var x in Model.MenuOrderItems)
+                        {
+                            <li value="@x.Id" class="ui-state-highlight" data-value="@x.Id.ToString()">@x.DisplayName</li>
+
+                        }
+                    </ul>
+                </form>
+            </div>
+        </div>
+        <!--begin::Portlet-->
+        <!--end::Portlet-->
+    </div>
+</div>
+
+<script>
+    //$();
+
+    //document search form submit
+    $('form').submit(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var items = [];
+        $("#sortable2 li").map(function () {
+            items.push(this.dataset.value);
+        });
+
+        var Id = $('#menuid').val();
+        var ParentId = $('#id').val();
+        var AppName = $('#AppName').val();
+        var DisplayName = $('#DisplayName').val();
+        var ToolTip = $('#ToolTip').val();
+        var ControllerName = $('#ControllerName').val();
+        var ActionName = $('#ActionName').val();
+        var Link = $('#Link').val();
+        var IconCss = $('#IconCss').val();
+        var CssClass = $('#CssClass').val();
+        var Active = $('#Active').is(":checked");
+        //var list = $('#ListOrder').val();
+        //var serializedForm = $(this).serialize();
+        $.ajax({
+            url: "/Administration/Menu/EditResponse",
+            type: "POST",
+            data: {
+                    Id: Id,
+                    ParentId: ParentId,
+                    AppName: AppName,
+                    DisplayName: DisplayName,
+                    ToolTip: ToolTip,
+                    ControllerName: ControllerName,
+                    ActionName: ActionName,
+                    Link: Link,
+                    IconCss: IconCss,
+                    CssClass: CssClass,
+                    Active: Active,
+                    list: items
+                },
+            success: function (result) {
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+                $.unblockUI();
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+        return false;
+    });
+
+    $("#IsRoot").change(function () {
+        if ($('#IsRoot').prop('checked')) {
+            $("#id").val(0);
+            $("#ParentNodeLabel").val("Adding menu to root.");
+            $("#m_tree_6").jstree().deselect_all(true);
+        }
+        else {
+            //
+            $("#id").val(1);
+            var t = $("#m_tree_6").jstree(true).get_node(1);
+            $("#ParentNodeLabel").val("Adding menu item to " + t.text + " node.");
+        }
+
+        refreshSortOrder($("#id").val());
+    });
+
+    function refreshList() {
+        $("#sortable2").sortable();
+        $("#sortable2").disableSelection();
+    }
+
+    function refreshSortOrder(id) {
+        var menu = $("#menuid").val();
+
+        $.ajax({
+            url: "/Administration/Menu/MenuOrderPartial",
+            type: "POST",
+            data: { ID: id, MenuID: menu },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    $('#menuOrder').html(result.Form.Result);
+                    refreshList();
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+    }
+
+    var Treeview = function () {
+
+        var demo6 = function () {
+            $('#m_tree_6').jstree({
+                "plugins": ["search", "wholerow"],
+                'core': {
+                    'data': {
+                        type: "GET",
+                        cache: false,
+                        'url': function (node) {
+                            var address = '';
+                            if (node.id === '#' || node.id === '--') {
+                                address = "/Administration/Menu/MenuTree/" + node.id;
+                                return address;
+                            }
+                            else {
+                                address = "/Administration/Menu/MenuTree/" + node.id;
+                                return address;
+                            }
+                        },
+                        'data': function (node) {
+                            if (node.id === '#' || node.id === '--') {
+                                return { 'id': '#' };
+                            }
+                            else {
+                                return { 'id': node.id };
+                            }
+                        }
+                    }
+                }
+            });
+
+            $("#m_tree_6").on("click", ".jstree-anchor", function (e) {
+                var id = $("#m_tree_6").jstree(true).get_node($(this)).id;
+                if (id !== '#') {
+                    id = $("#m_tree_6").jstree(true).get_node($(this)).id;
+                    var t = $("#m_tree_6").jstree(true).get_node(id);
+
+                    //change value of selected parent
+                    $("#id").val(id);
+                    $("#ParentNodeLabel").val("Adding menu item to " + t.text + " node.");
+                    $('#IsRoot').prop('checked', false);
+                }
+                refreshSortOrder(id);
+            });
+
+            $("#m_tree_6").on("click", ".jstree-icon", function (e) {
+                var id = $("#m_tree_6").jstree(true).get_node($(this)).id;
+                if (id !== '#') {
+                    id = $("#m_tree_6").jstree(true).get_node($(this)).id;
+                    var t = $("#m_tree_6").jstree(true).get_node(id);
+                    //change value of selected parent
+                    $("#id").val(id);
+                    $("#ParentNodeLabel").val("Adding menu item to " + t.text + " node.");
+                    $('#IsRoot').prop('checked', false);
+                }
+                refreshSortOrder(id);
+            });
+        };
+
+        return {
+            //main function to initiate the module
+            init: function () {
+                demo6();
+            }
+        };
+    }();
+
+    jQuery(document).ready(function () {
+        var windowheight = $(window).innerHeight();
+        var headerheight = $("#layout-navbar").innerHeight() * 2;
+        var breadcrumbHeight = $(".d-flex").innerHeight();
+        var footerHeight = $(".layout-footer").innerHeight() * 2;
+        $('.tree-demo').height(windowheight - headerheight - breadcrumbHeight - footerHeight);
+        Treeview.init();
+        refreshList();
+    });
+</script>
+@*<script src="~/scripts/Administration/Menu/Edit.js"></script>*@

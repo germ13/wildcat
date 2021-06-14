@@ -1,0 +1,310 @@
+﻿@model Wildcat.App.ViewModels.SecurityGroupViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">Security Groups</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        Security Group Settings
+        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#modals-default">Add New Group</button>
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table id="m_table_2" class="datatables-demo table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Security Group Name</th>
+                    <th>Active</th>
+                    <th>Added By</th>
+                    <th>Added</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Security Group
+                    <br>
+                    <small class="text-muted">Fill out request form to add new user.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label class="form-label">Security Group Name</label>
+                        @Html.TextBoxFor(x => x.SecurityGroupName, new { @class = "form-control", @id = "AddGroupName" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenew">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template -->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Security Group
+                    <br>
+                    <small class="text-muted">Fill out request form to add new user.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label class="form-label">Security Group Name</label>
+                        @Html.TextBoxFor(x => x.EditGroup.SecurityName, new { @class = "form-control", @readonly = "readonly", @id = "EditGroupName" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label class="custom-control custom-checkbox">
+                                @Html.CheckBoxFor(x => x.EditGroup.Active, new { @class = "custom-control-input", @id = "EditGroupActive" })
+                                <span class="custom-control-label">Active?</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveedit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Administration/SecurityGroup/EditGroupPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#savenew').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var SecurityGroup = $('#AddGroupName').val();
+
+        $.ajax({
+            url: "/Administration/SecurityGroup/AddGroupResult",
+            type: "POST",
+            data: { ID: SecurityGroup },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#saveedit').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var SecurityGroup = $('#EditGroupName').val();
+        var Active = $('#EditGroupActive').is(":checked") ? true : false;
+        //var EditUserLocked = $('#EditUserLocked').val();
+
+        $.ajax({
+            url: "/Administration/SecurityGroup/EditGroupResult",
+            type: "POST",
+            data: { ID: SecurityGroup, Active: Active },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    function resetNewForm() {
+        //Set Default value to dropdownlist
+        $('select').each(function () {
+            $(this).find('option:eq(0)').prop("selected", "selected");
+        });
+        //Clear the values from textboxes
+        $('input:text').each(function () {
+            $(this).val("");
+        });
+    }
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/Administration/Security/SecurityGroup/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "SecurityName", "orderable": true },
+                { "data": "Active", "orderable": true },
+                { "data": "AddedBy", "orderable": true },
+                { "data": "Added", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' + encodeURIComponent(data.SecurityName) + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+
+</script>

@@ -135,7 +135,12 @@ namespace Wildcat.App
                    pattern: "{area}/IDR/{controller=Workers}/{action=Index}/{id?}"
                 );
 
-
+                // :: Administration :: //
+                endpoints.MapAreaControllerRoute(
+                    name: "Administration",
+                    areaName: "Administration",
+                    pattern: "{area}/Security/{controller=Workers}/{action=Index}/{id?}"
+                );
 
                 //endpoints.MapControllerRoute(
                 //    name: "engineering",
@@ -174,6 +179,9 @@ namespace Wildcat.App
                 // :: CFCA :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Saws/{1}/{0}.cshtml");
                 //options.AreaViewLocationFormats.Add("Areas/{2}/Views/Planning/{1}/{0}.cshtml");
+
+                // :: Administration :: //
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/Security/{1}/{0}.cshtml");
 
 
             });

@@ -1,0 +1,11 @@
+﻿@model Wildcat.App.ViewModels.MenuOrderViewModel
+<form id="fileForm">
+    @Html.HiddenFor(Model => Model.ListOrder, new { @id = "ListOrder" })
+    <ul id="sortable2" class="connectedSortable">
+        @foreach (var x in Model.MenuOrderItems)
+        {
+            <li value="@x.Id" class="ui-state-highlight" data-value="@x.Id.ToString()">@x.DisplayName</li>
+
+        }
+    </ul>
+</form>

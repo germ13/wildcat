@@ -1,0 +1,16 @@
+﻿@model Wildcat.App.ViewModels.LocationsTreeClickViewModel
+<div id="id_subscription-@Model.navmenu.Id" class="card mb-4">
+    <h6 class="card-header">@Model.navmenu.DisplayName - @Model.navmenu.ControllerName/@Model.navmenu.ActionName</h6>
+    <div class="card-body" id="locationsCard">
+        <ul id="sortable1" class="connectedSortable">
+            @foreach (var m in Model.locations)
+            {
+                <li>
+                    @{var idd = $"subscription-{Model.MenuId}|worker-{m.LocationCode}";}
+                    <input id="@idd" class="form-check-input" type="checkbox" value="@m.LocationCode" @(Model.menuLocations.menuLocations.Contains(m) ? "checked" : "") onclick="changeWorkerAlarmStatus(this)">
+                    <div class="form-check-label">@m.LocationName</div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model Wildcat.Entities.PCC.Wildcat.SecurityGroup
+<div class="form-row">
+    <div class="form-group col">
+        <label class="form-label">Security Group Name</label>
+        @Html.TextBoxFor(x => x.SecurityName, new { @class = "form-control", @readonly = "readonly", @id = "EditGroupName" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-row">
+        <div class="form-group col">
+            <label class="custom-control custom-checkbox">
+                @Html.CheckBoxFor(x => x.Active, new { @class = "custom-control-input", @id = "EditGroupActive" })
+                <span class="custom-control-label">Active?</span>
+            </label>
+        </div>
+    </div>
+</div>

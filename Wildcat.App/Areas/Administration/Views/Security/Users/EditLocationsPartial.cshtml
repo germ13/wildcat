@@ -1,0 +1,13 @@
+﻿@model List<Wildcat.App.ViewModels.UserLocationAccess>
+<div class="form-row">
+    <ul>
+        @foreach (var locations in Model)
+        {
+            <li>
+                @{var idd = $"{locations.User}|{locations.Location}";}
+                <input id="@idd" class="form-check-input" type="checkbox" value="@locations.User"@(locations.UserAccess ? "checked" : "") onclick="changeUserLocationAccess(this)">
+                <div class="form-check-label">@locations.Location</div>
+            </li>
+        }
+    </ul>
+</div>

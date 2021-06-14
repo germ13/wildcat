@@ -1,0 +1,13 @@
+﻿@model List<Wildcat.App.ViewModels.UserGroupAccess>
+<div class="form-row">
+    <ul>
+        @foreach (var groups in Model)
+        {
+            <li>
+                @{var idd = $"{groups.User}|{groups.Group}";}
+                <input id="@idd" class="form-check-input" type="checkbox" value="@groups.User"@(groups.UserAccess ? "checked" : "") onclick="changeUserGroupAccess(this)">
+                <div class="form-check-label">@groups.Group</div>
+            </li>
+        }
+    </ul>
+</div>

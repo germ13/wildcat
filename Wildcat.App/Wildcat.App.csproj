@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Shultz.Util" Version="1.0.7" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="5.0.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.10" />
   </ItemGroup>
 
@@ -80,6 +81,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administration\Data\" />
+    <Folder Include="Areas\Administration\ViewModel\" />
     <Folder Include="Areas\CFCA\Data\" />
     <Folder Include="Areas\CFCA\Models\" />
     <Folder Include="Areas\SHCA\Controllers\Accounting\" />

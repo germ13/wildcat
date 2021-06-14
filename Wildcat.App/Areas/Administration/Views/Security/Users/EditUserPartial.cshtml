@@ -1,0 +1,35 @@
+﻿@model Wildcat.Entities.PCC.Wildcat.EndUser
+<div class="form-row">
+    <div class="form-group col-md-6">
+        <label class="form-label">Login Name:</label>
+        @Html.TextBoxFor(x => x.AppLoginName, new { @class = "form-control", @readonly = "readonly", @id = "EditUserAppLoginName" })
+    </div>
+    <div class="form-group col-md-6">
+        <label class="form-label">Display Name:</label>
+        @Html.TextBoxFor(x => x.DisplayName, new { @class = "form-control", @id = "EditUserDisplayName" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label class="form-label">Domain:</label>
+        @Html.TextBoxFor(x => x.Domain, new { @class = "form-control", @id = "EditUserDomain" })
+    </div>
+    <div class="form-group col-md-9">
+        <label class="form-label">Email:</label>
+        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @id = "EditUserEmail" })
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3">
+        <label class="custom-control custom-checkbox">
+            @Html.CheckBoxFor(x => x.Active, new { @class = "custom-control-input", @id = "EditUserActive" })
+            <span class="custom-control-label">Active?</span>
+        </label>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="custom-control custom-checkbox">
+            @Html.CheckBoxFor(x => x.Locked, new { @class = "custom-control-input", @id = "EditUserLocked" })
+            <span class="custom-control-label">Locked?</span>
+        </label>
+    </div>
+</div>

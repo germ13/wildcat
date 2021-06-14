@@ -1,0 +1,647 @@
+﻿@model Wildcat.App.ViewModels.UserSettingsViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active">User Administration</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="card">
+
+    <h5 class="card-header text-align-center">
+        User Settings
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle pull-right" data-toggle="dropdown">Options</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#modals-default">Add New User</a>
+                <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#modals-import">Import Users</a>
+            </div>
+        </div>
+    </h5>
+    <div class="card-datatable table-responsive">
+        <table class="datatables-demo table table-striped table-bordered display nowrap" id="m_table_2">
+            <thead>
+                <tr>
+                    <th>Login Name</th>
+                    <th>Display Name</th>
+                    <th>Domain</th>
+                    <th>Email</th>
+                    <th>Locked</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal template add user-->
+<div class="modal fade" id="modals-default">
+    <div class="modal-dialog">
+        <form class="modal-content" id="newuserform">
+            @*@Html.HiddenFor(x => x.SelectedJobType, new { @id = "SelectedJobType" })*@
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    New User
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Login Name:</label>
+                        @Html.TextBoxFor(x => x.AddUser.AppLoginName, new { @class = "form-control", @id = "AddUserAppLoginName" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Display Name:</label>
+                        @Html.TextBoxFor(x => x.AddUser.DisplayName, new { @class = "form-control", @id = "AddUserDisplayName" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Domain:</label>
+                        @Html.TextBoxFor(x => x.AddUser.Domain, new { @class = "form-control", @id = "AddUserDomain" })
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label class="form-label">Email:</label>
+                        @Html.TextBoxFor(x => x.AddUser.Email, new { @class = "form-control", @id = "AddUserEmail" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="savenew">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template edit user-->
+<div class="modal fade" id="modals-default-edit">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit User
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-modal-form">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Login Name:</label>
+                        @Html.TextBoxFor(x => x.EditUser.AppLoginName, new { @class = "form-control", @readonly = "readonly", @id = "EditUserAppLoginName" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Display Name:</label>
+                        @Html.TextBoxFor(x => x.EditUser.DisplayName, new { @class = "form-control", @id = "EditUserDisplayName" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Domain:</label>
+                        @Html.TextBoxFor(x => x.EditUser.Domain, new { @class = "form-control", @id = "EditUserDomain" })
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label class="form-label">Email:</label>
+                        @Html.TextBoxFor(x => x.EditUser.Email, new { @class = "form-control", @id = "EditUserEmail" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.EditUser.Active, new { @class = "custom-control-input", @id = "EditUserActive" })
+                            <span class="custom-control-label">Active?</span>
+                        </label>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="custom-control custom-checkbox">
+                            @Html.CheckBoxFor(x => x.EditUser.Locked, new { @class = "custom-control-input", @id = "EditUserLocked" })
+                            <span class="custom-control-label">Locked?</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="saveedit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template edit user groups-->
+<div class="modal fade" id="modals-default-edit-groups">
+    <div class="modal-dialog modal-sm">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit User Groups
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-groups-modal-form">
+                <div class="form-row">
+                    <ul>
+                        @foreach (var groups in Model.GroupAccess)
+                        {
+                            <li>
+                                @{var idd = $"{groups.User}|{groups.Group}";}
+                                <input id="@idd" class="form-check-input" type="checkbox" value=@(groups.UserAccess ? "checked" : "") onclick="changeUserGroupAccess(this)">
+                                <div class="form-check-label">@groups.Group</div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template  edit user locations-->
+<div class="modal fade" id="modals-default-edit-locations">
+    <div class="modal-dialog modal-sm">
+        <form class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit User Locations
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body" id="edit-locations-modal-form">
+                <div class="form-row">
+                    <ul>
+                        @foreach (var locations in Model.LocationAccess)
+                        {
+                            <li>
+                                @{var idd = $"{locations.User}|{locations.Location}";}
+                                <input id="@idd" class="form-check-input" type="checkbox" value=@(locations.UserAccess ? "checked" : "") onclick="changeUserLocationAccess(this)">
+                                <div class="form-check-label">@locations.Location</div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal template import users-->
+<div class="modal fade" id="modals-import">
+    <div class="modal-dialog">
+        <form class="modal-content" id="importform">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Import Users
+                    <br>
+                    <small class="text-muted">Enter network address of import sheet.</small>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label class="form-label">sheet address</label>
+                        @Html.TextBoxFor(x => x.Sheetaddress, new { @class = "form-control", @id="SheetAddress" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="importusers">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    $('#m_table_2 tbody').on('click', '.editopenbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Administration/Users/EditUserPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-modal-form').html(result.Form.Result);
+                $('#modals-default-edit').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#m_table_2 tbody').on('click', '.editlocationsbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Administration/Users/EditLocationsPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-locations-modal-form').html(result.Form.Result);
+                $('#modals-default-edit-locations').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#m_table_2 tbody').on('click', '.editgroupsbtn', function (e) {
+        var id = e.currentTarget.dataset.value;
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        $.ajax({
+            url: "/Administration/Users/EditGroupsPartial/?ID=" + encodeURIComponent(id),
+            type: "GET",
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                $('#edit-groups-modal-form').html(result.Form.Result);
+                $('#modals-default-edit-groups').modal('show');
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+        return false;
+    });
+
+    $('#savenew').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var AddUserAppLoginName = $('#AddUserAppLoginName').val();
+        var AddUserDisplayName = $('#AddUserDisplayName').val()
+        var AddUserDomain = $('#AddUserDomain').val();
+        var AddUserEmail = $('#AddUserEmail').val();
+
+        $.ajax({
+            url: "/Administration/Users/AddUserResult",
+            type: "POST",
+            data: { ID: AddUserAppLoginName, DisplayName: AddUserDisplayName, Domain: AddUserDomain, Email: AddUserEmail },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    //resetNewForm();
+                    $('#modals-default').modal('toggle');
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    $('#saveedit').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var EditUserAppLoginName = $('#EditUserAppLoginName').val();
+        var EditUserDisplayName = $('#EditUserDisplayName').val()
+        var EditUserDomain = $('#EditUserDomain').val();
+        var EditUserEmail = $('#EditUserEmail').val();
+        var EditUserActive = $('#EditUserActive').val();
+        var EditUserLocked = $('#EditUserLocked').is(":checked") ? true : false;
+        //var EditUserLocked = $('#EditUserLocked').val();
+
+        $.ajax({
+            url: "/Administration/Users/EditUserResult",
+            type: "POST",
+            data: { ID: EditUserAppLoginName, DisplayName: EditUserDisplayName, Domain: EditUserDomain, Email: EditUserEmail, Active: EditUserActive, Locked: EditUserLocked },
+            cache: false,
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                    $('#modals-default-edit-form').trigger('reset')
+                    $('#modals-default-edit').modal('toggle');
+
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+
+        });
+
+
+        return false;
+    });
+
+    function changeUserGroupAccess(e) {
+        var userid = e.id.split("|")[0];
+        var groupid = e.id.split("|")[1];
+
+        $.ajax({
+            url: 'EditSecurityGroupsResult',
+            type: "GET",
+            cache: false,
+            data: {
+                ID: userid,
+                Group: groupid,
+                check: e.checked
+            },
+            success: function (result) {
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+        });
+    }
+
+    function changeUserLocationAccess(e) {
+        var userid = e.id.split("|")[0];
+        var location = e.id.split("|")[1];
+
+        $.ajax({
+            url: 'EditLocationResult',
+            type: "GET",
+            cache: false,
+            data: {
+                ID: userid,
+                Location: location,
+                check: e.checked
+            },
+            success: function (result) {
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.statusText
+                });
+            }
+        });
+    }
+
+    //document search form submit
+    $('#importusers').click(function () {
+        $.blockUI({
+            message: '<div class="sk-folding-cube sk-primary"><div class="sk-cube1 sk-cube"></div><div class="sk-cube2 sk-cube"></div><div class="sk-cube4 sk-cube"></div><div class="sk-cube3 sk-cube"></div></div><h5 style="color: #444">LOADING...</h5>',
+            css: {
+                backgroundColor: 'transparent',
+                border: '0',
+                zIndex: 9999999
+            },
+            overlayCSS: {
+                backgroundColor: '#fff',
+                opacity: 0.8,
+                zIndex: 9999990
+            }
+        });
+
+        var SheetAddress = $('#SheetAddress').val();
+        $.ajax({
+            url: "/Administration/Users/ImportUsersResult",
+            type: "POST",
+            data: { SheetAddress: SheetAddress },
+            success: function (result) {
+                $.unblockUI();
+
+                if (result.success) {
+                    $.growl.notice({
+                        message: result.message
+                    });
+                    var mytbl = $("#m_table_2").DataTable();
+                    mytbl.ajax.reload(null, false);
+                }
+                else {
+                    $.growl.error({
+                        message: result.message
+                    });
+                }
+
+                $.unblockUI();
+
+            },
+            error: function (result) {
+                $.unblockUI();
+
+                $.growl.error({
+                    message: result.message
+                });
+            }
+
+        });
+        return false;
+    });
+
+    function resetNewForm() {
+        //Set Default value to dropdownlist
+        $('select').each(function () {
+            $(this).find('option:eq(0)').prop("selected", "selected");
+        });
+        //Clear the values from textboxes
+        $('input:text').each(function () {
+            $(this).val("");
+        });
+    }
+
+    function datatable() {
+        $('#m_table_2').dataTable({
+            "processing": true,
+            "serverSide": true,
+            //"search":
+            //"info": true,
+            //"stateSave": true,
+            "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
+            "ajax": {
+                "url": "/Administration/Security/Users/AjaxGetJsonData",
+                "type": "POST"
+            },
+            "language": {
+                "search": "",
+                "searchPlaceholder": "Search..."
+            },
+            "columns": [
+                { "data": "AppLoginName", "orderable": true },
+                { "data": "DisplayName", "orderable": true },
+                { "data": "Domain", "orderable": true },
+                { "data": "Email", "orderable": true },
+                { "data": "Locked", "orderable": true },
+                { "data": "Active", "orderable": true },
+                {
+                    "data": null,
+                    "className": "text-center",
+                    "render": function (data, type, item) {
+                        return '<a href="#" data-value=' + data.AppLoginName + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editopenbtn">EDIT</a> | <a href="#" data-value=' + data.AppLoginName + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editlocationsbtn">LOCATIONS</a>  | <a href="#" data-value=' + data.AppLoginName + ' type="button" style="text-align:center;margin:0 auto;" class="btn btn-primary btn-sm openbtn editgroupsbtn">GROUPS</a>';
+                    },
+                    "orderable": false
+                }
+            ],
+            "order": [[0, "asc"]]
+        });
+
+    }
+
+    $(document).ready(function () {
+        datatable()
+    });
+</script>

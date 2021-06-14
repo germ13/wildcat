@@ -1,0 +1,55 @@
+﻿@model Wildcat.App.ViewModels.EditNavigationGroupsViewModel
+@{
+    ViewData["Title"] = "EditGroups";
+    int counter = 0;
+    var request_user = Context.Request.HttpContext.User.Identity.Name.ToString();
+}
+
+<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Home/Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="breadcrumb-item" href="/Administration/Menu/Index">Menu Settings</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Menu Teams</li>
+        </ol>
+    </div>
+</h4>
+
+<div class="row">
+    <div class="col">
+        <div class="card mb-auto" id="treeviewHeight">
+            <h6 class="card-header">
+                Select Menu Item To Modify
+            </h6>
+            <div id="fromTree" class="tree-demo m-scrollable m-scrollable--track overflow-scroll" data-scrollable="true">
+            </div>
+            <div class="card-body">
+                    @*<select id="id_furnacealarms" multiple size="36" class="form-control" onclick="show_workers_click(e);">
+                        @foreach (var item in Model.MenuItems)
+                        {
+                            <!option @((counter++ == 0) ? "selected" : String.Empty)>
+                                @item.Menu.DisplayName - @item.Menu.ControllerName - @item.Menu.ActionName
+                            </!option>
+                        }*@
+                    @*</select>*@
+                </div>
+
+        </div>
+    </div>
+    <div class="col">
+        <div class="card mb-auto" id="id_subscriptions">
+            <h6 class="card-header">
+                Select Menu Item To Modify
+            </h6>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/assets/vendor/libs/growl/growl.js"></script>
+<script src="~/assets/vendor/libs/toastr/toastr.js"></script>
+<script src="~/scripts/Administration/Menu/EditTeams.js"></script>

@@ -1,0 +1,13 @@
+﻿@model List<Wildcat.App.ViewModels.MenuGroupAccess>
+<div class="form-row">
+    <ul>
+        @foreach (var groups in Model)
+        {
+            <li>
+                @{var idd = $"{groups.Menu}|{groups.Group}";}
+                <input id="@idd" class="form-check-input" type="checkbox" value="@groups.Menu"@(groups.MenuAccess ? "checked" : "") onclick="changeMenuGroupAccess(this)">
+                <div class="form-check-label">@groups.Group</div>
+            </li>
+        }
+    </ul>
+</div>
