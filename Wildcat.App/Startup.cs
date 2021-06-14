@@ -16,6 +16,7 @@ using Wildcat.Entities.MCNJ.SecureHeatTreatBatchBook;
 using Wildcat.Entities.PCC.Wildcat;
 using Wildcat.Entities.SHCA.EngineeringData;
 using Wildcat.Entities.SHCA.Grinders.Wildcat;
+using Wildcat.Entities.SHCA.ShultzPro;
 using Wildcat.Utilities;
 
 namespace Wildcat.App
@@ -189,9 +190,13 @@ namespace Wildcat.App
             services.AddDbContext<SHCAEngineeringContext>(
                 options => options.UseSqlServer(
                     Configuration.GetConnectionString("SHCAEngineering")));
+            //TODO rename with SHCA prefix
             services.AddDbContext<EngineeringDataContext>(
                 options => options.UseSqlServer(
                 Configuration.GetConnectionString("EngineeringData")));
+            services.AddDbContext<ShultzProContext>(
+                options => options.UseSqlServer(
+                    Configuration.GetConnectionString("ShultzPro")));
 
 
             // :: MCJN :: //

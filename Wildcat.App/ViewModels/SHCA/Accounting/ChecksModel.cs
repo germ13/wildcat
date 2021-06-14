@@ -32,6 +32,7 @@ namespace Wildcat.App.ViewModels.SHCA.Accounting
             //    }
             //}
 
+            //TODO NullReference exception is not being caught
             CheckRunSelect.FirstOrDefault().Selected = true;
         }
     }
