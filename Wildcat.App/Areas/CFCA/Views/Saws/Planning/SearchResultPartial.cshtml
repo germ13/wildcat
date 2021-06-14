@@ -1,0 +1,61 @@
+﻿
+@model Wildcat.App.ViewModels.Planning.PlanningModel
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Inventory</h5>
+                <div class="card-datatable table-responsive">
+
+                    <table cellpadding="0" cellspacing="0" class="display datatables-demo table table-striped table-bordered" id="datatable4" dataTable no-footer role="grid">
+                        <thead>
+                            <tr role="row">
+                                <th>ID</th>
+                                <th>Lot</th>
+                                <th>Code</th>
+                                <th>Size</th>
+                                <th>Shape</th>
+
+                                <th>Allocation</th>
+
+                                <th>$/lb</th>
+                                <th>Received</th>
+                                <th>Total Wt</th>
+                                <th>Mults</th>
+                                <th>Mult Wt</th>
+                                <th>Rem Wt</th>
+                                <th></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var blt in Model.InventoryRecords)
+                            {
+                            <tr>
+                                <td>@Html.DisplayFor(Model => blt.TableKey)</td>
+                                <td>@Html.DisplayFor(Model => blt.LotNumber)</td>
+                                <td>@Html.DisplayFor(Model => blt.RmItemNumber)</td>
+                                <td>@Html.DisplayFor(Model => blt.MetalSize)</td>
+                                <td>@Html.DisplayFor(Model => blt.MetalShape)</td>
+
+                                <td>@Html.Raw(@Model.GetPortionBarHTML(string.Format("Progress{0}", blt.InventoryItemId), blt.TransactionQuantity, blt.TransactionQuantity, false))</td>
+
+                                <td>@Convert.ToDecimal(blt.MaterialCost).ToString("0.00")</td>
+                                <td>@blt.DateReceived.Value.ToString("d")</td>
+                                <td>@Model.GetTotalWeight(blt.TransactionQuantity, blt.TransactionQuantity)</td>
+                                <td>1</td> <!--Must use formatting here; if data annotation applieed on class, EF generation would keep wiping it out-->
+                                <td>@blt.TransactionQuantity.ToString("0.0")</td>
+                                <td>@blt.TransactionQuantity.ToString("0.0")</td>
+                                <td><a class="edit btn btn-sm btn-outline-primary" href="#">Edit</a></td>
+                                <td><a class="delete btn btn-sm btn-outline-secondary" href="#">Delete</a></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

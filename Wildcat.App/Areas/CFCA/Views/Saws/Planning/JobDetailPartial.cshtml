@@ -1,0 +1,120 @@
+﻿@model Wildcat.App.ViewModels.Planning.PlanningModel
+
+<div class="row">
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Customer</h5>
+                <p class="card-text">
+                    @Model.PlanHeader.CustomerName
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Part, Dimensions</h5>
+                <p class="card-text">
+                    @Model.PlanHeader.Partnumber
+
+                    @if (Model.PlanHeader.Partdescription != null && Model.PlanHeader.Partdescription.Length > 0)
+                    {
+                        <br />
+                        @Model.PlanHeader.Partdescription
+                    }
+                    <br />
+                    @Model.PlanHeader.Materialnotes
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Serial Numbers</h5>
+                <p class="card-text">
+                    @Model.SerialNumberString
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Notes</h5>
+                <p class="card-text">
+                    @Model.PlanHeader.EngineProgram
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Material Requirements</h5>
+                <p class="card-text">
+                    @Model.PlanHeader.Material1
+                    <br />
+                    @Model.PlanHeader.Material2
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Pieces, Weights</h5>
+                <p class="card-text">
+                    @Html.Raw(@Model.WeightString)
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Material Prospects</h5>
+                <p class="card-text">
+                    @Model.PlanHeader.MaterialCode @Model.PlanHeader.Material1  @Model.PlanHeader.Stockshape @Model.PlanHeader.RmSize
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Other</h5>
+                <p class="card-text">
+                    @Html.Raw(@Model.OtherString)
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-xl-6">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Process, Testing</h5>
+                <p class="card-text">                    
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-6">
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Additional Quality Notes</h5>
+                <p class="card-text">
+                    @Model.PlanHeader.ShortText
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+

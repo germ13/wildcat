@@ -1,0 +1,115 @@
+﻿
+@model Wildcat.App.ViewModels.Saws.MultModel
+
+    <form asp-controller="Saws" id="PieceDetail">
+
+        <input type="hidden" id="HiddenPieceBladeSelected" asp-for="BladeSelected" />
+        <input type="hidden" id="HiddenPieceCutTypeSelected" asp-for="CutTypeSelected" />
+
+        <input type="hidden" id="HiddenPieceID" asp-for="Piece.PieceId" />
+        <input type="hidden" id="HiddenBilletID" asp-for="Billet.BilletId" />
+        <input type="hidden" id="HiddenShopOrderId" asp-for="Piece.ShopOrderId" />
+
+        <div class="card card-hover mb-4">
+            <div class="card-body">
+
+                <div class="demo-inline-spacing mt-sm-3">
+                    <h5>
+                        <label class="form-check-inline">
+                            <strong>Mult Details</strong>
+                        </label>
+                        <label class="form-check-inline">
+                            @Model.Piece.CreatedDate
+                        </label>
+                    </h5>
+                </div>
+
+                <p class="card-text">
+                    <div class="row">
+                        <div class="col-md-auto col-lg-6">
+                            <table cellpadding="4">
+                                <tr><td style="width: 290px">Operator</td><td class="text-right"><strong>@Model.Operator.Name</strong></td><td style="width: 0px" class="text-left"></td></tr>
+                                <tr><td style="width: 240px">Cross Section Area</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricCrossSectionArea)</strong></td><td style="width: 50px" class="text-left">si</td></tr>
+                                <tr><td style="width: 240px">Target Weight</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricTargetWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+                                <tr><td style="width: 240px">Actual Wt vs Target Wt</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricActualVsTarget)</strong></td><td style="width: 50px" class="text-left">%</td></tr>
+                                <tr><td style="width: 240px">Adjusted Target Length</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricAdjustedTargetLength)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+                                <tr><td style="width: 240px">TPI</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricTPI)</strong></td><td style="width: 50px" class="text-left"></td></tr>
+                                <tr><td style="width: 240px">Kerf</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricKerf)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+                            </table>
+                        </div>
+                        <div class="col-md-auto col-lg-6">
+                            <table cellpadding="4">
+                                <tr><td style="width: 240px">Cut Rate</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricCutRate)</strong></td><td style="width: 50px" class="text-left">si/min</td></tr>
+                                <tr><td style="width: 240px">Blade Speed</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricBladeSpeed)</strong></td><td style="width: 50px" class="text-left">ft/min</td></tr>
+                                <tr><td style="width: 240px">Blade Depleted</td><td class="text-right"><strong>@Html.DisplayFor(model => model.MetricBladeLifeDepleted)</strong></td><td style="width: 50px" class="text-left">%</td></tr>
+
+                                <tr><td style="width: 240px">Billet Shape</td><td class="text-right"><strong>@Html.DisplayFor(model => model.Shape)</strong></td><td style="width: 50px" class="text-left"></td></tr>
+                                <tr><td style="width: 240px">Dimension 1</td><td class="text-right"><strong>@Html.DisplayFor(model => model.Dimension1)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+                                <tr><td style="width: 240px">Dimension 2</td><td class="text-right"><strong>@Html.DisplayFor(model => model.Dimension2)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+                                <tr><td style="width: 240px">Dimension 3</td><td class="text-right"><strong>@Html.DisplayFor(model => model.Dimension3)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text">
+                    <div class="row">
+                        <div class="col-md-auto col-lg-6">
+                            <table cellpadding="4">
+                                <tr>
+                                    <td style="width: 40%">Actual Weight</td>
+                                    <td><input type="text" class="form-control" placeholder="Actual Weight" asp-for="Piece.ActualWeight"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%">Serial Number</td>
+                                    <td><input type="text" class="form-control" placeholder="Serial Number" asp-for="Piece.MultSerialNumber"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%">Type</td>
+                                    <td>@Model.Dropdown("ddlPieceCutType", Model.CutTypeOptions, "Type", Model.CutTypeSelected)</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-auto col-lg-6">
+                            <table cellpadding="4">
+                                <tr>
+                                    <td style="width: 40%">Heat</td>
+                                    <td><input type="text" class="form-control" placeholder="Heat" asp-for="Billet.HeatNumber"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%">Billet</td>
+                                    <td><input type="text" class="form-control" placeholder="Billet" asp-for="Billet.BilletNumber"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 40%">Blade</td>
+                                    <td>@Model.Dropdown("ddlPieceBlade", Model.BladeOptions, "Blade", Model.BladeSelected)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </p>
+            </div>
+        </div>
+        <div class="card mb-4" text-left">
+            <div class="card-body">
+                <p class="card-text">
+
+                    <textarea class="form-control" rows="2" placeholder="Mult Notes" asp-for="Piece.IssueNotes"></textarea>
+                    <br />
+
+                    <div class="demo-inline-spacing mt-sm-3 text-right">
+                        <button type="button" id="SaveEdit" class="btn btn-primary">Save</button>
+                        <button type="button" id="CancelEdit" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </p>
+            </div>
+        </div>
+    </form>    
+
+    <script type="text/javascript" src="~/scripts/Saws/edit_saw_piece.js"></script>
+
+

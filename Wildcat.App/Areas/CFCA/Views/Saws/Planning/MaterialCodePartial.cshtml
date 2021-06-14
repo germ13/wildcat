@@ -1,0 +1,124 @@
+﻿@model Wildcat.App.ViewModels.Planning.PlanningModel
+
+<input type="hidden" id="HiddenShapeSelected" asp-for="ShapeSelected" />
+<input type="hidden" id="HiddenMetalSelected" asp-for="MetalSelected" />
+<input type="hidden" id="HiddenTestCategoryOptions" asp-for="TestCategorySelected" />
+<input type="hidden" id="HiddenUnitTypeOptions" asp-for="UnitTypeSelected" />
+@*<input type="hidden" id="HiddenSortOptions" asp-for="SortSelected" />*@
+
+<div class="demo-vertical-spacing">
+    <div class="nav-tabs-top nav-responsive-xl">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active show" data-toggle="tab" href="#navs-top-responsive-link-1">Materials By Code</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#navs-top-responsive-link-2">By Attribute</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="navs-top-responsive-link-1">
+                <div class="card-body">
+                    <div class="card-datatable table-responsive">
+                        <table cellpadding="0" cellspacing="0" class="display datatables-demo table table-striped table-bordered" id="datatable1" dataTable no-footer role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sortable">ID</th>
+                                    <th class="sortable">Code</th>
+                                    <th class="sortable">Material</th>
+                                    <th class="sortable">Shape</th>
+                                    <th class="sortable">Size</th>
+                                    <th class="sortable">Specifications</th>
+                                    <th><a id="new1" class='btn btn-sm btn-outline-primary' href="">Add</a></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var msc in Model.MaterialCriteria)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(Model => msc.RawMaterialID)</td>
+                                        <td>@Html.DisplayFor(Model => msc.RawMaterialCode)</td>
+                                        <td>@Html.DisplayFor(Model => msc.Material)</td>
+                                        <td>@Html.DisplayFor(Model => msc.Shape)</td>
+                                        <td>@Html.DisplayFor(Model => msc.Size)</td>
+                                        <td>@Html.DisplayFor(Model => msc.Specifications)</td>
+                                        <td><a class="edit btn btn-sm btn-outline-primary" href="#">Edit</a></td>
+                                        <td><a class="delete btn btn-sm btn-outline-secondary" href="#">Delete</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="navs-top-responsive-link-2">
+                <div class="card-body">
+                    <div class="demo-inline-spacing mt-3">
+
+                        <label class="form-check-inline">
+                            @Model.Dropdown("ddlShape", Model.BarShapeOptions, "Shape", Model.ShapeSelected)
+                        </label>
+
+                        <label class="form-check-inline">
+                            @Model.Dropdown("ddlMetal", Model.MetalOptions, "Material", Model.MetalSelected)
+                        </label>
+
+                        <label class="form-check-inline">
+                            <input type="text" class="form-control" placeholder=" Minimum Size" asp-for="MinimumSize" />
+                        </label>
+                        <label class="form-check-inline">
+                            <input type="text" class="form-control" placeholder=" Maximum Size" asp-for="MaximumSize" />
+                        </label>
+                        <label class="form-check-inline">
+                            <input type="text" class="form-control" placeholder=" Specifications" asp-for="Specification" />
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Mults</h5>
+                <div class="card-datatable table-responsive">
+
+                    <table cellpadding="0" cellspacing="0" class="display datatables-demo table table-striped table-bordered" id="datatable2" dataTable no-footer role="grid">
+                        <thead>
+                            <tr role="row">
+                                <th class="sortable">ID</th>
+                                <th class="sortable">Mult Count</th>
+                                <th class="sortable">Cut Weight</th>
+                                <th class="sortable">Gross Weight</th>
+                                <th class="sortable">1 =</th>
+                                <th>Test</th>
+                                <th><a id="new2" class='btn btn-sm btn-outline-primary' href="">Add</a></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mlt in Model.MultCriteria)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(Model => mlt.MultID)</td>
+                                    <td>@Html.DisplayFor(Model => mlt.MultCount)</td>
+                                    <td>@Html.DisplayFor(Model => mlt.CutWeight)</td>
+                                    <td>@Html.DisplayFor(Model => mlt.GrossWeight)</td>
+                                    <td>@Html.DisplayFor(Model => mlt.OneEquals)</td>
+                                    <td>@Html.CheckBoxFor(Model => mlt.Test)</td>
+                                    <td><a class="edit btn btn-sm btn-outline-primary" href="#">Edit</a></td>
+                                    <td><a class="delete btn btn-sm btn-outline-secondary" href="#">Delete</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

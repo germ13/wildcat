@@ -1,0 +1,141 @@
+﻿@model Wildcat.App.ViewModels.Planning.PlanningModel
+
+    <div class="container-fluid flex-grow-1 container-p-y">
+
+        <div>
+            <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a class="breadcrumb-item" href="/Home/Index">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Planning Distribution
+                    </li>
+                </ol>
+            </h4>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card mb-4 text-left">
+                    <div class="card-body">
+                        <div class="demo-inline-spacing mt-sm-3">
+
+                            <label class="form-check-inline">
+                                <input type="text" class="form-control" id="discreteJobNumber" placeholder="Discrete Job Number" asp-for="DiscreteJobNumber">
+                            </label>
+
+                            <label class="form-check-inline">
+                                <button id="GetJob" type="submit" class="btn btn-primary">Load</button>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="divJob">
+            <partial name="JobDetailPartial" />
+        </div>
+
+        <form asp-controller="Planning" asp-action="Search" data-bind="true" data-ajax-success="onSearchSubmitSuccess" data-ajax-failure="onSearchSubmitFailed" data-ajax-mode="replace" data-ajax="true" data-ajax-method="GET">
+
+            <div id="divMaterial">
+                <partial name="MaterialCodePartial" />
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card mb-4 text-left">
+                        <div class="card-body">
+                            <div class="demo-inline-spacing mt-sm-3">
+
+                                <label class="form-check-inline">
+                                    <input type="checkbox" class="form-check-input" asp-for="SearchUnusableBillets" />
+                                    <span class="form-check-label">
+                                        Include Unusable Billets
+                                    </span>
+                                </label>
+                                <label class="form-check-inline">
+                                    @Model.Dropdown("ddlTest", Model.TestCategoryOptions, "Test")
+                                </label>
+
+                                <label class="form-check-inline">
+                                    @Model.Dropdown("ddlUnit", Model.UnitTypeOptions, "Unit")
+                                </label>
+
+                                @*Table has built in sort*@
+                                @*<label class="form-check-inline">
+                                    @Model.Dropdown("ddlSort", Model.SortOptions, "Sort By")
+                                </label>*@
+
+                                <label class="form-check-inline">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <div id="divSearchResult">
+            <partial name="SearchResultPartial" />
+        </div>
+
+        @*<div class="demo-vertical-spacing-sm">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-sm btn-primary" style="width: 161px; height: 20px;">
+                    <input type="checkbox">
+                </label>
+                <label class="btn btn-sm btn-outline-secondary" style="width: 67px; height: 20px;">
+                    <input type="checkbox">
+                </label>
+            </div>
+        </div>*@
+
+        @*<div class="demo-vertical-spacing-sm">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-sm btn-primary" style="width: 80px; height: 20px;">
+                    <input type="checkbox">
+
+                </label>
+                <label class="btn btn-sm btn-outline-secondary" style="width: 20px; height: 20px;">
+                    <input type="checkbox">
+                </label>
+            </div>
+        </div>*@
+
+        <div class="row">
+            <div class="col-md">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Bar Distribution</h5>
+                        <p class="card-text">
+                            <div id="barDiv" class="barDistribution"></div>
+                            <div id='colorSample1' class='bg-primary-dark'></div>
+                            <div id='colorSample2' class='bg-secondary-dark'></div>
+
+                            <div id='colorSample3' class='btn-primary'></div>
+                            <div id='colorSample4' class='btn-secondary'></div>
+
+                            <div id='colorSample5' class='bg-primary-darker'></div>
+                            <div id='colorSample6' class='bg-secondary-darker'></div>
+                        </p>
+
+                        <div class="demo-inline-spacing mt-sm-3">
+                            <button id="cuttingTicketButton" type="button" class="btn btn-primary" onclick="CuttingTicketClick();">Cutting Ticket</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="~/scripts/Planning/d3/d3.v4.min.js"></script>
+<script src="~/scripts/Planning/d3/viz.v1.1.0.min.js"></script>
+
+<script type="text/javascript" src="https://datatables.net/release-datatables/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="~/scripts/Planning/index.js"></script>

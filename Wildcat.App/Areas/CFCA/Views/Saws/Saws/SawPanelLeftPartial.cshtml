@@ -1,0 +1,87 @@
+﻿
+@model Wildcat.App.ViewModels.Saws.SawModel
+
+        <form asp-controller="Saws" asp-action="SawPanelLeftPartial" data-ajax-success="onEditJobLeftSuccess" data-ajax-mode="replace" data-ajax="true" data-ajax-method="POST">
+        
+            <input type="hidden" id="HiddenLocation" asp-for="LocationCode" />
+            <input type="hidden" id="HiddenShopOrderNumber" asp-for="DiscreteJobSelected" />
+
+            <input type="hidden" id="HiddenLotNumberSelected1" asp-for="LotNumberSelected" />
+            <input type="hidden" id="HiddenBilletDirectionSelected" asp-for="BilletDirectionSelected" />
+            <input type="hidden" id="HiddenTargetWeightSelected" asp-for="LengthParameters.TargetWeightSelected" />
+
+            <input type="hidden" id="HiddenSawMachineSelected1" asp-for="SawMachineSelected" />
+            <input type="hidden" id="HiddenTpiRangeSelected1" asp-for="TpiRangeSelected" />
+            <input type="hidden" id="HiddenBladeSelected1" asp-for="BladeSelected" />
+            <input type="hidden" id="HiddenBarShapeSelected1" asp-for="LengthParameters.BarShapeSelected" />
+            <input type="hidden" id="HiddenMaterialName" asp-for="Material.MaterialName" />
+
+            <div class="card-body">
+                <h5 class="card-title">Discrete Job</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        <tr><td style="width: 100px">Order</td><td>@Model.DropdownTextBox("DiscreteJobSelected", Model.DiscreteJobOptions, "Job Number", Model.DiscreteJobSelected)</td></tr>
+                        <tr><td style="width: 100px">Part</td><td><input type="text" class="form-control" placeholder="Part Number" asp-for="ShopOrder.PartNumber"></td></tr>
+                        <tr><td style="width: 100px">Mill</td><td><input type="text" class="form-control" placeholder="Mill" asp-for="ShopOrder.Mill"></td></tr>
+                        <tr><td style="width: 100px">Pieces</td><td><input type="text" class="form-control" placeholder="Pieces" asp-for="ShopOrder.NumberOfTotalPieces"></td></tr>
+                    </table>
+                </p>
+                <h5 class="card-title">Customer</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        <tr><td><input type="text" class="form-control" disabled placeholder="Customer" asp-for="ShopOrder.Customer"></td></tr>
+                    </table>
+                </p>
+                <h5 class="card-title">Specification</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        <tr><td><input type="text" class="form-control" placeholder="Specification" asp-for="ShopOrder.Specification"></td></tr>
+                    </table>
+                </p>
+                <h5 class="card-title">Billet</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        <tr><td style="width: 100px">Shape</td><td>@Model.Dropdown("ddlShape", Model.LengthParameters.BarShapeOptions, "Shape", Model.LengthParameters.BarShapeSelected)</td></tr>
+                        <tr><td style="width: 100px">Material</td><td>@Model.Dropdown("ddlMaterial", Model.MaterialOptions, "Material", Model.Material.MaterialName)</td></tr>
+                        <tr><td style="width: 100px">Lot</td><td>@Model.Dropdown("ddlLot", Model.LotNumberOptions, "Lot Number", Model.LotNumberSelected)</td></tr>
+                        <tr><td style="width: 100px">Direction</td><td>@Model.Dropdown("ddlDirection", Model.BilletDirectionOptions, "Billet Direction", Model.BilletDirectionSelected)</td></tr>
+                        <tr><td style="width: 100px">Orig Wt</td><td><input type="text" class="form-control" placeholder="Original Weight (lbs)" asp-for="OriginalWeight"></td></tr>
+                    </table>
+                </p>
+                <h5 class="card-title">Mult</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        <tr><td style="width: 100px">Target Wt</td><td>@Model.Dropdown("ddlTargetWeight", Model.LengthParameters.TargetWeightOptions, "Target Weight (lbs)", Model.LengthParameters.TargetWeightSelected)</td></tr>
+                        <tr><td style="width: 100px">Pieces Left</td><td><input type="text" class="form-control" placeholder="Pieces Left to Cut" asp-for="PiecesLeftToCut"></td></tr>
+                    </table>
+                </p>
+                <h5 class="card-title">Saw, Blade</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        <tr><td style="width: 100px">Saw</td><td>@Model.Dropdown("ddlSaw", Model.SawMachineOptions, "Saw", Model.SawMachineSelected)</td></tr>
+                        <tr><td style="width: 100px">Blade</td><td>@Model.Dropdown("ddlBlade", Model.BladeOptions, "Blade", Model.BladeSelected)</td></tr>
+                        <tr><td style="width: 100px">Kerf (in)</td><td><input type="text" id="txtKerf" class="form-control" placeholder="Kerf" asp-for="Kerf"></td></tr>
+                        <tr><td style="width: 100px">TPI</td><td>@Model.Dropdown("ddlTpiRange", Model.TpiRangeOptions, "TPI", Model.TpiRangeSelected)</td></tr>
+                        <tr><td style="width: 100px">Cut Rate</td><td><input type="text" id="txtCutRate" class="form-control" placeholder="Cut Rate" asp-for="CutRate"></td></tr>
+                    </table>
+                </p>
+                <h5 class="card-title">Adjustments</h5>
+                <p class="card-text">
+                    <table cellpadding="2" style="width: 100%">
+                        @*<tr><td style="width: 100px">Angle</td><td><input type="text" class="form-control" placeholder="Crooked End Angle" asp-for="CrookedEndAngle"></td></tr>*@
+                        <tr><td style="width: 100px">Density</td><td><input type="text" id="txtDensityCorrectionFactor" class="form-control" placeholder="Density Correction" asp-for="DensityCorrection"></td></tr>
+                        <tr><td style="width: 100px">Saw Offset</td><td><input type="text" id="txtSawCalibrationOffset" class="form-control" placeholder="Saw Calib Offset (in)" asp-for="SawCalibrationOffset"></td></tr>
+                    </table>
+                </p>
+                <p class="card-text">
+                    <div class="demo-inline-spacing mt-sm-3 text-right">
+                        <input name="Command" type="submit" value="Load" style="display: none;" />
+                        <input name="Command" type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </p>
+            </div>
+
+        </form>
+
+        @*As of 03/05/2019, this is not used because there is no cancel button*@
+        @*<script type="text/javascript" src="~/js/edit_job.js"></script>*@

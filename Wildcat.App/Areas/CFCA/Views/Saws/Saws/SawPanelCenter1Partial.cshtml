@@ -1,0 +1,257 @@
+﻿
+@model Wildcat.App.ViewModels.Saws.SawModel
+
+<form asp-controller="Saws" asp-action="SawPanelCenter1Partial" data-ajax-complete="onEditJobCenter1Complete" data-ajax-update="#divPanel1Center" data-ajax-mode="replace" data-ajax="true" data-ajax-method="GET" method="get">
+
+    <input type="hidden" asp-for="LocationCode">
+    <input type="hidden" asp-for="DiscreteJobSelected">
+
+    <input type="hidden" id="HiddenSawSelected2" asp-for="SawMachineSelected" />
+    <input type="hidden" id="HiddenTpiRangeSelected2" asp-for="TpiRangeSelected" />
+    <input type="hidden" id="HiddenBladeSelected2" asp-for="BladeSelected" />
+    <input type="hidden" id="HiddenLotNumberSelected2" asp-for="LotNumberSelected" />
+    <input type="hidden" id="HiddenBarShapeSelected2" asp-for="LengthParameters.BarShapeSelected" />
+
+    <input type="hidden" id="HiddenPieceType" asp-for="PieceTypeString" />
+
+    <input type="hidden" id="HiddenCalculatedTargetLength" asp-for="LengthParameters.CalculatedTargetLength" />
+    <input type="hidden" id="HiddenAdjustedTargetLength" asp-for="AdjustedTargetLength" />
+
+    <input type="hidden" id="HiddenBarShapeMeasurementId" asp-for="LengthParameters.ShapeMeasurementId" />
+    <input type="hidden" id="HiddenBladeSpeed" asp-for="BladeSpeed" />
+
+    <input type="hidden" id="HiddenKerf" asp-for="Kerf" />
+    <input type="hidden" id="HiddenCutRate" asp-for="CutRate" />
+    <input type="hidden" id="HiddenDensityCorrectionFactor" asp-for="DensityCorrection" />
+    <input type="hidden" id="HiddenSawCalibrationOffset" asp-for="SawCalibrationOffset" />
+
+    <!--
+        NOT ALL SHAPES ARE USED; RUN
+            SELECT * FROM SawCalc_Billets
+    WHERE CrossSectionShape not in ('Round', 'Rounded rectangle', 'rectangle', 'conical bar') YIELDS NO RECORDS!
+
+        -->
+
+    <div class="demo-vertical-spacing">
+        <div class="nav-tabs-top nav-responsive-xl">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active show" onclick="UpdateShapeFromTab('RND')" id="rnd" data-toggle="tab" href="#navs-top-responsive-link-1">Round</a>
+                </li>
+                @*<li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#navs-top-responsive-link-2">Tube</a>
+                    </li>*@
+                <li class="nav-item">
+                    <a class="nav-link" onclick="UpdateShapeFromTab('REC')" id="rec" data-toggle="tab" href="#navs-top-responsive-link-3">Rectangle</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="UpdateShapeFromTab('RCS')" id="rcs" data-toggle="tab" href="#navs-top-responsive-link-4">Rounded Rectangle</a>
+                </li>
+                @*<li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#navs-top-responsive-link-5">Bulging Rectangle</a>
+                    </li>*@
+                <li class="nav-item">
+                    <a class="nav-link" onclick="UpdateShapeFromTab('CON')" id="con" data-toggle="tab" href="#navs-top-responsive-link-6">Conical</a>
+                </li>
+                @*<li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#navs-top-responsive-link-7">Beveled Rectangle</a>
+                    </li>*@
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="navs-top-responsive-link-1">
+                    <div class="card-body">
+                        <table cellpadding="5">
+                            <tr>
+                                <td><img src="~/images/saw_op_round.png" style="opacity: 0.3" /></td>
+                                <td><input type="text" class="form-control dimension" placeholder="Diameter (in)" asp-for="LengthParameters.Dimension1"></td>
+                                <td><button type="submit" class="btn btn-primary">Update</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                @*<div class="tab-pane fade" id="navs-top-responsive-link-2">
+                        <div class="card-body">
+                            <table cellpadding="5">
+                                <tr>
+                                    <td><img src="~/images/saw_op_tube.png" style="opacity: 0.35" /></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Outer Diameter (in)" asp-for="LengthParameters.Dimension1"></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Inner Diameter (in)" asp-for="LengthParameters.Dimension2"></td>
+                                    <td><button type="submit" class="btn btn-primary">Update</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>*@
+                <div class="tab-pane fade" id="navs-top-responsive-link-3">
+                    <div class="card-body">
+                        <table cellpadding="5">
+                            <tr>
+                                <td>
+                                    <img src="~/images/saw_op_rectangle.png" style="opacity: 0.35" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Width (in)" asp-for="LengthParameters.Dimension2">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Height (in)" asp-for="LengthParameters.Dimension3">
+                                </td>
+                                <td><button type="submit" class="btn btn-primary">Update</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="navs-top-responsive-link-4">
+                    <div class="card-body">
+                        <table cellpadding="5">
+                            <tr>
+                                <td>
+                                    <img src="~/images/saw_op_rounded_rect.png" style="opacity: 0.35" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Width (in)" asp-for="LengthParameters.Dimension4">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Height (in)" asp-for="LengthParameters.Dimension5">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Corner Radius (in)" asp-for="LengthParameters.Dimension6">
+                                </td>
+                                <td><button type="submit" class="btn btn-primary">Update</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                @*<div class="tab-pane fade" id="navs-top-responsive-link-5">
+                        <div class="card-body">
+                            <table cellpadding="5">
+                                <tr>
+                                    <td><input type="text" class="form-control dimension" placeholder="Left Corner Radius" asp-for="LengthParameters.Dimension1"></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Top Left Height" asp-for="LengthParameters.Dimension2"></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Top Center Height" asp-for="LengthParameters.Dimension3"></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Top Right Height" asp-for="LengthParameters.Dimension4"></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Right Corner Radius" asp-for="LengthParameters.Dimension5"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td align="center" rowspan="2"><img src="~/images/saw_op_rectangle_bulging.png" style="opacity: 0.35" /></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Side Top Width" asp-for="LengthParameters.Dimension3"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Side Center Width" asp-for="LengthParameters.Dimension3"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" class="form-control dimension" placeholder="Left Corner Radius" asp-for="LengthParameters.Dimension3"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Side Bottom Width" asp-for="LengthParameters.Dimension3"></td>
+                                    <td><input type="text" class="form-control dimension" placeholder="Right Corner Radius" asp-for="LengthParameters.Dimension3"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td align="right"><button type="submit" class="btn btn-primary">Update</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>*@
+                <div class="tab-pane fade" id="navs-top-responsive-link-6">
+                    <div class="card-body">
+                        <table cellpadding="5">
+                            <tr>
+                                <td>
+                                    <img src="~/images/saw_op_conical.png" style="opacity: 0.35" />
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Length (in)" asp-for="LengthParameters.Dimension7">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Small Diameter (in)" asp-for="LengthParameters.Dimension8">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control dimension" placeholder="Large Diameter (in)" asp-for="LengthParameters.Dimension9">
+                                </td>
+                                <td><button type="submit" class="btn btn-primary">Update</button></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                @*<div class="tab-pane fade" id="navs-top-responsive-link-7">
+                        <div class="card-body">
+                            <table cellpadding="5">
+                                <tr>
+                                    <td>
+                                        <img src="~/images/saw_op_rectangle_beveled.png" style="opacity: 0.35" />
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control dimension" placeholder="Width (in)" asp-for="LengthParameters.Dimension1">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control dimension" placeholder="Height (in)" asp-for="LengthParameters.Dimension2">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control dimension" placeholder="Bevel Length (in)" asp-for="LengthParameters.Dimension3">
+                                    </td>
+                                    <td><button type="submit" class="btn btn-primary">Update</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>*@
+            </div>
+        </div>
+        <div class="card mb-4 text-left">
+            <div class="card-body">
+                <div class="demo-inline-spacing mt-sm-3">
+                    <h5>
+                        <label class="form-check-inline">
+                            Saw Input Length (in)&nbsp;&nbsp;<button type="button" class="btn btn-lg btn-default"><div id="TargetLength"><strong>@Html.DisplayFor(model => model.LengthParameters.CalculatedTargetLength)</strong></div></button>
+                        </label>
+                        <label class="form-check-inline">
+                            <input type="text" class="form-control" placeholder="Actual Weight (lbs)" asp-for="ActualWeight">
+                        </label>
+
+                        <label class="form-check-inline">
+                            @Model.Dropdown("ddlJob1", Model.UnfinishedSerialNumberOptions, "Serial Number", Model.UnfinishedSerialNumberSelected)
+                        </label>
+                    </h5>
+                </div>
+                <div class="demo-inline-spacing mt-sm-3">
+                    <label class="form-check-inline">
+                        <button type="submit" onclick="SendWeight('MULT');" class="btn btn-primary">Record Mult</button>
+                    </label>
+                    <label class="form-check-inline">
+                        <button type="submit" onclick="SendWeight('PROLONG');" class="btn btn-primary">Record Prolong</button>
+                    </label>
+                    <label class="form-check-inline">
+                        <button type="submit" onclick="SendWeight('REMNANT');" class="btn btn-primary">Record Remnant</button>
+                    </label>
+                    <label class="form-check-inline">
+                        <button type="submit" onclick="SendWeight('EXCEPTION');" class="btn btn-primary">Record Exception</button>
+                    </label>
+                    <label class="form-check-inline">
+                        <button type="button" onclick="SubmitMultChart();" class="btn btn-primary">Mult Chart</button>
+                    </label>
+                </div>
+                <div class="demo-inline-spacing mt-sm-3">
+                    
+                    <label class="form-check-inline">
+                        <button type="button" onclick="CallMaintenance();" class="btn btn-outline-primary">Maintenance</button>
+                    </label>                    
+                    <label class="form-check-inline">
+                        <button type="button" class="btn btn-default" disabled style="width: 554px; font-weight: 600; font-size: medium; text-align: left;"><div id="ServerFeedback">&nbsp;</div></button>                        
+                    </label>
+                </div>
+                <div class="demo-inline-spacing mt-sm-3">
+                    <textarea class="form-control" rows="2" placeholder="Comments" id="ShopOrderNotes" asp-for="ShopOrder.Notes"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript" src="~/scripts/Saws/center1.js"></script>

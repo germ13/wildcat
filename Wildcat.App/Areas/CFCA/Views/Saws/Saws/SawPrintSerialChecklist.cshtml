@@ -1,0 +1,114 @@
+﻿
+
+@{
+    Layout = "";
+}
+
+@model Wildcat.App.ViewModels.Saws.SawPieceModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+
+        //IMMEDIATELY POP OPEN PRINT DIALOG IF USER HAS CHROME...BECAUSE CHROME HAS
+        // AN ANNOYING ERROR MESSAGE WHEN THE USER EXECUTES window.print() AFTER PAGE LOAD
+        window.onload = function () {
+            if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+                window.PPClose = false;
+                window.print();
+                window.close();
+                window.PPClose = true;
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <style>
+        body {
+            font-size: small;
+        }
+    </style>
+
+    <table border="0" cellpadding="2" cellspacing="0" id="datatable1" style="width: 100%">
+        <tbody>
+            <tr>
+                <td style="width: 25%; text-align: left">@*<h3>JOB NUMBER @Model.SawPieceResult[0].ShopOrderNumber</h3>*@</td>
+                <td style="width: 50%; text-align: center"><h2>SERIAL NUMBER CHECKLIST</h2></td>
+                <td style="width: 25%; text-align: right">@*<button type="button" onclick="javascript: window.print();"> PRINT </button>*@</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table border="1" cellpadding="4" cellspacing="0" id="datatable2" style="width: 100%">
+        <thead>
+            <tr role="row">
+                <th colspan="1" style="text-align: left;">SERIAL NUMBERS</th>
+                <th colspan="4" style="text-align: left; font-weight: 400;">@Model.SerialNumberRangeString</th>
+                <th colspan="1" style="text-align: left;">MULTS</th>
+                <th colspan="3" style="text-align: left; font-weight: 400;">@Model.SawPieceResult.Count</th>
+                <th colspan="1" style="text-align: left;">JOB</th>
+                <th colspan="3" style="text-align: left; font-weight: 400;">@Model.SawPieceResult[0].ShopOrderNumber</th>
+            </tr>
+            <tr role="row">
+                <th style="width: 150px;">&nbsp;</th>
+                <th colspan="12">LINE NUMBER</th>
+            </tr>
+            <tr role="row">
+                <th>SERIAL NUMBER</th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var piece in Model.SawPieceResult)
+            {
+                <tr>
+                    <td>Mult @Html.DisplayFor(Model => piece.MultID)</td>
+                    <th colspan="2"></th>
+                    <th colspan="2"></th>
+                    <th colspan="2"></th>
+                    <th colspan="2"></th>
+                    <th colspan="2"></th>
+                    <th colspan="2"></th>
+                </tr>
+            }
+            <tr>
+                <td>&nbsp;</td>
+                <td style="text-align: center">&nbsp;&nbsp;&nbsp;CUT&nbsp;&nbsp;&nbsp;</td>
+                <td style="text-align: center">MARK</td>
+                <td style="text-align: center">LOAD</td>
+                <td style="text-align: center">MARK</td>
+                <td style="text-align: center">LOAD</td>
+                <td style="text-align: center">MARK</td>
+                <td style="text-align: center">LOAD</td>
+                <td style="text-align: center">MARK</td>
+                <td style="text-align: center">LOAD</td>
+                <td style="text-align: center">MARK</td>
+                <td style="text-align: center">LOAD</td>
+                <td style="text-align: center">MARK</td>
+            </tr>
+            <tr>
+                <td style="text-align: right"><strong>OPERATOR'S INITIALS</strong></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

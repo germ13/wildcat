@@ -1,0 +1,58 @@
+﻿
+@model Wildcat.App.ViewModels.Saws.SawModel
+
+<div class="card-body">
+    <h5 class="card-title">Billet</h5>
+    <p class="card-text">
+        <table cellpadding="4" style="width: 100%">
+            <tr><td style="width: 220px">Density</td><td class="text-right"><strong>@Html.DisplayFor(model => model.Material.Density)</strong></td><td style="width: 50px" class="text-left">lbs/ci</td></tr>
+            <tr><td style="width: 220px">Calculated Initial Length</td><td class="text-right"><strong>@Html.DisplayFor(model => model.CalculatedInitialLength)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+            <tr><td style="width: 220px">Remaining Billet Length</td><td class="text-right"><strong>@Html.DisplayFor(model => model.RemainingLength)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+            <tr><td style="width: 220px">Remaining Billet Weight</td><td class="text-right"><strong>@Html.DisplayFor(model => model.RemainingWeight)</strong></td><td style="width: 50px" class="text-rleftight">lbs</td></tr>
+            <tr><td style="width: 220px">Pieces Left in Billet</td><td class="text-right"><strong>@Html.DisplayFor(model => model.PiecesLeftInBillet)</strong></td><td style="width: 50px" class="text-left"></td></tr>
+            <tr><td style="width: 220px">Est. Remnant Length</td><td class="text-right"><strong>@Html.DisplayFor(model => model.RemnantLength)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+            <tr><td style="width: 220px">Est. Remnant Weight</td><td class="text-right"><strong>@Html.DisplayFor(model => model.RemnantWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+        </table>
+    </p>
+    <h5 class="card-title">All Mults</h5>
+    <p class="card-text">
+        <table cellpadding="4" style="width: 100%">
+            <tr><td style="width: 220px">Completed Mults</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AllMultsCompletedUnits)</strong></td><td style="width: 50px" class="text-left"></td></tr>
+            <tr><td style="width: 220px">Completed Mults Tot Wt</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AllMultsCompletedTotalWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+            <tr><td style="width: 220px">Completed Mults Avg Wt</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AllMultsCompletedAverageWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+            <tr><td style="width: 220px">Completed Mults Std Dev</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AllMultsCompletedStandDeviation)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+            <tr><td style="width: 220px">All Mults Projected Wt</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AllMultsProjectedWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+        </table>
+    </p>
+    <h5 class="card-title">Current Mult</h5>
+    <p class="card-text">
+        <table cellpadding="4" style="width: 100%">
+            <tr><td style="width: 220px">Cross Section Area</td><td class="text-right"><strong>@Html.DisplayFor(model => model.LengthParameters.CrossSectionArea)</strong></td><td style="width: 50px" class="text-left">sq in</td></tr>
+            <tr><td style="width: 220px">Ideal Target Length</td><td class="text-right"><strong>@Html.DisplayFor(model => model.LengthParameters.CalculatedTargetLength)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+            @*<tr><td style="width: 220px">Crooked End Adjustment</td><td class="text-right"><strong>@Html.DisplayFor(model => model.CrookedEndAdjustment)</strong></td><td style="width: 50px" class="text-left">in</td></tr>*@
+            <tr><td style="width: 220px">Density Correction</td><td class="text-right"><strong>@Html.DisplayFor(model => model.DensityCorrection)</strong></td><td style="width: 50px"></td></tr>
+            <tr><td style="width: 220px">Adjusted Target Length</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AdjustedTargetLength)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+            <tr><td style="width: 220px">Actual Wt / Target Wt Change</td><td class="text-right"><strong>@Html.DisplayFor(model => model.ActualWeightVsTargetWeight)</strong></td><td style="width: 50px" class="text-left">%</td></tr>
+            <tr><td style="width: 220px">Actual Wt / Avg Wt Change</td><td class="text-right"><strong>@Html.DisplayFor(model => model.ActualWeightVsAverageWeight)</strong><td style="width: 50px" class="text-left">%</td></tr>
+        </table>
+    </p>
+    <h5 class="card-title">Kerf, Revert</h5>
+    <p class="card-text">
+        <table cellpadding="4" style="width: 100%">
+            <tr><td style="width: 220px">Single Kerf Wt</td><td class="text-right"><strong>@Html.DisplayFor(model => model.SingleKerfWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+            <tr><td style="width: 220px">Total Revert Wt So Far</td><td class="text-right"><strong>@Html.DisplayFor(model => model.TotalRevertWeight)</strong></td><td style="width: 50px" class="text-left">lbs</td></tr>
+        </table>
+    </p>
+    <h5 class="card-title">Saw, Blade</h5>
+    <p class="card-text">
+        <table cellpadding="4" style="width: 100%">
+            <tr><td style="width: 220px">Chip Load</td><td class="text-right"><strong>@Html.DisplayFor(model => model.Material.ChipLoad)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+            <tr><td style="width: 220px">Est Time Per Cut</td><td class="text-right"><strong>@Html.DisplayFor(model => model.EstimatedTimePerCut)</strong></td><td style="width: 50px" class="text-left">min</td></tr>
+            <tr><td style="width: 220px">Actual Time For Last Cut</td><td class="text-right"><strong>@Html.DisplayFor(model => model.ActualTimeLastCut)</strong></td><td style="width: 50px" class="text-left">min</td></tr>
+            <tr><td style="width: 220px">Blade Speed</td><td class="text-right"><strong>@Html.DisplayFor(model => model.BladeSpeed)</strong></td><td style="width: 50px" class="text-left">ft/min</td></tr>
+            <tr><td style="width: 220px">Allowable Cut Deviation</td><td class="text-right"><strong>@Html.DisplayFor(model => model.AllowableCutDeviation)</strong></td><td style="width: 50px" class="text-left">in</td></tr>
+        </table>
+    </p>
+</div>
+
+

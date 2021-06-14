@@ -1,0 +1,156 @@
+﻿
+
+@{
+    Layout = "";
+}
+
+@model Wildcat.App.ViewModels.Saws.SawPieceModel
+
+@{
+    bool newLot = false;
+    string lastLot = string.Empty;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript">
+
+        //IMMEDIATELY POP OPEN PRINT DIALOG IF USER HAS CHROME...BECAUSE CHROME HAS
+        // AN ANNOYING ERROR MESSAGE WHEN THE USER EXECUTES window.print() AFTER PAGE LOAD
+        window.onload = function () {
+            if (navigator.userAgent.toLowerCase().indexOf('chrome') > -1) {
+                window.PPClose = false;
+                window.print();
+                window.close();
+                window.PPClose = true;
+            }
+        }
+
+    </script>
+</head>
+<body>
+
+    <style>
+        body {
+            font-size: small;
+        }
+    </style>
+
+    <table border="0" cellpadding="2" cellspacing="0" id="datatable11" style="width: 100%">
+        <tbody>
+            <tr>
+                <td style="width: 25%; text-align: left">&nbsp;</td>
+                <td style="width: 50%; text-align: center"><h2>MULT CHART</h2></td>
+                <td style="width: 25%; text-align: right">@*<button type="button" onclick="javascript: HandlePrint();"> PRINT </button>*@</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table border="1" cellpadding="4" cellspacing="0" id="datatable13" style="width: 100%">
+        <thead>
+            <tr role="row">
+                <th colspan="1" style="text-align: left;">CUSTOMER</th>
+                <th colspan="4" style="text-align: left; font-weight: 400;">@Model.ShopOrder.Customer</th>
+                <th colspan="1" style="text-align: left;">JOB</th>
+                <th colspan="5" style="text-align: left; font-weight: 400;">@Model.ShopOrder.ShopOrderNumber</th>
+            </tr>
+            <tr role="row">
+                <th colspan="1" style="text-align: left;">PART</th>
+                <th colspan="4" style="text-align: left; font-weight: 400;">@Model.ShopOrder.PartNumber</th>
+                <th colspan="1" style="text-align: left;">BILLET</th>
+                <th colspan="5" style="text-align: left; font-weight: 400;">@Model.SawPieceResult[0].BilletShape</th>
+            </tr>
+            <tr role="row">
+                <th colspan="1" style="text-align: left;">MATERIAL</th>
+                <th colspan="4" style="text-align: left; font-weight: 400;">@Model.SawPieceResult[0].MaterialName</th>
+                <th colspan="1" style="text-align: left;">MILL</th>
+                <th colspan="5" style="text-align: left; font-weight: 400;">@Model.ShopOrder.Mill</th>
+            </tr>
+            <tr role="row">
+                <th colspan="1" style="text-align: left;">SPEC</th>
+                <th colspan="10" style="text-align: left; font-weight: 400;">@Model.ShopOrder.Specification</th>
+            </tr>
+
+            <tr role="row">
+                <th colspan="11">&nbsp;</th>
+            </tr>
+
+            <tr role="row">
+                <th>LOT</th>
+                <th>ORIG WT</th>
+                <th>DATE</th>
+                <th>MULT</th>
+                <th>S/N</th>
+                <th>TARGET WT</th>
+                <th>ACTUAL WT</th>
+                <th>LENGTH</th>
+                <th>AREA</th>
+                <th>DENSITY</th>
+                <th>END</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var piece in Model.SawPieceResult)
+            {
+                //For tne online grid, this dataset still needs lot numbers populated; however it doesn't appear
+                // on every row for the reports
+                if (piece.LotNumber != lastLot)
+                {
+                    newLot = true;
+                    lastLot = piece.LotNumber;
+                }
+                else
+                {
+                    newLot = false;
+                }
+
+                <tr>
+
+                    @if (newLot)
+                    {
+                        <td>@Html.DisplayFor(Model => piece.LotNumber)</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    @if (newLot)
+                    {
+                        <td style="text-align: right">@Html.DisplayFor(Model => piece.NewBilletWeight)</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                    <td>@Html.DisplayFor(Model => piece.CreatedDate)</td>
+                    @*FORCE A LIMIT ON THE SIZE OF THIS COLUMN WIDTH OR ELSE RAMBLING TEXT WILL SKEW ALL OTHER COLUMNS SIZES TO NOTHING *@
+                    <td style="width: 80px;">@Html.DisplayFor(Model => piece.MultID)</td>
+                    <td>@Html.DisplayFor(Model => piece.SerialNumber)</td>
+                    <td style="text-align: right">@Html.DisplayFor(Model => piece.TargetWeight)</td>
+                    <td style="text-align: right">@Html.DisplayFor(Model => piece.ActualWeight)</td>
+                    <td style="text-align: right">@Html.DisplayFor(Model => piece.AdjustedTargetLength)</td>
+                    <td style="text-align: right">@Html.DisplayFor(Model => piece.AverageCrossSectionArea)</td>
+                    <td style="text-align: right">@Html.DisplayFor(Model => piece.DensityCorrectionFactor)</td>
+                    <td>@Html.DisplayFor(Model => piece.Location)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @*<table border="0" cellpadding="4" cellspacing="0" id="datatable2" style="width: 100%">
+            <tbody>
+                <tr role="row">
+                    <td style="text-align: left; width: 110px;">PREPARED BY</td>
+                    <td style="text-align: left; font-weight: 400;">@Model.SawPieceResult[0].PreparedBy</td>
+                    <td style="text-align: right; width: 105px;">DATE</td>
+                    <td style="text-align: right; width: 150px; font-weight: 400;">@Model.SawPieceResult[0].CreatedDate</td>
+                </tr>
+            </tbody>
+        </table>*@
+
+</body>
+</html>

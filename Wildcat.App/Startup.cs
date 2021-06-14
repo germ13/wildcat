@@ -89,6 +89,18 @@ namespace Wildcat.App
                     pattern: "{area}/Kepware/{controller=Workers}/{action=Index}/{id?}"
                 );
 
+                endpoints.MapAreaControllerRoute(
+                   name: "CFCA_SAWS",
+                   areaName: "CFCA",
+                   pattern: "{area}/Saws/{controller=Workers}/{action=Index}/{id?}"
+                );
+                //endpoints.MapAreaControllerRoute(
+                //   name: "CFCA_PLANNING",
+                //   areaName: "CFCA",
+                //   pattern: "{area}/Planning/{controller=Workers}/{action=Index}/{id?}"
+                //);
+
+
                 // :: MCNJ :: //
                 endpoints.MapAreaControllerRoute(
                    name: "MCNJ_DCR",
@@ -115,6 +127,8 @@ namespace Wildcat.App
                    areaName: "MCNJ",
                    pattern: "{area}/IDR/{controller=Workers}/{action=Index}/{id?}"
                 );
+
+
 
                 //endpoints.MapControllerRoute(
                 //    name: "engineering",
@@ -147,6 +161,12 @@ namespace Wildcat.App
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/HeatTreatMaterials/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/IDR/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+
+                // :: CFCA :: //
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/Saws/{1}/{0}.cshtml");
+                //options.AreaViewLocationFormats.Add("Areas/{2}/Views/Planning/{1}/{0}.cshtml");
+
+
             });
         }
 

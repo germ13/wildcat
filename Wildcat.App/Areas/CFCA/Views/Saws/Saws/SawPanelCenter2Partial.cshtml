@@ -1,0 +1,84 @@
+﻿
+@model Wildcat.App.ViewModels.Saws.SawModel
+
+<form asp-controller="Saws" asp-action="SawPanelCenter2Partial" data-ajax-complete="onEditJobCenter2Complete" data-ajax-update="#divPanel2Center" data-ajax-mode="replace" data-ajax="true" data-ajax-method="GET" method="get">
+
+    <input type="hidden" asp-for="LocationCode">
+    <input type="hidden" asp-for="DiscreteJobSelected">
+
+    <div class="demo-vertical-spacing">
+        <div class="nav-tabs-top nav-responsive-xl">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active show" id="bottom-center-chart-nav" data-toggle="tab" href="#bottom-center-chart">Chart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="bottom-center-table-nav" data-toggle="tab" href="#bottom-center-table">Table</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="bottom-center-print-nav" data-toggle="tab" href="#bottom-center-print">Print</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="bottom-center-chart">
+                    <div class="card-body">
+                        <div class="demo-inline-spacing mt-3">
+                            <div id="scatterDiv" class="scatterVariance"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="bottom-center-table">
+                    <div class="card-body">
+
+                        <div class="card-datatable table-responsive">
+                            <table cellpadding="0" cellspacing="0" class="display datatables-demo table table-striped table-bordered" id="datatable1" dataTable no-footer role="grid">
+                                <thead>
+                                    <tr role="row">
+                                        <th>Date</th>
+                                        <th>Lot</th>
+                                        <th></th>
+                                        <th>Cut</th>
+                                        <th>Serial Number</th>
+                                        <th>Actual Wt</th>
+                                        <th>&nbsp;</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var piece in Model.PieceSummaryResults)
+                                    {
+                                        <tr id=@piece.PieceID>
+                                            <td>@Html.DisplayFor(Model => piece.CreatedDate)</td>
+                                            <td>@Html.DisplayFor(Model => piece.LotNumber)</td>
+                                            <td>@Html.DisplayFor(Model => piece.PieceIndex)</td>
+                                            <td>@Html.DisplayFor(Model => piece.PieceType)</td>
+                                            <td>@Html.DisplayFor(Model => piece.SerialNumber)</td>
+                                            <td>@Html.DisplayFor(Model => piece.ActualWeight)</td>
+                                            <td>
+                                                <a class="edit btn btn-sm btn-outline-primary" href="#">Edit</a>
+                                            </td>
+                                            <td>
+                                                <a class="delete btn btn-sm btn-outline-secondary" href="#">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="bottom-center-print">
+                    <div class="card-body">
+                        <div class="demo-inline-spacing mt-sm-3">
+                            <button type="button" class="btn btn-primary" onclick="window.open('@Model.PrintMultChartUrl');">Mult Chart</button>
+                            <button type="button" class="btn btn-primary" onclick="window.open('@Model.PrintCheckListUrl');">Check List</button>
+                            <button type="button" class="btn btn-primary" onclick="window.open('@Model.PrintMarkingSheetUrl');">Marking Sheet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
