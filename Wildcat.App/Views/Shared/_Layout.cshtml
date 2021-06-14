@@ -130,24 +130,38 @@
                 <div class="layout-content">
                     <!-- Content -->
                     <div class="container-fluid flex-grow-1 container-p-y h-100">
+                        @{
+                            if (Environment.MachineName == "WGFC-QA-IIS01")
+                            {
+                                <div class="bg-danger">QA Environment</div>
+                            }
+                            else if (Environment.MachineName == "WGFC-DEV-IIS01")
+                            {
+                                <div class="bg-success">Dev Environment</div>
+                            }
+                            else if (Environment.MachineName.ToUpper().Contains("7Y8B6L2"))
+                            {
+                                <div class="bg-warning">LOCAL ENVIRONMENT</div>
+                            }
+                        }
+
                         @await Component.InvokeAsync("BreadCrumb", request)
 
                         @RenderBody()
                     </div>
                     <!-- / Content -->
                     <!-- Layout footer -->
-                    <nav class="layout-footer footer bg-footer-theme">
+                    <nav class="layout-footer footer bg-footer-theme bg-danger">
                         <div class="container-fluid d-flex flex-wrap justify-content-between text-center container-p-x pb-3">
                             <div class="pt-3">
-                                <span class="footer-text font-weight-bolder">Wildcat</span> ©@DateTime.Now.Year
+                                <span class="footer-text">
+                                    [ @request.User.Identity.Name ]
+                                    [ @request.Connection.RemoteIpAddress.ToString() ]
+                                    [ @Environment.MachineName ]
+                                </span>
                             </div>
                             <div class="pt-3">
-                                    <span class="footer-text">
-                                    @Environment.UserDomainName\
-                                    @Environment.UserName |
-                                    @Environment.MachineName |
-                                    @Environment.OSVersion
-                                </span>
+                                <span class="footer-text font-weight-bolder">Wildcat</span> ©@DateTime.Now.Year
                             </div>
                         </div>
                     </nav>
