@@ -82,13 +82,19 @@ namespace Wildcat.App
                     areaName: "SHCA",
                     pattern: "{area}/Engineering/{controller=Workers}/{action=Index}/{id?}"
                 );
-
                 endpoints.MapAreaControllerRoute(
                     name: "SHCA_KEPWARE",
                     areaName: "SHCA",
                     pattern: "{area}/Kepware/{controller=Workers}/{action=Index}/{id?}"
                 );
+                endpoints.MapAreaControllerRoute(
+                    name: "SHCA_ACCOUNTING",
+                    areaName: "SHCA",
+                    pattern: "{area}/Accounting/{controller=Workers}/{action=Index}/{id?}"
+                );
 
+
+                // :: CFCA :: //
                 endpoints.MapAreaControllerRoute(
                    name: "CFCA_SAWS",
                    areaName: "CFCA",
@@ -152,6 +158,8 @@ namespace Wildcat.App
                 // :: SHCA :: //
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Engineering/{1}/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("Areas/{2}/Views/Kepware/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("Areas/{2}/Views/Accounting/{1}/{0}.cshtml");
+
 
 
                 // :: MCNJ :: //
