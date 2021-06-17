@@ -1,4 +1,4 @@
-﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersProductionChartsViewModel
+﻿@model Wildcat.App.SHCA.ViewModels.Grinders.SHCAGrindersProductionChartsViewModel
 @{
     ViewData["Title"] = "ProductionCharts";
 }
@@ -196,7 +196,7 @@
         var Todate = $('#todate').val();
 
         $.ajax({
-            url: "/Engineering/SHCAGrinders/SHCAGrindersProductionChartsResponse",
+            url: "/SHCA/Engineering/SHCAGrinders/SHCAGrindersProductionChartsResponse",
             type: "POST",
             data: {
                 selectedGrinder: GrindersSelect,
@@ -560,7 +560,7 @@
         var Todate = $('#todate').val();
 
         $.ajax({
-            url: "/Engineering/SHCAGrinders/SHCAGrindersProductionChartsResponse",
+            url: "/SHCA/Engineering/SHCAGrinders/SHCAGrindersProductionChartsResponse",
             type: "POST",
             data: {
                 selectedGrinder: GrindersSelect,

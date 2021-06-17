@@ -7,7 +7,7 @@ using Wildcat.Entities.SHCA.ShultzPro;
 using Wildcat.Logic.SHCA.Accounting;
 using Wildcat.Utilities;
 
-namespace Wildcat.App.ViewModels.SHCA.Accounting
+namespace Wildcat.App.SHCA.ViewModels.Accounting
 {
     #region - ViewModels
 

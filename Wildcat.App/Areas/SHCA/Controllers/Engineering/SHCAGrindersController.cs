@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 //using Wildcat.App.Classes.Engineering.Grinders;
-using Wildcat.App.ViewModels.SHCA.Grinders;
+using Wildcat.App.SHCA.ViewModels.Grinders;
 using Wildcat.Entities.PCC.Wildcat;
 using Wildcat.Entities.SHCA.EngineeringData;
 //using Wildcat.Entities.SHCA.Grinders.FGA;

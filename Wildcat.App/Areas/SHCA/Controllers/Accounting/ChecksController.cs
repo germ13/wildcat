@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Wildcat.App.ViewModels.SHCA.Accounting;
+using Wildcat.App.SHCA.ViewModels.Accounting;
 using Wildcat.Entities.PCC.Wildcat;
 using Wildcat.Entities.SHCA.ShultzPro;
 using Wildcat.Utilities;

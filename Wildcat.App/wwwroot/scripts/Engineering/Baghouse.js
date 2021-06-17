@@ -113,7 +113,7 @@ function DownloadFile() {
     console.info("Begin download request");
 
     $.ajax({
-        url: "/Engineering/Baghouse/Download",
+        url: "/SHCA/Engineering/Baghouse/Download",
         data: $('form#DownloadParameters').serialize(),
         method: 'GET',
         xhrFields: {

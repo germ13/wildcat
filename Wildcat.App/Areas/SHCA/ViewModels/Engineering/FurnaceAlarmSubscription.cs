@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Wildcat.Entities.PCC.Wildcat;
 
-namespace Wildcat.App.ViewModels
+namespace Wildcat.App.SHCA.ViewModels.Engineering
 {
     public class FurnaceAlarmSubscriptions
     {

@@ -10,7 +10,7 @@ using Wildcat.Logic.Models;
 using Wildcat.Logic.SHCA.Engineering.Grinders;
 using Wildcat.Utilities;
 
-namespace Wildcat.App.ViewModels.SHCA.Grinders
+namespace Wildcat.App.SHCA.ViewModels.Grinders
 {
     #region - ViewModels
 
@@ -295,13 +295,14 @@ namespace Wildcat.App.ViewModels.SHCA.Grinders
             {
                 SHCAGrindersProductionViewModel vm = new SHCAGrindersProductionViewModel(_httpContextAccessor, viewRenderService, _engineeringContext, selectedGrinder, fromdate, todate);
 
-                GrinderProdVM pvm = new GrinderProdVM(vm.Shift1DTO, "table1", 1); Table1 = _viewRenderService.RenderToStringAsync("Engineering/SHCAGrinders/ProdDataRefresh", pvm);
+                //TODO necessary to do it this way?
+                GrinderProdVM pvm = new GrinderProdVM(vm.Shift1DTO, "table1", 1); Table1 = _viewRenderService.RenderToStringAsync("ProdDataRefresh", pvm);
 
-                pvm = new GrinderProdVM(vm.Shift2DTO, "table2", 2); Table2 = _viewRenderService.RenderToStringAsync("Engineering/SHCAGrinders/ProdDataRefresh", pvm);
+                pvm = new GrinderProdVM(vm.Shift2DTO, "table2", 2); Table2 = _viewRenderService.RenderToStringAsync("ProdDataRefresh", pvm);
 
-                pvm = new GrinderProdVM(vm.Shift3DTO, "table3", 3); Table3 = _viewRenderService.RenderToStringAsync("Engineering/SHCAGrinders/ProdDataRefresh", pvm);
+                pvm = new GrinderProdVM(vm.Shift3DTO, "table3", 3); Table3 = _viewRenderService.RenderToStringAsync("ProdDataRefresh", pvm);
 
-                pvm = new GrinderProdVM(vm.Shift4DTO, "table4", 4); Table4 = _viewRenderService.RenderToStringAsync("Engineering/SHCAGrinders/ProdDataRefresh", pvm);
+                pvm = new GrinderProdVM(vm.Shift4DTO, "table4", 4); Table4 = _viewRenderService.RenderToStringAsync("ProdDataRefresh", pvm);
 
                 success = true;
                 message = "data retrieved";

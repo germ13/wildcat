@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <UserSecretsId>6ec67ae9-3be1-45d5-b1cf-991c7b85693b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -86,6 +87,7 @@
     <Folder Include="Areas\CFCA\Data\" />
     <Folder Include="Areas\CFCA\Models\" />
     <Folder Include="Areas\SHCA\Controllers\Accounting\" />
+    <Folder Include="Areas\SHCA\ViewModels\" />
     <Folder Include="Areas\SMCA\Data\" />
     <Folder Include="Areas\SMCA\Models\" />
   </ItemGroup>

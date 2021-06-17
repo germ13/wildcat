@@ -11,7 +11,7 @@ using Wildcat.Logic.PCC.Wildcat;
 using Wildcat.Utilities;
 using static Wildcat.Logic.PCC.Wildcat.MachineAdministration;
 
-namespace Wildcat.App.ViewModels.Engineering
+namespace Wildcat.App.SHCA.ViewModels.Engineering
 {
     #region - ViewModels
 

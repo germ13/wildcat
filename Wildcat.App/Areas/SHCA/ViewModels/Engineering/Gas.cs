@@ -9,7 +9,7 @@ using Wildcat.Entities.PCC.Wildcat;
 using Wildcat.Logic.SHCA.Engineering.GasMeters;
 using Wildcat.Utilities;
 
-namespace Wildcat.App.ViewModels.Engineering
+namespace Wildcat.App.SHCA.ViewModels.Engineering
 {
     public class Gas
     {

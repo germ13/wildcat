@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using Wildcat.Utilities;
 
-namespace Wildcat.App.ViewModels.Engineering
+namespace Wildcat.App.SHCA.ViewModels.Engineering
 {
     public class BaghouseReport
     {

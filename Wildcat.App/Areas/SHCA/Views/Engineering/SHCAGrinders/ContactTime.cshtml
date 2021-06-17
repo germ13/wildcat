@@ -1,4 +1,4 @@
-﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersContactTimeViewModel
+﻿@model Wildcat.App.SHCA.ViewModels.Grinders.SHCAGrindersContactTimeViewModel
 @{
     ViewData["Title"] = "Contact Time";
 }
@@ -10,7 +10,7 @@
                 <a class="breadcrumb-item" href="/Home/Index">Home</a>
             </li>
             <li class="breadcrumb-item">
-                <a class="breadcrumb-item" href="/Engineering/SHCAGrinders/Index">Grinders</a>
+                <a class="breadcrumb-item" href="SHCA/Engineering/SHCAGrinders/Index">Grinders</a>
             </li>
             <li class="breadcrumb-item active">Contact Time</li>
         </ol>
@@ -72,7 +72,7 @@
             //"stateSave": true,
             "lengthMenu": [[10, 20, 50, -1], [10, 20, 50, "All"]],
             "ajax": {
-                "url": "/Engineering/SHCAGrinders/AjaxGetJsonContactTimeData",
+                "url": "/SHCA/Engineering/SHCAGrinders/AjaxGetJsonContactTimeData",
                 "data": function (d) {
                     d.selectedGrinder = $("#GrindersSelect").val();
                 },

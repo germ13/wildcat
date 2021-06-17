@@ -11,7 +11,7 @@ using Wildcat.Entities.SHCA.Engineering.FUP;
 using Wildcat.Entities.SHCA.Engineering.FXP;
 using Wildcat.Utilities;
 
-namespace Wildcat.App.ViewModels.Engineering
+namespace Wildcat.App.SHCA.ViewModels.Engineering
 {
     public class PressData
     {

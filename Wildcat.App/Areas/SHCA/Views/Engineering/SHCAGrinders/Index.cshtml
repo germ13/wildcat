@@ -1,4 +1,4 @@
-﻿@model Wildcat.App.ViewModels.SHCA.Grinders.SHCAGrindersIndexViewModel
+﻿@model Wildcat.App.SHCA.ViewModels.Grinders.SHCAGrindersIndexViewModel
 @{
     ViewData["Title"] = "Index";
 }
@@ -164,7 +164,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderPressureWarning?ID=" + selectedGrinder,
+            url: "GetGrinderPressureWarning?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -204,7 +204,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderAutoGrind?ID=" + selectedGrinder,
+            url: "GetGrinderAutoGrind?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -244,7 +244,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderAutoGrind?ID=" + selectedGrinder,
+            url: "GetGrinderAutoGrind?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -284,7 +284,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderBoomIn?ID=" + selectedGrinder,
+            url: "GetGrinderBoomIn?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -324,7 +324,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderBoomOut?ID=" + selectedGrinder,
+            url: "GetGrinderBoomOut?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -364,7 +364,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderInGrindArea?ID=" + selectedGrinder,
+            url: "GetGrinderInGrindArea?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -404,7 +404,6 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderContactTime?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -467,7 +466,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderIndexPosition?ID=" + selectedGrinder,
+            url: "GetGrinderIndexPosition?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -530,7 +529,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderTravelSpeed?ID=" + selectedGrinder,
+            url: "GetGrinderTravelSpeed?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -593,7 +592,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderPressureDiff?ID=" + selectedGrinder,
+            url: "GetGrinderPressureDiff?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -656,7 +655,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderLubeTempReturn?ID=" + selectedGrinder,
+            url: "GetGrinderLubeTempReturn?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {
@@ -720,7 +719,7 @@
             }
         });
         $.ajax({
-            url: "/Engineering/SHCAGrinders/GetGrinderLubeTempSupply?ID=" + selectedGrinder,
+            url: "GetGrinderLubeTempSupply?ID=" + selectedGrinder,
             type: "GET",
             cache: false,
             success: function (result) {

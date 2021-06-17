@@ -92,7 +92,7 @@ function DownloadFile() {
     });
 
     $.ajax({
-        url: "/Engineering/PressData/Download",
+        url: "/SHCA/Engineering/PressData/Download",
         data: $('form#DownloadParameters').serialize(),
         method: 'GET',
         xhrFields: {

@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Wildcat.App.ViewModels;
+using Wildcat.App.SHCA.ViewModels;
+using Wildcat.App.SHCA.ViewModels.Engineering;
 using Wildcat.Entities.PCC.Wildcat;
 
 namespace Wildcat.App.Controllers.Engineering

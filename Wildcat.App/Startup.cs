@@ -16,6 +16,10 @@ using Wildcat.Entities.MCNJ.SecureHeatTreatBatchBook;
 using Wildcat.Entities.PCC.PCC03Integration;
 using Wildcat.Entities.PCC.Wildcat;
 using Wildcat.Entities.SHCA.EngineeringData;
+using Wildcat.Entities.SHCA.Grinders.FGA;
+using Wildcat.Entities.SHCA.Grinders.FGD;
+using Wildcat.Entities.SHCA.Grinders.FGQ;
+using Wildcat.Entities.SHCA.Grinders.FGX;
 using Wildcat.Entities.SHCA.Grinders.Wildcat;
 using Wildcat.Entities.SHCA.ShultzPro;
 using Wildcat.Utilities;
@@ -215,6 +219,21 @@ namespace Wildcat.App
             services.AddDbContext<ShultzProContext>(
                 options => options.UseSqlServer(
                     Configuration.GetConnectionString("ShultzPro")));
+            services.AddDbContext<FGAContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("FGAGrinder")));
+            services.AddDbContext<FGDContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("FGDGrinder")));
+            services.AddDbContext<FGQContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("FGQGrinder")));
+            services.AddDbContext<FGXContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("FGXGrinder")));
+
+
+
 
 
             // :: MCJN :: //
